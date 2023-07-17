@@ -1,0 +1,5 @@
+package analytics.sdk.clickstream.properties.application
+
+import analytics.sdk.clickstream.properties.AnalyticsPropertyValue
+
+interface ApplicationAnalyticsProperties : AnalyticsPropertyValue
