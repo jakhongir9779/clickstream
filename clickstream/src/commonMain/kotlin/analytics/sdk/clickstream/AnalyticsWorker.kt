@@ -2,7 +2,7 @@ package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
-import analytics.sdk.clickstream.gateway.LocalEventsGateway
+import analytics.sdk.database.gateway.LocalEventsGateway
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

@@ -2,10 +2,9 @@ package analytics.sdk.clickstream.gateway
 
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
-import analytics.sdk.clickstream.data.database.entity.EventSnapshotEntity
+import analytics.sdk.database.model.EventSnapshotEntity
 import com.google.gson.Gson
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import timber.log.Timber
 
@@ -54,7 +53,7 @@ internal class ClickstreamRemoteGatewayImpl(
 
         val eventArray = JsonArray(events.size)
         events.forEach {
-            val fromJson = gson.fromJson(it.eventJson, JsonElement::class.java)
+            val fromJson = it.event
             eventArray.add(fromJson)
         }
         jsonObject.add(EVENTS_JSON_KEY, eventArray)

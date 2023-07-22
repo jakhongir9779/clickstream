@@ -31,10 +31,11 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // put your multiplatform dependencies here
-                  implementation(project(":analyticstype"))
-                  implementation(project(":eventsender"))
-                  implementation(project(":common"))
-                  implementation(project(":event"))
+                implementation(project(":analyticstype"))
+                implementation(project(":eventsender"))
+                implementation(project(":common"))
+                implementation(project(":event"))
+                implementation(project(":database"))
 
                 implementation(Libraries.Network.Retrofit.core)
                 implementation(Libraries.Kotlin.Coroutines.core)

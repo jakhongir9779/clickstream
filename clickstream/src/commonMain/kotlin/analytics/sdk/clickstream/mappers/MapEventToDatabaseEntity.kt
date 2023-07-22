@@ -2,12 +2,12 @@ package analytics.sdk.clickstream.mappers
 
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
-import analytics.sdk.clickstream.data.database.entity.EventSnapshotEntity
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.properties.EventPropertiesDelegate
 import analytics.sdk.clickstream.properties.PropertiesProvider
+import analytics.sdk.database.model.EventSnapshotEntity
 import com.squareup.moshi.JsonAdapter
 
 internal class MapEventToDatabaseEntity(
@@ -25,8 +25,7 @@ internal class MapEventToDatabaseEntity(
         val jsonEvent = populateEvent(event)
 
         return EventSnapshotEntity(
-            id = 0, // auto generated
-            eventJson = jsonEvent,
+            event = jsonEvent,
             properties = properties,
             propertyHash = propertiesHash,
         )

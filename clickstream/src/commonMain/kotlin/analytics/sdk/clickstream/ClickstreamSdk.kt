@@ -2,14 +2,12 @@ package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
-import analytics.sdk.clickstream.data.database.ClickstreamDatabase
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.exposure.ExposureExperimentsImpl
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
-import analytics.sdk.clickstream.gateway.LocalEventsGateway
 import analytics.sdk.clickstream.gateway.RequestInterceptor
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.clickstream.properties.ClickstreamLifecycleCallbacks
@@ -26,6 +24,9 @@ import analytics.sdk.clickstream.properties.user.UserAnalyticsPropertyProvider
 import analytics.sdk.clickstream.properties.user.default.UserInstallIdProperty
 import analytics.sdk.clickstream.properties.user.default.getDefaultUserProperties
 import analytics.sdk.common.AnalyticsEventSender
+import analytics.sdk.database.ClickstreamDatabase
+import analytics.sdk.database.DriverFactory
+import analytics.sdk.database.gateway.LocalEventsGateway
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -42,7 +43,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import timber.log.Timber
 import java.util.Calendar
-import java.util.TreeMap
 import java.util.UUID
 import kotlin.properties.Delegates
 
@@ -82,7 +82,7 @@ class ClickstreamSdk(
     // DO NOT CHANGE
     init {
         check(applicationContext is Application)
-        database = createDatabase(applicationContext)
+        database = ClickstreamDatabase(clickStreamConfig.databaseDriverFactory)
         localEventsGateway = database.events()
         val eventPropertiesDelegate = createEventPropertiesDelegate(applicationContext)
         val moshi = Moshi.Builder().build()
@@ -186,9 +186,6 @@ class ClickstreamSdk(
         isWifiConnection = isWifiConnection,
     )
 
-    private fun createDatabase(context: Context): ClickstreamDatabase =
-        ClickstreamDatabase.get(context)
-
     private fun send(event: ClickstreamEvent) {
         coroutineScope.launch {
             sender.send(event)
@@ -208,7 +205,7 @@ class ClickstreamSdk(
             clickStreamPropProviders: PropertiesProvider?,
             appVersion: String,
             packageName: String,
-            config: ClickstreamConfig = ClickstreamConfig(5, 20),
+            config: ClickstreamConfig = ClickstreamConfig(5, 20, DriverFactory(applicationContext)),
             requestHeaders: Map<String, () -> String> = emptyMap(),
             isDebug: Boolean,
         ): ClickstreamSdk {
