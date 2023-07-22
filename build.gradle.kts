@@ -36,6 +36,7 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        /*
         maven {
             url = uri(java.lang.System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
             credentials(PasswordCredentials::class) {
@@ -43,6 +44,7 @@ allprojects {
                 password = java.lang.System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
             }
         }
+        */
         mavenLocal()
     }
 }

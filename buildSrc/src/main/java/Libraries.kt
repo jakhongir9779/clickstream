@@ -104,16 +104,11 @@ object Libraries {
             "com.facebook.android:facebook-android-sdk:${Versions.facebookSdkVersion}"
     }
 
-    object Room {
-        private const val roomPrefix = "androidx.room:room"
-        const val ktx = "$roomPrefix-ktx:${Versions.roomVersion}"
-        const val runtime = "$roomPrefix-runtime:${Versions.roomVersion}"
-        const val compiler = "$roomPrefix-compiler:${Versions.roomVersion}"
+    object SqlDelight {
 
-        fun DependencyHandler.room() {
-            api(runtime)
-            kapt(compiler)
-            implementation(ktx)
+        object Driver {
+            const val android = "app.cash.sqldelight:android-driver:${Versions.sqlDelight}"
+            const val native = "app.cash.sqldelight:native-driver:${Versions.sqlDelight}"
         }
     }
 
@@ -145,6 +140,9 @@ object Libraries {
 
         const val androidExtensionsRuntime =
             "org.jetbrains.kotlin:kotlin-android-extensions-runtime:${Versions.kotlin}"
+
+        const val serialization =
+            "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}"
 
         fun DependencyHandler.kotlin() {
             implementation(std)

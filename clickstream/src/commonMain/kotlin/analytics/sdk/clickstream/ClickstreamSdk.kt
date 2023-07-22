@@ -83,7 +83,7 @@ class ClickstreamSdk(
     init {
         check(applicationContext is Application)
         database = ClickstreamDatabase(clickStreamConfig.databaseDriverFactory)
-        localEventsGateway = database.events()
+        localEventsGateway = database.queries()
         val eventPropertiesDelegate = createEventPropertiesDelegate(applicationContext)
         val moshi = Moshi.Builder().build()
         val connectivity = Connectivity()

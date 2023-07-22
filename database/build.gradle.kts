@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("plugin.serialization") version "1.8.21"
+    kotlin("plugin.serialization") version Versions.Kotlin.core
     id("com.android.library")
-    id("app.cash.sqldelight") version "2.0.0-rc02"
+    id("app.cash.sqldelight") version Versions.sqlDelight
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -30,17 +30,17 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                implementation(Libraries.Kotlin.serialization)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation("app.cash.sqldelight:android-driver:2.0.0-rc02")
+                implementation(Libraries.SqlDelight.Driver.android)
             }
         }
         val nativeMain by getting {
             dependencies {
-                implementation("app.cash.sqldelight:native-driver:2.0.0-rc02")
+                implementation(Libraries.SqlDelight.Driver.native)
             }
         }
     }

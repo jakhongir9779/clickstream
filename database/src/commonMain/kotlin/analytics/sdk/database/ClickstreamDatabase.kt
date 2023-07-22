@@ -16,7 +16,7 @@ class ClickstreamDatabase(driverFactory: DriverFactory) {
         )
     )
 
-    fun events(): LocalEventsGateway = LocalEventsGatewayImpl(database.eventSnapshotQueries)
+    fun queries(): LocalEventsGateway = LocalEventsGatewayImpl(database.eventSnapshotQueries)
 
     private inline fun <reified T : Any> jsonAdapter() = object : ColumnAdapter<T, String> {
         override fun decode(databaseValue: String): T = Json.decodeFromString(databaseValue)

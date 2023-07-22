@@ -50,8 +50,14 @@ object Versions {
         const val adjust = "4.33.0"
     }
 
-    // room
-    const val roomVersion = "2.4.2"
+    // kotlin
+    object Kotlin {
+        const val core = "1.8.21"
+        const val serialization = "1.5.1"
+    }
+
+    // sqlDelight
+    const val sqlDelight = "2.0.0-rc02"
 
     // design
     const val materialDesignVersion = "1.6.1"
