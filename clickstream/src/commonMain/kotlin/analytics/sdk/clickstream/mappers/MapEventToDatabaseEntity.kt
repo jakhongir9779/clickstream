@@ -8,10 +8,10 @@ import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.properties.EventPropertiesDelegate
 import analytics.sdk.clickstream.properties.PropertiesProvider
 import analytics.sdk.database.model.EventSnapshotEntity
-import com.squareup.moshi.JsonAdapter
-
+//import com.squareup.moshi.JsonAdapter
+import kotlinx.serialization.json.Json
 internal class MapEventToDatabaseEntity(
-    private val eventAdapter: JsonAdapter<Event>,
+//    private val eventAdapter: JsonAdapter<Event>,
     private val propertiesProvider: PropertiesProvider,
     private val eventPropertiesDelegate: EventPropertiesDelegate,
     private val timestamp: () -> Long,
@@ -22,38 +22,38 @@ internal class MapEventToDatabaseEntity(
         val properties = propertiesProvider.toMapWithJsonValues()
         val propertiesHash = properties.hashCode().toString()
 
-        val jsonEvent = populateEvent(event)
+//        val jsonEvent = populateEvent(event)
 
         return EventSnapshotEntity(
-            event = jsonEvent,
+            event =  Json.Default,
             properties = properties,
             propertyHash = propertiesHash,
         )
     }
 
 
-    private fun populateEvent(clickStreamEvent: ClickstreamEvent): String {
-        val shouldIncrementCounter =
-            clickStreamEvent.uiProperties?.action == UiProperties.Action.SPACE_OPEN
-        val eventAdditionalProperties = eventPropertiesDelegate.get(shouldIncrementCounter)
-
-        val uiProperties = clickStreamEvent.uiProperties?.let {
-            val (viewId, previousViewId) = eventPropertiesDelegate.getViewId()
-            it.toDb(viewId, previousViewId)
-        }
-
-        val event = Event(
-            counter = eventAdditionalProperties.counter,
-            timeZone = eventAdditionalProperties.timeZone,
-            uiProperties = uiProperties,
-            timestamp = timestamp(),
-            eventProperties = clickStreamEvent.eventProperties?.toDb(),
-            connectionType = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
-            isInteractive = clickStreamEvent.isInteractive
-        )
-
-        return eventAdapter.toJson(event)
-    }
+//    private fun populateEvent(clickStreamEvent: ClickstreamEvent): String {
+//        val shouldIncrementCounter =
+//            clickStreamEvent.uiProperties?.action == UiProperties.Action.SPACE_OPEN
+//        val eventAdditionalProperties = eventPropertiesDelegate.get(shouldIncrementCounter)
+//
+//        val uiProperties = clickStreamEvent.uiProperties?.let {
+//            val (viewId, previousViewId) = eventPropertiesDelegate.getViewId()
+//            it.toDb(viewId, previousViewId)
+//        }
+//
+//        val event = Event(
+//            counter = eventAdditionalProperties.counter,
+//            timeZone = eventAdditionalProperties.timeZone,
+//            uiProperties = uiProperties,
+//            timestamp = timestamp(),
+//            eventProperties = clickStreamEvent.eventProperties?.toDb(),
+//            connectionType = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
+//            isInteractive = clickStreamEvent.isInteractive
+//        )
+//
+//        return eventAdapter.toJson(event)
+//    }
 
     private fun EventProperties.toDb(): analytics.sdk.clickstream.data.model.EventProperties =
         analytics.sdk.clickstream.data.model.EventProperties(

@@ -4,9 +4,9 @@ import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 
-actual class DriverFactory(private val context: Context) {
+class AndroidDriverFactory(val context: Context) : DriverFactory {
 
-    actual fun createDriver(): SqlDriver = AndroidSqliteDriver(
+    override fun createDriver(): SqlDriver = AndroidSqliteDriver(
         context = context,
         name = "clickstream.db",
         schema = Database.Schema,

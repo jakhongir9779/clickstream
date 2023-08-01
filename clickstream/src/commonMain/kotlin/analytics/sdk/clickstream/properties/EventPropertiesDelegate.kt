@@ -1,16 +1,16 @@
 package analytics.sdk.clickstream.properties
 
-import analytics.sdk.clickstream.sharedpreference.key
-import android.content.SharedPreferences
+import kotlin.jvm.Synchronized
 
 internal class EventPropertiesDelegate internal constructor(
-    sharedPreferences: SharedPreferences,
+//    sharedPreferences: SharedPreferences,
     private val generateUUID: () -> String,
     private val getTimezoneId: () -> String,
     private val generateTimestamp: () -> Long,
 ) : UpdateSessionId, UpdateCounter {
-    private var _sessionId: String? by sharedPreferences key SESSION_ID
-    private var lastViewId: String? by sharedPreferences key LAST_VIEW_ID
+//    private var _sessionId: String? by sharedPreferences key SESSION_ID
+//    private var lastViewId: String? by sharedPreferences key LAST_VIEW_ID
+    private var lastViewId: String? = ""
     private var counter = 1L
 
     @Synchronized
@@ -30,7 +30,7 @@ internal class EventPropertiesDelegate internal constructor(
 
     @Synchronized
     override fun updateSessionId() {
-        _sessionId = generateUUID()
+//        _sessionId = generateUUID()
     }
 
     @Synchronized
@@ -43,8 +43,8 @@ internal class EventPropertiesDelegate internal constructor(
         if (incrementCounter) ++counter else counter
 
     @Synchronized
-    fun getSessionId(): String =
-        _sessionId ?: generateUUID()
+    fun getSessionId(): String =""
+//        _sessionId ?: generateUUID()
 
     @Synchronized
     fun getTimestamp(): String =

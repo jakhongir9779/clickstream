@@ -3,10 +3,7 @@ package analytics.sdk.clickstream.gateway
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.database.model.EventSnapshotEntity
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import timber.log.Timber
+
 
 internal class ClickstreamRemoteGatewayImpl(
     private val api: ClickstreamAnalyticsApi,
@@ -25,47 +22,47 @@ internal class ClickstreamRemoteGatewayImpl(
     ): List<EventResult> = try {
         val body = mapEntityToJsonBodyString(events)
         val result = api.sendEvents(body)
-        if (result.isSuccessful) {
-            events.map { EventResult.Succeed(it.id) }
-        } else {
+//        if (result.isSuccessful) {
+//            events.map { EventResult.Succeed(it.id) }
+//        } else {
             events.map { EventResult.Failed(it.id) }
-        }
+//        }
     } catch (e: Exception) {
-        Timber.e(Exception(Exception("Failed to send events $events", e)))
+//        Timber.e(Exception(Exception("Failed to send events $events", e)))
         events.map { EventResult.Failed(it.id) }
     }
 
     // TODO refactor double work string <-> json <-> string
     private fun mapEntityToJsonBodyString(events: List<EventSnapshotEntity>): String {
-        val jsonObject = JsonObject()
-
-        events.first().properties.forEach { (k, v) ->
-            val j = JsonObject()
-
-            val map = gson.fromJson(v, Map::class.java)
-            map.forEach { (kk, vv) ->
-                check(kk is String)
-                check(vv is String)
-                j.addProperty(kk, vv)
-            }
-            jsonObject.add(k, j)
-        }
-
-        val eventArray = JsonArray(events.size)
-        events.forEach {
-            val fromJson = it.event
-            eventArray.add(fromJson)
-        }
-        jsonObject.add(EVENTS_JSON_KEY, eventArray)
-
-
-        // TODO change to production
-        val body = gson.toJson(jsonObject)
-        return body
+//        val jsonObject = JsonObject()
+//
+//        events.first().properties.forEach { (k, v) ->
+//            val j = JsonObject()
+//
+//            val map = gson.fromJson(v, Map::class.java)
+//            map.forEach { (kk, vv) ->
+//                check(kk is String)
+//                check(vv is String)
+//                j.addProperty(kk, vv)
+//            }
+//            jsonObject.add(k, j)
+//        }
+//
+//        val eventArray = JsonArray(events.size)
+//        events.forEach {
+//            val fromJson = it.event
+//            eventArray.add(fromJson)
+//        }
+//        jsonObject.add(EVENTS_JSON_KEY, eventArray)
+//
+//
+//        // TODO change to production
+//        val body = gson.toJson(jsonObject)
+        return "body"
     }
 
     private companion object {
         private const val EVENTS_JSON_KEY = "events"
-        private val gson = Gson()
+//        private val gson = Gson()
     }
 }
