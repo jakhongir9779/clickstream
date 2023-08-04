@@ -2,6 +2,7 @@ package analytics.sdk.clickstream.properties
 
 import kotlin.jvm.Synchronized
 
+
 internal class EventPropertiesDelegate internal constructor(
 //    sharedPreferences: SharedPreferences,
     private val generateUUID: () -> String,

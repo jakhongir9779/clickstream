@@ -1,16 +1,17 @@
 import kotlin.String;
 import kotlin.collections.Map;
-import kotlinx.serialization.json.Json;
 
 CREATE TABLE event_snapshot (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    event_json TEXT AS Json NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_json TEXT AS String NOT NULL,
     properties_map_json TEXT AS Map<String, String> NOT NULL,
     properties_hash TEXT NOT NULL
 );
 
+
+
 save:
-INSERT INTO event_snapshot VALUES :event;
+INSERT INTO event_snapshot VALUES(?,?,?,?);
 
 getAllByCount:
 SELECT * FROM event_snapshot LIMIT :count;

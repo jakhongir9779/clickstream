@@ -21,7 +21,7 @@ internal class ClickstreamAnalyticsEventSender(
             require(event is ClickstreamEvent)
             localEventsGateway.save(mapEventToDatabaseEntity(event))
         } catch (e: Exception) {
-//            Timber.e(Exception("Error while trying to save to database", e))
+            println("Error while trying to save to database $e")
         }
     }
 }

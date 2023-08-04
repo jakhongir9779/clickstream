@@ -1,6 +1,9 @@
 package analytics.sdk.clickstream.data.model
 
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 internal data class Event(
     val counter: Long? = null,
 

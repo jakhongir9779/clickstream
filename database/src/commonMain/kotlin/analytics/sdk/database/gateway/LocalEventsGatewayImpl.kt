@@ -1,7 +1,6 @@
 package analytics.sdk.database.gateway
 
 import analytics.sdk.database.EventSnapshotQueries
-import analytics.sdk.database.mapper.toLocalModel
 import analytics.sdk.database.mapper.toPublicModel
 import analytics.sdk.database.model.EventSnapshotEntity
 
@@ -10,7 +9,7 @@ internal class LocalEventsGatewayImpl(
 ) : LocalEventsGateway {
 
     override fun save(event: EventSnapshotEntity) {
-        queries.save(event.toLocalModel())
+        queries.save(null, event.event, event.properties, event.propertyHash)
     }
 
     override fun getAllByCount(count: Int): List<EventSnapshotEntity> {

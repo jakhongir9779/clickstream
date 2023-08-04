@@ -15,6 +15,7 @@ object Versions {
         }
     }
 
+    const val ktor = "2.3.2"
     const val googleServices = "4.3.10"
     const val gradlePlugin = "7.2.1"
     const val kotlin = "1.6.21"
