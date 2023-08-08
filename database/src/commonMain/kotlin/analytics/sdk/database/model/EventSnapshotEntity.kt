@@ -1,10 +1,12 @@
 package analytics.sdk.database.model
 
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.Serializable
 
-data class EventSnapshotEntity(
+
+@Serializable
+data class  EventSnapshotEntity(
     val id: Long = 0,
-    val event: Json,
+    val event: String,
     val properties: Map<String, String>,
     val propertyHash: String,
 )

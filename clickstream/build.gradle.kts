@@ -40,6 +40,11 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 //                implementation(Libraries.Network.Retrofit.core)
                 implementation(Libraries.Kotlin.Coroutines.core)
+                implementation(Libraries.Ktor.clientCore)
+                implementation(Libraries.Ktor.clientCio)
+                implementation(Libraries.Ktor.clientLogging)
+                implementation(Libraries.Ktor.clientContentNegotiation)
+                implementation(Libraries.Ktor.clientJson)
 //                implementation(Libraries.Network.OkHttp.logging)
 
                 implementation(Libraries.Kotlin.Coroutines.core)

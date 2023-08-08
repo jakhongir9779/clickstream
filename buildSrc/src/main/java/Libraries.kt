@@ -34,6 +34,13 @@ object Libraries {
     object Acquiring {
         const val tinkoff = "ru.tinkoff.acquiring:ui:${Versions.Acquiring.tinkoff}"
     }
+    object Ktor {
+        const val clientCore = "io.ktor:ktor-client-core:${Versions.ktor}"
+        const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
+        const val clientLogging = "io.ktor:ktor-client-logging:${Versions.ktor}"
+        const val clientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
+        const val clientJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
+    }
 
     object ExoPlayer {
         const val core = "com.google.android.exoplayer:exoplayer-core:${Versions.exoplayerVersion}"

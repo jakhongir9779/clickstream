@@ -1,15 +1,15 @@
 package analytics.sdk.clickstream
 
+
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
+import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
-import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.exposure.ExposureExperimentsImpl
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
-import analytics.sdk.clickstream.properties.ClickstreamLifecycleCallbacks
 import analytics.sdk.clickstream.properties.EventPropertiesDelegate
 import analytics.sdk.clickstream.properties.PropertiesProvider
 import analytics.sdk.clickstream.properties.application.ApplicationAnalyticsProperties
@@ -26,10 +26,20 @@ import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.DriverFactory
 import analytics.sdk.database.gateway.LocalEventsGateway
-//import android.app.Application
-//import android.content.Context
-//import android.content.SharedPreferences
-//import com.squareup.moshi.Moshi
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
+import io.ktor.client.request.header
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.Url
+import io.ktor.http.encodedPath
+import io.ktor.http.takeFrom
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,20 +47,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import kotlin.jvm.Volatile
-//import okhttp3.OkHttpClient
-//import okhttp3.logging.HttpLoggingInterceptor
-//import retrofit2.Retrofit
-//import retrofit2.converter.moshi.MoshiConverterFactory
-//import retrofit2.converter.scalars.ScalarsConverterFactory
-
-//import java.util.Calendar
-//import java.util.UUID
 import kotlin.properties.Delegates
 
 @Suppress("UNCHECKED_CAST")
 class ClickstreamSdk(
-    url: String,
+    urlString: String,
     propertiesProvider: PropertiesProvider,
     clickStreamConfig: ClickstreamConfig,
     requestHeaders: Map<String, () -> String>,
@@ -58,11 +61,7 @@ class ClickstreamSdk(
 ) {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-//        Timber.e(
-//            Exception(
-//                "ClickStreamSdk", throwable
-//            )
-//        )
+        println("Exception in coroutine: $throwable")
     }
 
     private val coroutineScope = CoroutineScope(
@@ -85,31 +84,24 @@ class ClickstreamSdk(
 //        check(applicationContext is Application)
         database = ClickstreamDatabase(clickStreamConfig.databaseDriverFactory)
         localEventsGateway = database.queries()
-//        val eventPropertiesDelegate = createEventPropertiesDelegate(applicationContext)
-//        val moshi = Moshi.Builder().build()
+        val eventPropertiesDelegate = createEventPropertiesDelegate(/*applicationContext*/)
 //        val connectivity = Connectivity()
-//        sender = createAnalyticsClickStreamSender(
-//            localEventsGateway, createMapEventToDatabaseEntity(
-////                moshi,
-//                propertiesProvider,
-////                eventPropertiesDelegate,
-//                { /*connectivity.isConnectedWifi(applicationContext.applicationContext)*/
-//                     true
-//                },
-//            )
-//        )
+        sender = createAnalyticsClickStreamSender(
+            localEventsGateway, createMapEventToDatabaseEntity(
+//                moshi,
+                propertiesProvider,
+                eventPropertiesDelegate,
+                { /*connectivity.isConnectedWifi(applicationContext.applicationContext)*/
+                    true
+                },
+            )
+        )
 
-//        val okHttpClient = OkHttpClient.Builder().build()
-//        val retrofit =
-//            Retrofit.Builder().baseUrl(url).addConverterFactory(ScalarsConverterFactory.create())
-//                .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
-//                    okHttpClient.newBuilder().addInterceptor(RequestInterceptor(requestHeaders))
-//                        .addDebugHttpLoggingInterceptor().build()
-//                ).build()
         if (isDebug) {
 //            Timber.plant(Timber.DebugTree())
         }
-//        api = retrofit.create(ClickstreamAnalyticsApi::class.java)
+
+        api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, urlString))
         createGrowthExposure(propertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
         worker = AnalyticsWorker.get(
@@ -125,9 +117,37 @@ class ClickstreamSdk(
 //        )
     }
 
-    fun send(
-        builder: ClickstreamBuilder.() -> ClickstreamEvent
-    ) {
+    private fun buildCioHttpClient(
+        headers: Map<String, () -> String>,
+        baseUrl: String
+    ): HttpClient {
+        val httpClient = HttpClient(CIO) {
+            expectSuccess = true
+            defaultRequest {
+                url.protocol = URLProtocol.HTTPS
+                val urlBuilder = URLBuilder(Url(baseUrl))
+                urlBuilder.encodedPath += urlBuilder.encodedPath
+                url.takeFrom(urlBuilder)
+            }
+            install(Logging)
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
+        httpClient.plugin(HttpSend).intercept { request ->
+            headers.forEach { (k, v) ->
+                request.header(k, v)
+            }
+            execute(request)
+        }
+        return httpClient
+    }
+
+    fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
         send(ClickstreamBuilder().builder())
     }
 
@@ -161,14 +181,15 @@ class ClickstreamSdk(
 //            else this
 //        }
 
-//    private fun createEventPropertiesDelegate(
+    private fun createEventPropertiesDelegate(
 //        context: Context,
-//    ): EventPropertiesDelegate = EventPropertiesDelegate(context.getSharedPreferences(
+    ): EventPropertiesDelegate = EventPropertiesDelegate(
+//        context.getSharedPreferences(
 //        EventPropertiesDelegate.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE
 //    ),
-//        { UUID.randomUUID().toString() },
-//        { Calendar.getInstance().timeZone.id },
-//        { System.currentTimeMillis() })
+        { /*UUID.randomUUID().toString() */ "" },
+        { /*Calendar.getInstance().timeZone.id*/ "" },
+        {/* System.currentTimeMillis() */0 })
 
     private fun createAnalyticsClickStreamSender(
         localEventsGateway: LocalEventsGateway,
@@ -208,7 +229,7 @@ class ClickstreamSdk(
             clickStreamPropProviders: PropertiesProvider?,
             appVersion: String,
             packageName: String,
-            driverFactory:DriverFactory,
+            driverFactory: DriverFactory,
             config: ClickstreamConfig = ClickstreamConfig(5, 20, driverFactory),
             requestHeaders: Map<String, () -> String> = emptyMap(),
             isDebug: Boolean,
@@ -224,7 +245,8 @@ class ClickstreamSdk(
 //                    ),
                     getUUID = {
                         /*UUID.randomUUID().toString()*/
-                        ""},
+                        ""
+                    },
                 )
 
                 // should drop default in case of conflict
@@ -268,7 +290,7 @@ class ClickstreamSdk(
 
                 val clickStream = ClickstreamSdk(
 //                    applicationContext = applicationContext,
-                    url = url,
+                    urlString = url,
                     propertiesProvider = mergedPropertiesProviders,
                     requestHeaders = requestHeaders,
                     clickStreamConfig = config,

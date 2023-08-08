@@ -1,7 +1,9 @@
 package analytics.sdk.clickstream.data.model
 
+import kotlinx.serialization.Serializable
 
 
+@Serializable
 internal class UiProperties(
     val space: Space?,
 
@@ -15,6 +17,7 @@ internal class UiProperties(
 )
 
 
+@Serializable
 internal class Group(
     val name: String,
 
@@ -22,6 +25,7 @@ internal class Group(
 )
 
 
+@Serializable
 internal class Widget(
     val name: String,
 
@@ -37,6 +41,7 @@ internal class Widget(
 )
 
 
+@Serializable
 internal class Section(
     val id: String?,
 
@@ -51,6 +56,7 @@ internal class Section(
  * WidgetSpace это зона, в пределах которой происходят все взаимодействия с виджетами этой зоны
  */
 
+@Serializable
 internal class Space(
     // example: 420502
     val id: String?,
