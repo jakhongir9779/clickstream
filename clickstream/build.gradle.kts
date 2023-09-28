@@ -38,14 +38,12 @@ kotlin {
                 implementation(project(":event"))
                 implementation(project(":database"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-//                implementation(Libraries.Network.Retrofit.core)
-                implementation(Libraries.Kotlin.Coroutines.core)
+
                 implementation(Libraries.Ktor.clientCore)
                 implementation(Libraries.Ktor.clientCio)
                 implementation(Libraries.Ktor.clientLogging)
                 implementation(Libraries.Ktor.clientContentNegotiation)
                 implementation(Libraries.Ktor.clientJson)
-//                implementation(Libraries.Network.OkHttp.logging)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
 //                implementation(Libraries.Kotlin.Coroutines.android)
@@ -53,17 +51,9 @@ kotlin {
 
 //                implementation(Libraries.Kotlin.androidExtensionsRuntime)
 //                implementation(Libraries.AndroidX.annotation)
-//                implementation(Libraries.Network.Retrofit.core)
-//                implementation(Libraries.Network.Retrofit.converterMoshi)
-//                implementation(Libraries.Network.Retrofit.adapterCoroutines)
-//                implementation(Libraries.Network.OkHttp.core)
-//                implementation(Libraries.Network.OkHttp.logging)
-
 //                implementation(Libraries.Google.Services.gmsAds)
 
-//                implementation(Libraries.Logging.timber)
-//                implementation("com.squareup.retrofit2:converter-scalars:2.1.0")
-//                implementation("com.google.code.gson:gson:2.10.1")
+                implementation(Libraries.Logging.kermit)
             }
         }
         val commonTest by getting {

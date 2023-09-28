@@ -3,6 +3,7 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -22,11 +23,7 @@ internal class AnalyticsWorker(
 ) {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-//        Timber.e(
-//            Exception(
-//                "AnalyticsWorker", throwable
-//            )
-//        )
+        Logger.e(throwable) { "AnalyticsWorker" }
     }
 
     private val coroutineScope = CoroutineScope(
@@ -63,17 +60,12 @@ internal class AnalyticsWorker(
                                 delay(backoffStrategy.getMillis())
                             }
                         } catch (e: Exception) {
-//                            Timber.e(Exception("AnalyticsDispatchWorker failed with error", e))
+                            Logger.e(e) {"AnalyticsDispatchWorker failed with error" }
                             delay(backoffStrategy.getMillis())
                         }
                     }
                 } catch (e: Exception) {
-//                    Timber.e(
-//                        Exception(
-//                            "AnalyticsDispatchWorker failed trying to check count of events",
-//                            e
-//                        )
-//                    )
+                    Logger.e(e) { "AnalyticsDispatchWorker failed trying to check count of events" }
                     delay(backoffStrategy.getMillis())
                 }
             }

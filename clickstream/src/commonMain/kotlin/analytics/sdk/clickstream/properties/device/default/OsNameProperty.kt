@@ -10,7 +10,7 @@ internal class OsNameProperty : DeviceAnalyticsProperties {
 //        try {
 //            Build.VERSION_CODES::class.java.fields[Build.VERSION.SDK_INT].name
 //        } catch (e: Exception) {
-////            Timber.e(Exception("failed while trying to get os name property"))
+////            Logger.e(e) { "Failed while trying to get OS name property" }
 //            ""
 //        }
 

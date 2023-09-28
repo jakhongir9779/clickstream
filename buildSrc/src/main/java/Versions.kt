@@ -192,7 +192,7 @@ object Versions {
     }
 
     object Logging {
-        const val timber = "5.0.1"
+        const val kermit = "2.0.1"
         const val anrWatchDog = "1.4.0"
     }
 

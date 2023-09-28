@@ -26,6 +26,7 @@ import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.DriverFactory
 import analytics.sdk.database.gateway.LocalEventsGateway
+import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpSend
@@ -96,10 +97,6 @@ class ClickstreamSdk(
                 },
             )
         )
-
-        if (isDebug) {
-//            Timber.plant(Timber.DebugTree())
-        }
 
         api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, urlString))
         createGrowthExposure(propertiesProvider)
@@ -251,30 +248,44 @@ class ClickstreamSdk(
 
                 // should drop default in case of conflict
                 val appProps = defaultPropertiesProvider.appProvider.properties().apply {
-                    clickStreamPropProviders?.appProvider?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-//                        Timber.w("This app properties conflicted ${replaced.joinToString(separator = ",") { it }}, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.appProvider?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This app properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 
                 val userProps = defaultPropertiesProvider.userProps.properties().apply {
-                    clickStreamPropProviders?.userProps?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-//                        Timber.w("This user properties conflicted ${replaced.joinToString(separator = ",") { it }}, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.userProps?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This user properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 
                 val deviceProps = defaultPropertiesProvider.deviceProps.properties().apply {
-                    clickStreamPropProviders?.deviceProps?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-//                        Timber.w("This device properties conflicted ${
-//                            replaced.joinToString(
-//                                separator = ","
-//                            ) { it }
-//                        }, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.deviceProps?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This device properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 

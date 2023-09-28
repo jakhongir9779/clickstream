@@ -1,6 +1,7 @@
 package analytics.sdk.clickstream.properties.device.default
 
 import analytics.sdk.clickstream.properties.device.DeviceAnalyticsProperties
+import co.touchlab.kermit.Logger
 
 
 internal class GoogleAdvertisingIdProperty(
@@ -15,7 +16,7 @@ internal class GoogleAdvertisingIdProperty(
 //            ) return null
 //            return AdvertisingIdClient.getAdvertisingIdInfo(context).id!!
         } catch (e: Exception) {
-//            Timber.e(Exception("Failed to get gaid", e))
+            Logger.e(e) { "Failed to get gaid" }
             return null
         }
         return ""

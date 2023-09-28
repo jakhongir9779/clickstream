@@ -406,14 +406,14 @@ object Libraries {
     }
 
     object Logging {
-        const val timber = "com.jakewharton.timber:timber:${Versions.Logging.timber}"
+        const val kermit = "co.touchlab:kermit:${Versions.Logging.kermit}"
         private const val anrWatchDog =
             "com.github.anrwatchdog:anrwatchdog:${Versions.Logging.anrWatchDog}"
         private const val leakCanary =
             "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanaryVersion}"
 
-        fun DependencyHandler.timber() {
-            implementation(timber)
+        fun DependencyHandler.kermit() {
+            implementation(kermit)
         }
 
         fun DependencyHandler.anrWatchDog() {

@@ -1,7 +1,7 @@
 package analytics.sdk.clickstream.properties.user.default
 
 import analytics.sdk.clickstream.properties.user.UserAnalyticsProperties
-
+import co.touchlab.kermit.Logger
 
 
 /**
@@ -26,7 +26,7 @@ internal class OperatorCountryCodeProperty(
 //                return cache
 //            }
         } catch (e: Exception) {
-//            Timber.e(Exception("Failed to get country code", e))
+            Logger.e(e) { "Failed to get country code" }
             return ""
         }
 

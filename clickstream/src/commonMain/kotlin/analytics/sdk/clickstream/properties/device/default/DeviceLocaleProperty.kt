@@ -19,7 +19,7 @@ internal class DeviceLocaleProperty(
 //                context.resources.configuration.locale.toString()
 //            }
 //        } catch (e: Exception) {
-//            Timber.e(Exception("Failed to get Locale", e))
+//            Logger.e(e) { "Failed to get Locale" }
 //            ""
 //        }
 

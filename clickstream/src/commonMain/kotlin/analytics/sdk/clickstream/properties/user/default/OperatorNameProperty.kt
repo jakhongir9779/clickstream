@@ -19,7 +19,7 @@ internal class OperatorNameProperty(
 //                (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
 //                    .networkOperatorName
 //        } catch (e: Exception) {
-////            Timber.e(Exception("Failed to get operator name", e))
+////            Logger.e(e) { "Failed to get operator name" }
 //            return ""
 //        }
 

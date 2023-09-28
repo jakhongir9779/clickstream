@@ -3,6 +3,7 @@ package analytics.sdk.clickstream.gateway
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.database.model.EventSnapshotEntity
+import co.touchlab.kermit.Logger
 
 
 internal class ClickstreamRemoteGatewayImpl(
@@ -28,7 +29,7 @@ internal class ClickstreamRemoteGatewayImpl(
             events.map { EventResult.Failed(it.id) }
 //        }
     } catch (e: Exception) {
-//        Timber.e(Exception(Exception("Failed to send events $events", e)))
+        Logger.e(e) { "Failed to send events $events" }
         events.map { EventResult.Failed(it.id) }
     }
 

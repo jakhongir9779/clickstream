@@ -26,7 +26,7 @@ internal class OperatorNetworkCodeProperty(
 //                return cache
 //            }
         } catch (e: Exception) {
-//            Timber.e(Exception("Failed to get mobile network code", e))
+//            Logger.e(e) { "Failed to get mobile network code" }
             return ""
         }
 
