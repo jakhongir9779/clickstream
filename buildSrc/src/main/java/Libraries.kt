@@ -31,6 +31,8 @@ object Libraries {
     const val caverockSvg = "com.caverock:androidsvg-aar:${Versions.androidSvgVersion}"
     const val mongoDbDriver = "org.mongodb:mongodb-driver-sync:${Versions.mongodbDriverSyncVersion}"
 
+    const val settings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
+
     object Acquiring {
         const val tinkoff = "ru.tinkoff.acquiring:ui:${Versions.Acquiring.tinkoff}"
     }

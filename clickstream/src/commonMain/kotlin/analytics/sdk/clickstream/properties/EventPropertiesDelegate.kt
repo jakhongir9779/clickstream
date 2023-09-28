@@ -1,16 +1,14 @@
 package analytics.sdk.clickstream.properties
 
-import analytics.sdk.clickstream.sharedpreference.key
-import android.content.SharedPreferences
+import analytics.sdk.clickstream.settings.EventPropertiesSettings
 
 internal class EventPropertiesDelegate internal constructor(
-    sharedPreferences: SharedPreferences,
+    private val eventPropertiesSettings: EventPropertiesSettings,
     private val generateUUID: () -> String,
     private val getTimezoneId: () -> String,
     private val generateTimestamp: () -> Long,
 ) : UpdateSessionId, UpdateCounter {
-    private var _sessionId: String? by sharedPreferences key SESSION_ID
-    private var lastViewId: String? by sharedPreferences key LAST_VIEW_ID
+
     private var counter = 1L
 
     @Synchronized
@@ -25,12 +23,12 @@ internal class EventPropertiesDelegate internal constructor(
     @Synchronized
     fun getViewId(): ViewId {
         val generateNewViewId = generateUUID()
-        return ViewId(generateNewViewId, lastViewId)
+        return ViewId(generateNewViewId, eventPropertiesSettings.lastViewId)
     }
 
     @Synchronized
     override fun updateSessionId() {
-        _sessionId = generateUUID()
+        eventPropertiesSettings.sessionId = generateUUID()
     }
 
     @Synchronized
@@ -43,18 +41,10 @@ internal class EventPropertiesDelegate internal constructor(
         if (incrementCounter) ++counter else counter
 
     @Synchronized
-    fun getSessionId(): String =
-        _sessionId ?: generateUUID()
+    fun getSessionId(): String = eventPropertiesSettings.sessionId ?: generateUUID()
 
     @Synchronized
     fun getTimestamp(): String =
         generateTimestamp().toString()
 
-
-    internal companion object {
-        const val SHARED_PREFERENCES_FILE_NAME = "event_properties"
-
-        private const val SESSION_ID = "session_id"
-        private const val LAST_VIEW_ID = "last_view_id"
-    }
 }

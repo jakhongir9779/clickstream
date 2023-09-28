@@ -1,5 +1,3 @@
-import Libraries.Network.Retrofit.moshi
-
 plugins {
     kotlin("multiplatform").version("1.8.21")
     id("com.android.library")
@@ -31,10 +29,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 // put your multiplatform dependencies here
-                  implementation(project(":analyticstype"))
-                  implementation(project(":eventsender"))
-                  implementation(project(":common"))
-                  implementation(project(":event"))
+                implementation(project(":analyticstype"))
+                implementation(project(":eventsender"))
+                implementation(project(":common"))
+                implementation(project(":event"))
 
                 implementation(Libraries.Network.Retrofit.core)
                 implementation(Libraries.Kotlin.Coroutines.core)
@@ -54,6 +52,7 @@ kotlin {
 
                 implementation(Libraries.Google.Services.gmsAds)
 
+                implementation(Libraries.settings)
                 implementation(Libraries.Logging.timber)
                 implementation("com.squareup.retrofit2:converter-scalars:2.1.0")
                 implementation("com.google.code.gson:gson:2.10.1")
