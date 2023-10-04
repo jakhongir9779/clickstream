@@ -87,6 +87,8 @@ object Versions {
 
     const val circularProgressBar = "3.1.0"
 
+    const val settings = "1.0.0"
+
     object AndroidX {
         const val appcompat = "1.4.2"
         const val activity = "1.5.1"

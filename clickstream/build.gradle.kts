@@ -1,5 +1,3 @@
-import Libraries.Network.Retrofit.moshi
-
 plugins {
     kotlin("multiplatform").version("1.8.21")
     id("com.android.library")
@@ -46,14 +44,15 @@ kotlin {
                 implementation(Libraries.Ktor.clientJson)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-//                implementation(Libraries.Kotlin.Coroutines.android)
-//                implementation(Libraries.Kotlin.Coroutines.jdk)
+//              implementation(Libraries.Kotlin.Coroutines.android)
+//              implementation(Libraries.Kotlin.Coroutines.jdk)
 
-//                implementation(Libraries.Kotlin.androidExtensionsRuntime)
-//                implementation(Libraries.AndroidX.annotation)
-//                implementation(Libraries.Google.Services.gmsAds)
+//              implementation(Libraries.Kotlin.androidExtensionsRuntime)
+//              implementation(Libraries.AndroidX.annotation)
+//              implementation(Libraries.Google.Services.gmsAds)
 
                 implementation(Libraries.Logging.kermit)
+                implementation(Libraries.settings)
             }
         }
         val commonTest by getting {

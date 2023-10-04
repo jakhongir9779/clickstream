@@ -1,6 +1,5 @@
 package analytics.sdk.clickstream
 
-
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
@@ -20,9 +19,14 @@ import analytics.sdk.clickstream.properties.device.DeviceAnalyticsPropertyProvid
 import analytics.sdk.clickstream.properties.device.default.getDefaultDeviceProperties
 import analytics.sdk.clickstream.properties.user.UserAnalyticsProperties
 import analytics.sdk.clickstream.properties.user.UserAnalyticsPropertyProvider
-import analytics.sdk.clickstream.properties.user.default.UserInstallIdProperty
 import analytics.sdk.clickstream.properties.user.default.getDefaultUserProperties
+import analytics.sdk.clickstream.settings.ClickStreamSettings
+import analytics.sdk.clickstream.settings.EventPropertiesSettings
 import analytics.sdk.common.AnalyticsEventSender
+import android.app.Application
+import android.content.Context
+import com.russhwolf.settings.Settings
+import com.squareup.moshi.Moshi
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.DriverFactory
 import analytics.sdk.database.gateway.LocalEventsGateway
@@ -48,6 +52,14 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import timber.log.Timber
+import java.util.Calendar
+import java.util.UUID
 import kotlinx.serialization.json.Json
 import kotlin.jvm.Volatile
 import kotlin.properties.Delegates
@@ -58,6 +70,7 @@ class ClickstreamSdk(
     propertiesProvider: PropertiesProvider,
     clickStreamConfig: ClickstreamConfig,
     requestHeaders: Map<String, () -> String>,
+    private val settings: Settings,
     private val isDebug: Boolean = false,
 ) {
 
@@ -162,9 +175,13 @@ class ClickstreamSdk(
     }
 
     private fun createGrowthExposure(propertiesProvider: PropertiesProvider) {
-        exposureExperimentsApi = ExposureExperimentsImpl(api,
-            propertiesProvider.userProps.properties()
-                .find { it.key == UserInstallIdProperty.INSTALL_ID } ?: error("should be defined"))
+        val installId = requireNotNull(
+            value = propertiesProvider.userProps
+                .properties()
+                .find { it.key == ClickStreamSettings.INSTALL_ID },
+            lazyMessage = { "should be defined" }
+        )
+        exposureExperimentsApi = ExposureExperimentsImpl(api = api, installId = installId)
     }
 
     fun sender(): AnalyticsEventSender = sender
@@ -178,15 +195,13 @@ class ClickstreamSdk(
 //            else this
 //        }
 
-    private fun createEventPropertiesDelegate(
-//        context: Context,
-    ): EventPropertiesDelegate = EventPropertiesDelegate(
-//        context.getSharedPreferences(
-//        EventPropertiesDelegate.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE
-//    ),
-        { /*UUID.randomUUID().toString() */ "" },
-        { /*Calendar.getInstance().timeZone.id*/ "" },
-        {/* System.currentTimeMillis() */0 })
+    private fun createEventPropertiesDelegate(context: Context): EventPropertiesDelegate =
+        EventPropertiesDelegate(
+            eventPropertiesSettings = EventPropertiesSettings(settings),
+            generateUUID = { UUID.randomUUID().toString() },
+            getTimezoneId = { Calendar.getInstance().timeZone.id },
+            generateTimestamp = { System.currentTimeMillis() },
+        )
 
     private fun createAnalyticsClickStreamSender(
         localEventsGateway: LocalEventsGateway,
@@ -218,9 +233,6 @@ class ClickstreamSdk(
         @Volatile
         private var INSTANCE: ClickstreamSdk? = null
 
-        private const val SHARED_PREF_KEY = "clickstream"
-
-        @OptIn(InternalCoroutinesApi::class)
         fun initialize(
             url: String,
             clickStreamPropProviders: PropertiesProvider?,
@@ -230,20 +242,16 @@ class ClickstreamSdk(
             config: ClickstreamConfig = ClickstreamConfig(5, 20, driverFactory),
             requestHeaders: Map<String, () -> String> = emptyMap(),
             isDebug: Boolean,
+            settings: Settings,
         ): ClickstreamSdk {
             synchronized(this) {
                 if (INSTANCE != null) error("already initialized")
                 val defaultPropertiesProvider = createDefaultPropertyProviders(
                     appVersion = appVersion,
                     packageName = packageName,
-//                    context = applicationContext,
-//                    sharedPreferences = applicationContext.getSharedPreferences(
-//                        SHARED_PREF_KEY, Context.MODE_PRIVATE
-//                    ),
-                    getUUID = {
-                        /*UUID.randomUUID().toString()*/
-                        ""
-                    },
+                    context = applicationContext,
+                    clickStreamSettings = ClickStreamSettings(settings),
+                    getUUID = { UUID.randomUUID().toString() },
                 )
 
                 // should drop default in case of conflict
@@ -300,12 +308,13 @@ class ClickstreamSdk(
                 )
 
                 val clickStream = ClickstreamSdk(
-//                    applicationContext = applicationContext,
+                    applicationContext = applicationContext,
                     urlString = url,
                     propertiesProvider = mergedPropertiesProviders,
                     requestHeaders = requestHeaders,
                     clickStreamConfig = config,
                     isDebug = isDebug,
+                    settings = settings,
                 )
 
                 INSTANCE = clickStream
@@ -323,12 +332,12 @@ class ClickstreamSdk(
 }
 
 private fun createDefaultPropertyProviders(
-//    context: Context,
+    context: Context,
     appVersion: String,
     packageName: String,
-//    sharedPreferences: SharedPreferences,
+    clickStreamSettings: ClickStreamSettings,
     getUUID: () -> String,
-    getExistingInstallId: (() -> String)? = null
+    getExistingInstallId: (() -> String)? = null,
 ): PropertiesProvider = PropertiesProvider(
     appProvider = ApplicationAnalyticsPropertyProvider(
         getDefaultAppProperties(
@@ -337,12 +346,12 @@ private fun createDefaultPropertyProviders(
         ),
     ),
     deviceProps = DeviceAnalyticsPropertyProvider(
-        getDefaultDeviceProperties(/*context*/)
+        getDefaultDeviceProperties(context)
     ),
     userProps = UserAnalyticsPropertyProvider(
         getDefaultUserProperties(
-//            context,
-//            sharedPreferences,
+            context,
+            clickStreamSettings,
             getUUID,
             getExistingInstallId,
         )

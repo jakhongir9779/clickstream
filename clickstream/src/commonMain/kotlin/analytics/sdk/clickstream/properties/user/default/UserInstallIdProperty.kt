@@ -1,29 +1,21 @@
 package analytics.sdk.clickstream.properties.user.default
 
 import analytics.sdk.clickstream.properties.user.UserAnalyticsProperties
-//import analytics.sdk.clickstream.sharedpreference.key
-//import android.content.SharedPreferences
+import analytics.sdk.clickstream.settings.ClickStreamSettings
 
 internal class UserInstallIdProperty(
-//    sharedPreferences: SharedPreferences,
+    private val clickStreamSettings: ClickStreamSettings,
     private val getUUID: () -> String,
-    private val getExistingInstallId: (() -> String)? = null
+    private val getExistingInstallId: (() -> String)? = null,
 ) : UserAnalyticsProperties {
-    override val key: String = INSTALL_ID
-
-//    private var installId: String? by sharedPreferences key INSTALL_ID
+    override val key: String = ClickStreamSettings.INSTALL_ID
 
     override fun getValue(): String {
-//        if (getExistingInstallId != null) return getExistingInstallId.invoke()
-//
-//        if (installId != null) return installId ?: error("can't be null")
-//        installId = getUUID()
-//
-//        return installId ?: error("can't be null")
-        return ""
-    }
+        if (getExistingInstallId != null) return getExistingInstallId.invoke()
 
-    internal companion object {
-        const val INSTALL_ID = "install_id"
+        return clickStreamSettings.installId ?: run {
+            clickStreamSettings.installId = getUUID()
+            requireNotNull(value = clickStreamSettings.installId, lazyMessage = { "can't be null" })
+        }
     }
 }
