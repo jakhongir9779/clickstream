@@ -2,6 +2,7 @@ package analytics.sdk.android
 
 import analytics.sdk.clickstream.ClickstreamSdk
 import analytics.sdk.database.AndroidDriverFactory
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.russhwolf.settings.SharedPreferencesSettings
+
 class MainActivity : ComponentActivity() {
 
     val clickstreamSdk = ClickstreamSdk.initialize(
@@ -20,6 +23,12 @@ class MainActivity : ComponentActivity() {
         appVersion = "1.0.0",
         packageName = packageName,
         driverFactory = AndroidDriverFactory(this),
+        clickstreamSettings = SharedPreferencesSettings(
+            getSharedPreferences("clickstream", Context.MODE_PRIVATE)
+        ),
+        eventPropertiesSettings = SharedPreferencesSettings(
+            getSharedPreferences("event_properties", Context.MODE_PRIVATE)
+        ),
         isDebug = BuildConfig.DEBUG
     )
     override fun onCreate(savedInstanceState: Bundle?) {
