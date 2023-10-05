@@ -1,13 +1,11 @@
 package analytics.sdk.clickstream.data.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
-@JsonClass(generateAdapter = true)
+@Serializable
 internal class EventProperties(
-    @Json(name = "event_type")
     val eventType: String,
 
-    @Json(name = "event_parameters")
-    val eventParameters: Map<String, Any>
+    val eventParameters: JsonObject
 )

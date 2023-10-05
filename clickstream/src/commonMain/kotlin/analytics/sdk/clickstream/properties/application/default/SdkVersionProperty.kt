@@ -1,6 +1,5 @@
 package analytics.sdk.clickstream.properties.application.default
 
-import analytics.sdk.clickstream.BuildConfig
 import analytics.sdk.clickstream.properties.application.ApplicationAnalyticsProperties
 
 /**
@@ -9,8 +8,8 @@ import analytics.sdk.clickstream.properties.application.ApplicationAnalyticsProp
 internal class SdkVersionProperty : ApplicationAnalyticsProperties {
     override val key: String = KEY
 
-    override fun getValue(): String =
-        BuildConfig.SDK_VERSION
+    override fun getValue(): String =""
+//        BuildConfig.SDK_VERSION
 
     internal companion object {
         const val KEY = "sdk_version"

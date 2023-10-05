@@ -1,8 +1,11 @@
 package analytics.sdk.clickstream.builder.widget
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class Widget private constructor(
     open val name: String,
-    val type: Widget.Type,
+    val type: Type,
 ) {
 
     class Button internal constructor(

@@ -4,7 +4,9 @@ import analytics.sdk.clickstream.builder.group.Group
 import analytics.sdk.clickstream.builder.section.Section
 import analytics.sdk.clickstream.builder.space.Space
 import analytics.sdk.clickstream.builder.widget.Widget
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UiProperties internal constructor(
     val widget: Widget?,
     val space: Space?,

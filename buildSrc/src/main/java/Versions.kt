@@ -15,6 +15,7 @@ object Versions {
         }
     }
 
+    const val ktor = "2.3.2"
     const val googleServices = "4.3.10"
     const val gradlePlugin = "7.2.1"
     const val kotlin = "1.6.21"
@@ -50,8 +51,14 @@ object Versions {
         const val adjust = "4.33.0"
     }
 
-    // room
-    const val roomVersion = "2.4.2"
+    // kotlin
+    object Kotlin {
+        const val core = "1.8.21"
+        const val serialization = "1.5.1"
+    }
+
+    // sqlDelight
+    const val sqlDelight = "2.0.0-rc02"
 
     // design
     const val materialDesignVersion = "1.6.1"
@@ -187,7 +194,7 @@ object Versions {
     }
 
     object Logging {
-        const val timber = "5.0.1"
+        const val kermit = "2.0.1"
         const val anrWatchDog = "1.4.0"
     }
 

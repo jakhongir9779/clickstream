@@ -1,18 +1,14 @@
 package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
+import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
-import analytics.sdk.clickstream.data.database.ClickstreamDatabase
-import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.exposure.ExposureExperimentsImpl
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
-import analytics.sdk.clickstream.gateway.LocalEventsGateway
-import analytics.sdk.clickstream.gateway.RequestInterceptor
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
-import analytics.sdk.clickstream.properties.ClickstreamLifecycleCallbacks
 import analytics.sdk.clickstream.properties.EventPropertiesDelegate
 import analytics.sdk.clickstream.properties.PropertiesProvider
 import analytics.sdk.clickstream.properties.application.ApplicationAnalyticsProperties
@@ -27,42 +23,49 @@ import analytics.sdk.clickstream.properties.user.default.getDefaultUserPropertie
 import analytics.sdk.clickstream.settings.ClickStreamSettings
 import analytics.sdk.clickstream.settings.EventPropertiesSettings
 import analytics.sdk.common.AnalyticsEventSender
-import android.app.Application
-import android.content.Context
 import com.russhwolf.settings.Settings
-import com.squareup.moshi.Moshi
+import analytics.sdk.database.ClickstreamDatabase
+import analytics.sdk.database.DriverFactory
+import analytics.sdk.database.gateway.LocalEventsGateway
+import co.touchlab.kermit.Logger
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
+import io.ktor.client.request.header
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.Url
+import io.ktor.http.encodedPath
+import io.ktor.http.takeFrom
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import timber.log.Timber
-import java.util.Calendar
-import java.util.UUID
+import kotlinx.serialization.json.Json
+import kotlin.jvm.Volatile
 import kotlin.properties.Delegates
 
 @Suppress("UNCHECKED_CAST")
 class ClickstreamSdk(
-    applicationContext: Context,
-    url: String,
+    urlString: String,
     propertiesProvider: PropertiesProvider,
     clickStreamConfig: ClickstreamConfig,
     requestHeaders: Map<String, () -> String>,
-    private val settings: Settings,
+    private val settings: EventPropertiesSettings,
     private val isDebug: Boolean = false,
 ) {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Timber.e(
-            Exception(
-                "ClickStreamSdk", throwable
-            )
-        )
+        println("Exception in coroutine: $throwable")
     }
 
     private val coroutineScope = CoroutineScope(
@@ -82,50 +85,69 @@ class ClickstreamSdk(
     // ORDER MATTERS
     // DO NOT CHANGE
     init {
-        check(applicationContext is Application)
-        database = createDatabase(applicationContext)
-        localEventsGateway = database.events()
-        val eventPropertiesDelegate = createEventPropertiesDelegate(applicationContext)
-        val moshi = Moshi.Builder().build()
-        val connectivity = Connectivity()
+//        check(applicationContext is Application)
+        database = ClickstreamDatabase(clickStreamConfig.databaseDriverFactory)
+        localEventsGateway = database.queries()
+        val eventPropertiesDelegate = createEventPropertiesDelegate()
+//        val connectivity = Connectivity()
         sender = createAnalyticsClickStreamSender(
             localEventsGateway, createMapEventToDatabaseEntity(
-                moshi,
+//                moshi,
                 propertiesProvider,
                 eventPropertiesDelegate,
-                { connectivity.isConnectedWifi(applicationContext.applicationContext) },
+                { /*connectivity.isConnectedWifi(applicationContext.applicationContext)*/
+                    true
+                },
             )
         )
 
-        val okHttpClient = OkHttpClient.Builder().build()
-        val retrofit =
-            Retrofit.Builder().baseUrl(url).addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create(moshi)).client(
-                    okHttpClient.newBuilder().addInterceptor(RequestInterceptor(requestHeaders))
-                        .addDebugHttpLoggingInterceptor().build()
-                ).build()
-        if (isDebug) {
-            Timber.plant(Timber.DebugTree())
-        }
-        api = retrofit.create(ClickstreamAnalyticsApi::class.java)
+        api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, urlString))
         createGrowthExposure(propertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
         worker = AnalyticsWorker.get(
             localEventsGateway, remoteGateway, clickStreamConfig
         )
 
-        applicationContext.registerActivityLifecycleCallbacks(
-            ClickstreamLifecycleCallbacks(
-                applicationContext,
-                eventPropertiesDelegate,
-                eventPropertiesDelegate,
-            )
-        )
+//        applicationContext.registerActivityLifecycleCallbacks(
+//            ClickstreamLifecycleCallbacks(
+//                applicationContext,
+//                eventPropertiesDelegate,
+//                eventPropertiesDelegate,
+//            )
+//        )
     }
 
-    fun send(
-        builder: ClickstreamBuilder.() -> ClickstreamEvent
-    ) {
+    private fun buildCioHttpClient(
+        headers: Map<String, () -> String>,
+        baseUrl: String
+    ): HttpClient {
+        val httpClient = HttpClient(CIO) {
+            expectSuccess = true
+            defaultRequest {
+                url.protocol = URLProtocol.HTTPS
+                val urlBuilder = URLBuilder(Url(baseUrl))
+                urlBuilder.encodedPath += urlBuilder.encodedPath
+                url.takeFrom(urlBuilder)
+            }
+            install(Logging)
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
+        httpClient.plugin(HttpSend).intercept { request ->
+            headers.forEach { (k, v) ->
+                request.header(k, v)
+            }
+            execute(request)
+        }
+        return httpClient
+    }
+
+    fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
         send(ClickstreamBuilder().builder())
     }
 
@@ -154,21 +176,21 @@ class ClickstreamSdk(
 
     fun sender(): AnalyticsEventSender = sender
 
-    private fun OkHttpClient.Builder.addDebugHttpLoggingInterceptor(): OkHttpClient.Builder =
-        with(this) {
-            val interceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-            if (isDebug) addInterceptor(interceptor)
-            else this
-        }
+//    private fun OkHttpClient.Builder.addDebugHttpLoggingInterceptor(): OkHttpClient.Builder =
+//        with(this) {
+//            val interceptor = HttpLoggingInterceptor().apply {
+//                level = HttpLoggingInterceptor.Level.BODY
+//            }
+//            if (isDebug) addInterceptor(interceptor)
+//            else this
+//        }
 
-    private fun createEventPropertiesDelegate(context: Context): EventPropertiesDelegate =
+    private fun createEventPropertiesDelegate(): EventPropertiesDelegate =
         EventPropertiesDelegate(
-            eventPropertiesSettings = EventPropertiesSettings(settings),
-            generateUUID = { UUID.randomUUID().toString() },
-            getTimezoneId = { Calendar.getInstance().timeZone.id },
-            generateTimestamp = { System.currentTimeMillis() },
+            eventPropertiesSettings = settings,
+            generateUUID = { /*UUID.randomUUID().toString()*/ "" },
+            getTimezoneId = { /*Calendar.getInstance().timeZone.id*/ "" },
+            generateTimestamp = { /*System.currentTimeMillis()*/ 0L },
         )
 
     private fun createAnalyticsClickStreamSender(
@@ -178,20 +200,17 @@ class ClickstreamSdk(
         ClickstreamAnalyticsEventSender(localEventsGateway, mapEventToDatabaseEntity)
 
     private fun createMapEventToDatabaseEntity(
-        moshi: Moshi,
+//        moshi: Moshi,
         propertiesProvider: PropertiesProvider,
         eventPropertiesDelegate: EventPropertiesDelegate,
         isWifiConnection: () -> Boolean,
     ): MapEventToDatabaseEntity = MapEventToDatabaseEntity(
-        eventAdapter = moshi.adapter(Event::class.java),
+//        eventAdapter = moshi.adapter(Event::class.java),
         propertiesProvider = propertiesProvider,
         eventPropertiesDelegate = eventPropertiesDelegate,
-        timestamp = { System.currentTimeMillis() },
+        timestamp = { /*System.currentTimeMillis()*/ 0 },
         isWifiConnection = isWifiConnection,
     )
-
-    private fun createDatabase(context: Context): ClickstreamDatabase =
-        ClickstreamDatabase.get(context)
 
     private fun send(event: ClickstreamEvent) {
         coroutineScope.launch {
@@ -199,58 +218,74 @@ class ClickstreamSdk(
         }
     }
 
+    @OptIn(InternalCoroutinesApi::class)
     companion object {
 
         @Volatile
         private var INSTANCE: ClickstreamSdk? = null
 
         fun initialize(
-            applicationContext: Context,
             url: String,
             clickStreamPropProviders: PropertiesProvider?,
             appVersion: String,
             packageName: String,
-            config: ClickstreamConfig = ClickstreamConfig(5, 20),
+            driverFactory: DriverFactory,
+            config: ClickstreamConfig = ClickstreamConfig(5, 20, driverFactory),
             requestHeaders: Map<String, () -> String> = emptyMap(),
             isDebug: Boolean,
-            settings: Settings,
+            //TODO: refactor settings init to expect/actual
+            clickstreamSettings: Settings,
+            eventPropertiesSettings: Settings,
         ): ClickstreamSdk {
             synchronized(this) {
                 if (INSTANCE != null) error("already initialized")
                 val defaultPropertiesProvider = createDefaultPropertyProviders(
                     appVersion = appVersion,
                     packageName = packageName,
-                    context = applicationContext,
-                    clickStreamSettings = ClickStreamSettings(settings),
-                    getUUID = { UUID.randomUUID().toString() },
+                    settings = ClickStreamSettings(clickstreamSettings),
+                    getUUID = { /*UUID.randomUUID().toString()*/ "" },
                 )
 
                 // should drop default in case of conflict
                 val appProps = defaultPropertiesProvider.appProvider.properties().apply {
-                    clickStreamPropProviders?.appProvider?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-                        Timber.w("This app properties conflicted ${replaced.joinToString(separator = ",") { it }}, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.appProvider?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This app properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 
                 val userProps = defaultPropertiesProvider.userProps.properties().apply {
-                    clickStreamPropProviders?.userProps?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-                        Timber.w("This user properties conflicted ${replaced.joinToString(separator = ",") { it }}, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.userProps?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This user properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 
                 val deviceProps = defaultPropertiesProvider.deviceProps.properties().apply {
-                    clickStreamPropProviders?.deviceProps?.let {
-                        val replaced = it.properties().map { it.key }.intersect(this.map { it.key })
-                        Timber.w("This device properties conflicted ${
-                            replaced.joinToString(
-                                separator = ","
-                            ) { it }
-                        }, default keys will be replaced")
-                        plus(it.properties())
+                    clickStreamPropProviders?.deviceProps?.let { provider ->
+                        val replaced = provider.properties()
+                            .map { it.key }
+                            .intersect(this.map { it.key }.toSet())
+                        Logger.w {
+                            "This device properties conflicted " +
+                                    "${replaced.joinToString(separator = ",") { it }}, " +
+                                    "default keys will be replaced"
+                        }
+                        plus(provider.properties())
                     }
                 }
 
@@ -265,13 +300,12 @@ class ClickstreamSdk(
                 )
 
                 val clickStream = ClickstreamSdk(
-                    applicationContext = applicationContext,
-                    url = url,
+                    urlString = url,
                     propertiesProvider = mergedPropertiesProviders,
                     requestHeaders = requestHeaders,
                     clickStreamConfig = config,
                     isDebug = isDebug,
-                    settings = settings,
+                    settings = EventPropertiesSettings(eventPropertiesSettings),
                 )
 
                 INSTANCE = clickStream
@@ -279,6 +313,7 @@ class ClickstreamSdk(
             return INSTANCE ?: throw IllegalStateException("can't be null")
         }
 
+        @OptIn(InternalCoroutinesApi::class)
         fun getInstance(): ClickstreamSdk {
             synchronized(this) {
                 return INSTANCE ?: throw IllegalStateException("Must be initialized first")
@@ -288,10 +323,9 @@ class ClickstreamSdk(
 }
 
 private fun createDefaultPropertyProviders(
-    context: Context,
     appVersion: String,
     packageName: String,
-    clickStreamSettings: ClickStreamSettings,
+    settings: ClickStreamSettings,
     getUUID: () -> String,
     getExistingInstallId: (() -> String)? = null,
 ): PropertiesProvider = PropertiesProvider(
@@ -302,12 +336,11 @@ private fun createDefaultPropertyProviders(
         ),
     ),
     deviceProps = DeviceAnalyticsPropertyProvider(
-        getDefaultDeviceProperties(context)
+        getDefaultDeviceProperties()
     ),
     userProps = UserAnalyticsPropertyProvider(
         getDefaultUserProperties(
-            context,
-            clickStreamSettings,
+            settings,
             getUUID,
             getExistingInstallId,
         )

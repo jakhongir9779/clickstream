@@ -1,17 +1,18 @@
 package analytics.sdk.clickstream.mappers
 
+//import com.squareup.moshi.JsonAdapter
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
-import analytics.sdk.clickstream.data.database.entity.EventSnapshotEntity
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.properties.EventPropertiesDelegate
 import analytics.sdk.clickstream.properties.PropertiesProvider
-import com.squareup.moshi.JsonAdapter
+import analytics.sdk.database.model.EventSnapshotEntity
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 internal class MapEventToDatabaseEntity(
-    private val eventAdapter: JsonAdapter<Event>,
     private val propertiesProvider: PropertiesProvider,
     private val eventPropertiesDelegate: EventPropertiesDelegate,
     private val timestamp: () -> Long,
@@ -25,8 +26,7 @@ internal class MapEventToDatabaseEntity(
         val jsonEvent = populateEvent(event)
 
         return EventSnapshotEntity(
-            id = 0, // auto generated
-            eventJson = jsonEvent,
+            event = jsonEvent,
             properties = properties,
             propertyHash = propertiesHash,
         )
@@ -45,15 +45,15 @@ internal class MapEventToDatabaseEntity(
 
         val event = Event(
             counter = eventAdditionalProperties.counter,
-            timeZone = eventAdditionalProperties.timeZone,
-            uiProperties = uiProperties,
+            time_zone = eventAdditionalProperties.timeZone,
+            ui_properties = uiProperties,
             timestamp = timestamp(),
-            eventProperties = clickStreamEvent.eventProperties?.toDb(),
-            connectionType = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
-            isInteractive = clickStreamEvent.isInteractive
+            event_properties = clickStreamEvent.eventProperties?.toDb(),
+            connection_type = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
+            is_interactive = clickStreamEvent.isInteractive
         )
 
-        return eventAdapter.toJson(event)
+        return Json.encodeToString(event)
     }
 
     private fun EventProperties.toDb(): analytics.sdk.clickstream.data.model.EventProperties =

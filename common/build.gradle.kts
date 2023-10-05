@@ -62,6 +62,8 @@ kotlin {
                 //put your multiplatform dependencies here
                 implementation(project(":analyticstype"))
                 implementation(project(":event"))
+                implementation(Libraries.Ktor.clientCore)
+
             }
         }
     }

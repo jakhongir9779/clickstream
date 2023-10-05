@@ -2,16 +2,19 @@ package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
-import analytics.sdk.clickstream.gateway.LocalEventsGateway
+import analytics.sdk.database.gateway.LocalEventsGateway
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import kotlin.jvm.Volatile
 
 internal class AnalyticsWorker(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -21,11 +24,7 @@ internal class AnalyticsWorker(
 ) {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Timber.e(
-            Exception(
-                "AnalyticsWorker", throwable
-            )
-        )
+        Logger.e(throwable) { "AnalyticsWorker" }
     }
 
     private val coroutineScope = CoroutineScope(
@@ -35,7 +34,7 @@ internal class AnalyticsWorker(
     private val backoffStrategy =
         ExponentialBackoffStrategy(
             maxRetries = 8,
-            initialDelayMillis = TimeUnit.SECONDS.toMillis(5)
+            initialDelayMillis = 5000
         )
 
     fun doWork() {
@@ -62,17 +61,12 @@ internal class AnalyticsWorker(
                                 delay(backoffStrategy.getMillis())
                             }
                         } catch (e: Exception) {
-                            Timber.e(Exception("AnalyticsDispatchWorker failed with error", e))
+                            Logger.e(e) {"AnalyticsDispatchWorker failed with error" }
                             delay(backoffStrategy.getMillis())
                         }
                     }
                 } catch (e: Exception) {
-                    Timber.e(
-                        Exception(
-                            "AnalyticsDispatchWorker failed trying to check count of events",
-                            e
-                        )
-                    )
+                    Logger.e(e) { "AnalyticsDispatchWorker failed trying to check count of events" }
                     delay(backoffStrategy.getMillis())
                 }
             }
@@ -86,6 +80,7 @@ internal class AnalyticsWorker(
         @Volatile
         private var INSTANCE: AnalyticsWorker? = null
 
+        @OptIn(InternalCoroutinesApi::class)
         internal fun get(
             localEventsGateway: LocalEventsGateway,
             clickStreamRemoteGateway: ClickstreamRemoteGateway,

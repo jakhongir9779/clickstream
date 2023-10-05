@@ -2,12 +2,12 @@ package analytics.sdk.clickstream
 
 import analytics.sdk.AnalyticsType
 import analytics.sdk.clickstream.event.ClickstreamEvent
-import analytics.sdk.clickstream.gateway.LocalEventsGateway
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.clickstream.type.Clickstream
 import analytics.sdk.common.AnalyticsEventSender
+import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.event.Event
-import timber.log.Timber
+
 
 internal class ClickstreamAnalyticsEventSender(
     private val localEventsGateway: LocalEventsGateway,
@@ -21,7 +21,7 @@ internal class ClickstreamAnalyticsEventSender(
             require(event is ClickstreamEvent)
             localEventsGateway.save(mapEventToDatabaseEntity(event))
         } catch (e: Exception) {
-            Timber.e(Exception("Error while trying to save to database", e))
+            println("Error while trying to save to database $e")
         }
     }
 }

@@ -1,30 +1,23 @@
 package analytics.sdk.clickstream.data.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+
+@Serializable
 internal data class Event(
-    @Json(name = "counter")
     val counter: Long? = null,
 
     // Local timezone; example: Europe/Moscow
-    @Json(name = "time_zone")
-    val timeZone: String? = null,
+    val time_zone: String? = null,
 
     // Local time of event in Unix timestamp milliseconds format; example: 1603377799962
-    @Json(name = "timestamp")
     val timestamp: Long,
 
-    @Json(name = "ui_properties")
-    val uiProperties: UiProperties? = null,
+    val ui_properties: UiProperties? = null,
 
-    @Json(name = "event_properties")
-    val eventProperties: EventProperties? = null,
+    val event_properties: EventProperties? = null,
 
-    @Json(name = "connection_type")
-    val connectionType: ConnectionType = ConnectionType.UNKNOWN,
+    val connection_type: ConnectionType = ConnectionType.UNKNOWN,
 
-    @Json(name = "is_interactive")
-    val isInteractive: Boolean = true
+    val is_interactive: Boolean = true
 )

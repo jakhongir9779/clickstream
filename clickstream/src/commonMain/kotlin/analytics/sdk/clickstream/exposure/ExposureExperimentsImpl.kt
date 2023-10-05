@@ -2,7 +2,8 @@ package analytics.sdk.clickstream.exposure
 
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.properties.AnalyticsPropertyValue
-import timber.log.Timber
+import co.touchlab.kermit.Logger
+
 
 internal class ExposureExperimentsImpl(
     private val api: ClickstreamAnalyticsApi,
@@ -24,7 +25,7 @@ internal class ExposureExperimentsImpl(
                 )
             )
         } catch (e: Exception) {
-            Timber.e(Exception(e))
+            Logger.e(e) { "Exposure experiments request failed" }
         }
     }
 }

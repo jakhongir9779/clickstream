@@ -13,7 +13,8 @@ import analytics.sdk.clickstream.builder.widget.Widget
 import analytics.sdk.clickstream.builder.widget.WidgetBuilder
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.common.builder.AnalyticsBuilder
-import timber.log.Timber
+import co.touchlab.kermit.Logger
+
 
 class ClickstreamBuilder : AnalyticsBuilder() {
     private var eventProperties: EventProperties? = null
@@ -106,12 +107,10 @@ class ClickstreamBuilder : AnalyticsBuilder() {
         val eventWithUi = eventProperties.isValid() && uiProperties.isValid()
         val eventWithoutUi = eventProperties.isValid() && uiProperties == null
 
-        Timber.e(
-            Exception(
-                "Should be defined at least event-properties or ui-properties; " +
-                        "eventWithUi: $eventWithUi, eventWithoutUi: $eventWithoutUi"
-            )
-        )
+        Logger.e {
+            "Should be defined at least event-properties or ui-properties; " +
+                    "eventWithUi: $eventWithUi, eventWithoutUi: $eventWithoutUi"
+        }
 
         return ClickstreamEvent(
             eventProperties = eventProperties,

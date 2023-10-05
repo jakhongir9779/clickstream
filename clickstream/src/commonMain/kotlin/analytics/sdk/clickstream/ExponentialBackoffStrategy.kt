@@ -1,6 +1,5 @@
 package analytics.sdk.clickstream
 
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class ExponentialBackoffStrategy(
@@ -13,7 +12,7 @@ class ExponentialBackoffStrategy(
     fun getMillis(): Long {
         if (retryCount > maxRetries) {
             retryCount = 0
-            return TimeUnit.HOURS.toMillis(1)
+            return 1000 * 60 * 60/*TimeUnit.HOURS.toMillis(1)*/
         }
 
         if (retryCount == 0) {

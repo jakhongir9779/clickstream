@@ -36,6 +36,13 @@ object Libraries {
     object Acquiring {
         const val tinkoff = "ru.tinkoff.acquiring:ui:${Versions.Acquiring.tinkoff}"
     }
+    object Ktor {
+        const val clientCore = "io.ktor:ktor-client-core:${Versions.ktor}"
+        const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
+        const val clientLogging = "io.ktor:ktor-client-logging:${Versions.ktor}"
+        const val clientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
+        const val clientJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
+    }
 
     object ExoPlayer {
         const val core = "com.google.android.exoplayer:exoplayer-core:${Versions.exoplayerVersion}"
@@ -106,16 +113,11 @@ object Libraries {
             "com.facebook.android:facebook-android-sdk:${Versions.facebookSdkVersion}"
     }
 
-    object Room {
-        private const val roomPrefix = "androidx.room:room"
-        const val ktx = "$roomPrefix-ktx:${Versions.roomVersion}"
-        const val runtime = "$roomPrefix-runtime:${Versions.roomVersion}"
-        const val compiler = "$roomPrefix-compiler:${Versions.roomVersion}"
+    object SqlDelight {
 
-        fun DependencyHandler.room() {
-            api(runtime)
-            kapt(compiler)
-            implementation(ktx)
+        object Driver {
+            const val android = "app.cash.sqldelight:android-driver:${Versions.sqlDelight}"
+            const val native = "app.cash.sqldelight:native-driver:${Versions.sqlDelight}"
         }
     }
 
@@ -147,6 +149,9 @@ object Libraries {
 
         const val androidExtensionsRuntime =
             "org.jetbrains.kotlin:kotlin-android-extensions-runtime:${Versions.kotlin}"
+
+        const val serialization =
+            "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}"
 
         fun DependencyHandler.kotlin() {
             implementation(std)
@@ -403,14 +408,14 @@ object Libraries {
     }
 
     object Logging {
-        const val timber = "com.jakewharton.timber:timber:${Versions.Logging.timber}"
+        const val kermit = "co.touchlab:kermit:${Versions.Logging.kermit}"
         private const val anrWatchDog =
             "com.github.anrwatchdog:anrwatchdog:${Versions.Logging.anrWatchDog}"
         private const val leakCanary =
             "com.squareup.leakcanary:leakcanary-android:${Versions.leakcanaryVersion}"
 
-        fun DependencyHandler.timber() {
-            implementation(timber)
+        fun DependencyHandler.kermit() {
+            implementation(kermit)
         }
 
         fun DependencyHandler.anrWatchDog() {

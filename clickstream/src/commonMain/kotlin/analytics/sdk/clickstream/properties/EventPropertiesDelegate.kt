@@ -1,6 +1,7 @@
 package analytics.sdk.clickstream.properties
 
 import analytics.sdk.clickstream.settings.EventPropertiesSettings
+import kotlin.jvm.Synchronized
 
 internal class EventPropertiesDelegate internal constructor(
     private val eventPropertiesSettings: EventPropertiesSettings,

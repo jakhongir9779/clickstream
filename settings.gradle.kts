@@ -34,4 +34,6 @@ include(
 
     // testing
 //    ":app",
+
+    ":database",
 )
