@@ -1,10 +1,11 @@
 package analytics.sdk.clickstream.properties.user.default
 
 import analytics.sdk.clickstream.properties.user.UserAnalyticsProperties
+import analytics.sdk.clickstream.settings.ClickStreamSettings
 
 internal fun getDefaultUserProperties(
-//    context: Context,
-//    sharedPreferences: SharedPreferences,
+    //context: Context,
+    clickStreamSettings: ClickStreamSettings,
     getUUID: () -> String,
     getExistingInstallId: (() -> String)? = null
 ): Set<UserAnalyticsProperties> =
@@ -12,6 +13,6 @@ internal fun getDefaultUserProperties(
         OperatorNameProperty(/*context*/),
         OperatorCountryCodeProperty(/*context*/),
         OperatorNetworkCodeProperty(/*context*/),
-        UserInstallIdProperty(/*sharedPreferences,*/ getUUID, getExistingInstallId)
+        UserInstallIdProperty(clickStreamSettings, getUUID, getExistingInstallId)
     )
 
