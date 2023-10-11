@@ -41,7 +41,7 @@ android {
 
 dependencies {
     implementation(project(":clickstream"))
-    implementation(project(":database"))
+    implementation(project(":platform"))
     implementation(project(":common"))
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling:1.4.3")

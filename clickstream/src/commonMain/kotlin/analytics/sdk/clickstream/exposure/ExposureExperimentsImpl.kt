@@ -1,9 +1,8 @@
 package analytics.sdk.clickstream.exposure
 
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
-import analytics.sdk.clickstream.properties.AnalyticsPropertyValue
+import analytics.sdk.properties.AnalyticsPropertyValue
 import co.touchlab.kermit.Logger
-
 
 internal class ExposureExperimentsImpl(
     private val api: ClickstreamAnalyticsApi,

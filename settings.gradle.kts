@@ -35,5 +35,8 @@ include(
     // testing
 //    ":app",
 
+    ":platform",
+    ":properties",
     ":database",
+    ":settings",
 )

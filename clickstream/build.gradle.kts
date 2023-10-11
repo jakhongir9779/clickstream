@@ -34,7 +34,8 @@ kotlin {
                 implementation(project(":eventsender"))
                 implementation(project(":common"))
                 implementation(project(":event"))
-                implementation(project(":database"))
+                implementation(project(":platform"))
+                implementation(project(":properties"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
                 implementation(Libraries.Ktor.clientCore)
@@ -52,7 +53,6 @@ kotlin {
 //              implementation(Libraries.Google.Services.gmsAds)
 
                 implementation(Libraries.Logging.kermit)
-                implementation(Libraries.settings)
             }
         }
         val commonTest by getting {

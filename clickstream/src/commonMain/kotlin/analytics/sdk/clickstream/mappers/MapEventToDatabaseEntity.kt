@@ -1,22 +1,21 @@
 package analytics.sdk.clickstream.mappers
 
-//import com.squareup.moshi.JsonAdapter
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
-import analytics.sdk.clickstream.properties.EventPropertiesDelegate
-import analytics.sdk.clickstream.properties.PropertiesProvider
 import analytics.sdk.database.model.EventSnapshotEntity
+import analytics.sdk.platform.PlatformDependencies
+import analytics.sdk.platform.properties.EventPropertiesDelegate
+import analytics.sdk.properties.PropertiesProvider
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 internal class MapEventToDatabaseEntity(
+    private val dependencies: PlatformDependencies,
     private val propertiesProvider: PropertiesProvider,
     private val eventPropertiesDelegate: EventPropertiesDelegate,
-    private val timestamp: () -> Long,
-    private val isWifiConnection: () -> Boolean,
 ) {
 
     operator fun invoke(event: ClickstreamEvent): EventSnapshotEntity {
@@ -47,10 +46,14 @@ internal class MapEventToDatabaseEntity(
             counter = eventAdditionalProperties.counter,
             time_zone = eventAdditionalProperties.timeZone,
             ui_properties = uiProperties,
-            timestamp = timestamp(),
+            timestamp = dependencies.utils.generateTimestamp(),
             event_properties = clickStreamEvent.eventProperties?.toDb(),
-            connection_type = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
-            is_interactive = clickStreamEvent.isInteractive
+            is_interactive = clickStreamEvent.isInteractive,
+            connection_type = if (dependencies.utils.isWifiConnection()) {
+                ConnectionType.WIFI
+            } else {
+                ConnectionType.CELL
+            },
         )
 
         return Json.encodeToString(event)

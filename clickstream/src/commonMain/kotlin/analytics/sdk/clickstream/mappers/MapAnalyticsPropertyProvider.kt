@@ -1,7 +1,6 @@
 package analytics.sdk.clickstream.mappers
 
-import analytics.sdk.clickstream.properties.PropertiesProvider
-
+import analytics.sdk.properties.PropertiesProvider
 
 internal fun PropertiesProvider.toMapWithJsonValues(): Map<String, String> {
     val map = mutableMapOf<String, String>()

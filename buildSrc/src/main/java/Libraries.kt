@@ -66,7 +66,7 @@ object Libraries {
             private const val core = "$prefix.play:core:${Versions.Google.Services.playCore}"
             const val installreferrer =
                 "com.android.installreferrer:installreferrer:${Versions.Google.Services.installreferrer}"
-            private const val gmsBase =
+            const val gmsBase =
                 "$prefix.gms:play-services-base:${Versions.Google.Services.playServicesBase}"
             const val gmsAds =
                 "$prefix.gms:play-services-ads-identifier:${Versions.Google.Services.adsService}"
