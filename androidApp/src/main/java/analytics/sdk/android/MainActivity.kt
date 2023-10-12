@@ -15,19 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 
 class MainActivity : ComponentActivity() {
 
-    val clickstreamSdk = ClickstreamSdk.initialize(
-        url = "https://nexus.infra.cluster.kznexpess.com/repository/clickstream/",
-        propertiesProvider = null,
-        dependencies = AndroidDependencies(
-            appVersion = "1.0.0",
-            packageName = packageName,
-            context = applicationContext,
-        ),
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val clickstreamSdk = ClickstreamSdk.getInstance()
 
         setContent {
             MyApplicationTheme {

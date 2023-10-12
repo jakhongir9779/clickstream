@@ -5,6 +5,6 @@ import analytics.sdk.database.model.EventSnapshotEntity
 //import androidx.annotation.RestrictTo
 
 //@RestrictTo(value = [RestrictTo.Scope.LIBRARY])
-internal interface ClickstreamRemoteGateway {
+ interface ClickstreamRemoteGateway {
     suspend fun send(events: List<EventSnapshotEntity>): List<EventResult>
 }

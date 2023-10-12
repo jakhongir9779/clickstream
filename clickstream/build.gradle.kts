@@ -35,7 +35,7 @@ kotlin {
                 implementation(project(":common"))
                 implementation(project(":event"))
                 implementation(project(":platform"))
-                implementation(project(":properties"))
+                api(project(":properties"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
                 implementation(Libraries.Ktor.clientCore)
@@ -58,6 +58,12 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                api("androidx.work:work-runtime-ktx:2.8.1")
             }
         }
     }

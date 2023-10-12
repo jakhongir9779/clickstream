@@ -3,6 +3,7 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
+import analytics.sdk.clickstream.data.DataForPeriodicJob
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.exposure.ExposureExperimentsImpl
@@ -48,7 +49,8 @@ class ClickstreamSdk(
     url: String,
     dependencies: PlatformDependencies,
     propertiesProvider: PropertiesProvider,
-    clickStreamConfig: ClickstreamConfig,
+    private val clickStreamConfig: ClickstreamConfig,
+    private val analyticsWorkManager: AnalyticsWorkManager,
     requestHeaders: Map<String, () -> String>,
 ) {
 
@@ -66,7 +68,6 @@ class ClickstreamSdk(
 
     private var api: ClickstreamAnalyticsApi by Delegates.notNull()
     private var remoteGateway: ClickstreamRemoteGateway by Delegates.notNull()
-    private var worker: AnalyticsWorker by Delegates.notNull()
 
     private var exposureExperimentsApi: ExposureExperimentsApi by Delegates.notNull()
 
@@ -94,12 +95,18 @@ class ClickstreamSdk(
         api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, url))
         createGrowthExposure(propertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
-        worker = AnalyticsWorker.get(
-            localEventsGateway, remoteGateway, clickStreamConfig
-        )
 
         dependencies.utils.registerScreenCallbacks(eventPropertiesDelegate)
+
+        initPeriodicWork()
     }
+
+    fun getDataForWorker() =
+        DataForPeriodicJob(
+            localEventsGateway = localEventsGateway,
+            remoteGateway = remoteGateway,
+            clickstreamConfig = clickStreamConfig
+        )
 
     // TODO: move client init to network module
     private fun buildCioHttpClient(
@@ -160,6 +167,11 @@ class ClickstreamSdk(
         exposureExperimentsApi = ExposureExperimentsImpl(api = api, installId = installId)
     }
 
+    private fun initPeriodicWork() {
+        analyticsWorkManager.init(clickStreamConfig = clickStreamConfig)
+        analyticsWorkManager.startWork()
+    }
+
     fun sender(): AnalyticsEventSender = sender
 
     private fun createAnalyticsClickStreamSender(
@@ -196,6 +208,7 @@ class ClickstreamSdk(
             propertiesProvider: PropertiesProvider?,
             config: ClickstreamConfig = ClickstreamConfig(5, 20),
             requestHeaders: Map<String, () -> String> = emptyMap(),
+            analyticsWorkManager: AnalyticsWorkManager
         ): ClickstreamSdk {
             synchronized(this) {
                 if (INSTANCE != null) error("already initialized")
@@ -205,6 +218,7 @@ class ClickstreamSdk(
                     dependencies = dependencies,
                     clickStreamConfig = config,
                     requestHeaders = requestHeaders,
+                    analyticsWorkManager = analyticsWorkManager,
                     propertiesProvider = mergePropertiesWithDefault(
                         dependencies = dependencies,
                         propertiesProvider = propertiesProvider
