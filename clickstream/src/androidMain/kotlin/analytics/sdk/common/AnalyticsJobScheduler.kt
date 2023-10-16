@@ -1,5 +1,7 @@
-package analytics.sdk.clickstream
+package analytics.sdk.common
 
+import analytics.sdk.clickstream.ClickstreamConfig
+import analytics.sdk.clickstream.SendToAnalyticsPeriodicTask
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -12,7 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import java.util.concurrent.TimeUnit
 
-actual class AnalyticsWorkManager(private val context: Context) {
+actual class AnalyticsJobScheduler(private val context: Context) {
     private var periodicRequest : WorkRequest? = null
     actual fun init(clickStreamConfig: ClickstreamConfig) {
 

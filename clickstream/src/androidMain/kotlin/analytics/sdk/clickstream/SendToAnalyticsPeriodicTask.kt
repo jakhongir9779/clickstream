@@ -1,6 +1,7 @@
 package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.data.EventResult
+import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
 import android.content.Context
@@ -17,24 +18,22 @@ internal class SendToAnalyticsPeriodicTask(
     context: Context,
     params: WorkerParameters,
     private val localEventsGateway: LocalEventsGateway,
-    private val clickstreamRemoteGateway: ClickstreamRemoteGateway,
+    clickstreamRemoteGateway: ClickstreamRemoteGateway,
     private val clickstreamConfig: ClickstreamConfig
 ) : CoroutineWorker(context, params) {
 
+    private val sendBatchOfEventsToClickstream = SendBatchOfEventsToClickstream(
+        localEventsGateway,
+        clickstreamRemoteGateway,
+        clickstreamConfig
+    )
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
             while (haveUnDispatchedData()) {
                 try {
-                    val eventsToSend = localEventsGateway.getAllByCount(clickstreamConfig.sizeOfBatch)
+                    val sentResult = sendBatchOfEventsToClickstream()
 
-                    val sentResult = clickstreamRemoteGateway.send(eventsToSend)
-
-                    val failedResults = sentResult.filterIsInstance<EventResult.Failed>()
-                    val successResults = sentResult.filterIsInstance<EventResult.Succeed>()
-
-                    localEventsGateway.removeByIds(successResults.map { it.id })
-
-                    if (failedResults.isNotEmpty()) {
+                    if (sentResult.filterIsInstance<EventResult.Failed>().isNotEmpty()) {
                         return@withContext Result.retry()
                     }
                 } catch (e: Exception) {

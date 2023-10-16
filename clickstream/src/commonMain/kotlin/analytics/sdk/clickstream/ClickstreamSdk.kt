@@ -11,6 +11,7 @@ import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.common.AnalyticsEventSender
+import analytics.sdk.common.AnalyticsJobScheduler
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.platform.PlatformDependencies
@@ -50,7 +51,7 @@ class ClickstreamSdk(
     dependencies: PlatformDependencies,
     propertiesProvider: PropertiesProvider,
     private val clickStreamConfig: ClickstreamConfig,
-    private val analyticsWorkManager: AnalyticsWorkManager,
+    private val analyticsJobScheduler: AnalyticsJobScheduler,
     requestHeaders: Map<String, () -> String>,
 ) {
 
@@ -168,8 +169,8 @@ class ClickstreamSdk(
     }
 
     private fun initPeriodicWork() {
-        analyticsWorkManager.init(clickStreamConfig = clickStreamConfig)
-        analyticsWorkManager.startWork()
+        analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
+        analyticsJobScheduler.startWork()
     }
 
     fun sender(): AnalyticsEventSender = sender
@@ -208,7 +209,7 @@ class ClickstreamSdk(
             propertiesProvider: PropertiesProvider?,
             config: ClickstreamConfig = ClickstreamConfig(5, 20),
             requestHeaders: Map<String, () -> String> = emptyMap(),
-            analyticsWorkManager: AnalyticsWorkManager
+            analyticsJobScheduler: AnalyticsJobScheduler
         ): ClickstreamSdk {
             synchronized(this) {
                 if (INSTANCE != null) error("already initialized")
@@ -218,7 +219,7 @@ class ClickstreamSdk(
                     dependencies = dependencies,
                     clickStreamConfig = config,
                     requestHeaders = requestHeaders,
-                    analyticsWorkManager = analyticsWorkManager,
+                    analyticsJobScheduler = analyticsJobScheduler,
                     propertiesProvider = mergePropertiesWithDefault(
                         dependencies = dependencies,
                         propertiesProvider = propertiesProvider

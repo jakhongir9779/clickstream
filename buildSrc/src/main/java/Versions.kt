@@ -100,6 +100,7 @@ object Versions {
         const val constraintLayout = "1.1.3" // todo: DON'T upgrade this one until u check that it's OK on all the screens.
         const val transition = "1.4.1"
         const val legacySupport = "1.0.0"
+        const val startup = "1.0.0"
 
         object Lifecycle {
             const val core = "2.2.0"
@@ -124,10 +125,6 @@ object Versions {
         object PlayMarket {
             const val tripleTPlublisher = "3.8.1"
         }
-    }
-
-    object Acquiring {
-        const val tinkoff = "2.5.9"
     }
 
     object Facebook {

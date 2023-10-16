@@ -13,47 +13,16 @@ object Libraries {
     const val redMadRobotInputMask =
         "com.github.RedMadRobot:input-mask-android:${Versions.redMadRobotInputMask}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
-    const val drakeetMultiTypeAdapter =
-        "com.drakeet.multitype:multitype:${Versions.multiTypeAdapterVersion}"
-
-    //TODO Suspicious,old libraries with lack of support, that must be removed ASAP
-    const val razirProgressButton =
-        "com.github.razir.progressbutton:progressbutton:${Versions.progressbuttonVersion}"
-    const val cachapaExpandableLayout =
-        "com.github.cachapa:ExpandableLayout:${Versions.cachapaExpandableLayout}"
-    const val romanDanylykPageIndicatorView =
-        "com.github.romandanylyk:PageIndicatorView:${Versions.pageindicatorviewVersion}"
-    const val circularProgressBar =
-        "com.mikhaellopez:circularprogressbar:${Versions.circularProgressBar}"
-    const val hdodenhofCircleImageView =
-        "de.hdodenhof:circleimageview:${Versions.circleimageviewVersion}"
-    const val chrisbanesPhotoView = "com.github.chrisbanes:PhotoView:${Versions.photoViewVersion}"
-    const val caverockSvg = "com.caverock:androidsvg-aar:${Versions.androidSvgVersion}"
-    const val mongoDbDriver = "org.mongodb:mongodb-driver-sync:${Versions.mongodbDriverSyncVersion}"
 
     const val settings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
 
-    object Acquiring {
-        const val tinkoff = "ru.tinkoff.acquiring:ui:${Versions.Acquiring.tinkoff}"
-    }
+
     object Ktor {
         const val clientCore = "io.ktor:ktor-client-core:${Versions.ktor}"
         const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
         const val clientLogging = "io.ktor:ktor-client-logging:${Versions.ktor}"
         const val clientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
         const val clientJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
-    }
-
-    object ExoPlayer {
-        const val core = "com.google.android.exoplayer:exoplayer-core:${Versions.exoplayerVersion}"
-        const val dash = "com.google.android.exoplayer:exoplayer-dash:${Versions.exoplayerVersion}"
-        const val ui = "com.google.android.exoplayer:exoplayer-ui:${Versions.exoplayerVersion}"
-
-        fun DependencyHandler.exoPlayer() {
-            implementation(core)
-            implementation(dash)
-            implementation(ui)
-        }
     }
 
     object Google {

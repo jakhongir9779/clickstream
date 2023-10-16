@@ -7,7 +7,7 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 
 
-class MyWorkerFactory(
+class AnalyticsSdkWorkerFactory(
     private val dataForPeriodicJob: DataForPeriodicJob
 ) : WorkerFactory() {
 

@@ -1,8 +1,8 @@
 package analytics.sdk.android
 
-import analytics.sdk.clickstream.AnalyticsWorkManager
+import analytics.sdk.common.AnalyticsJobScheduler
 import analytics.sdk.clickstream.ClickstreamSdk
-import analytics.sdk.clickstream.MyWorkerFactory
+import analytics.sdk.clickstream.AnalyticsSdkWorkerFactory
 import analytics.sdk.platform.AndroidDependencies
 import android.app.Application
 import androidx.work.Configuration
@@ -14,21 +14,19 @@ class App: Application(), Configuration.Provider {
         ClickstreamSdk.initialize(
             url = "https://nexus.infra.cluster.kznexpess.com/repository/clickstream/",
             propertiesProvider = null,
-            analyticsWorkManager = AnalyticsWorkManager(applicationContext),
+            analyticsJobScheduler = AnalyticsJobScheduler(applicationContext),
             dependencies = AndroidDependencies(
                 appVersion = "1.0.0",
                 packageName = packageName,
                 context = applicationContext,
             ),
         )
-
-
     }
     override fun getWorkManagerConfiguration(): Configuration {
         val myWorkerFactory = DelegatingWorkerFactory()
 
         myWorkerFactory.addFactory(
-            MyWorkerFactory(ClickstreamSdk.getInstance().getDataForWorker())
+            AnalyticsSdkWorkerFactory(ClickstreamSdk.getInstance().getDataForWorker())
         )
 
         return Configuration.Builder()
