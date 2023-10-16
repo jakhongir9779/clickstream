@@ -34,7 +34,7 @@ actual class AnalyticsJobScheduler(private val context: Context) {
             is PeriodicWorkRequest -> {
                 WorkManager.getInstance(context)
                     .enqueueUniquePeriodicWork(
-                        "uniqueWorkName",
+                        AnalyticsJobScheduler::class.java.name,
                         ExistingPeriodicWorkPolicy.KEEP,
                         periodicRequest as PeriodicWorkRequest
                     )
@@ -43,7 +43,7 @@ actual class AnalyticsJobScheduler(private val context: Context) {
             is OneTimeWorkRequest -> {
                 WorkManager.getInstance(context)
                     .enqueueUniqueWork(
-                        "uniqueWorkName",
+                        "${AnalyticsJobScheduler::class.java.name}.debugVersion",
                         ExistingWorkPolicy.KEEP,
                         periodicRequest as OneTimeWorkRequest
                     )
