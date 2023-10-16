@@ -18,6 +18,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("Try to get instance")
         val clickstreamSdk = ClickstreamSdk.getInstance()
 
         setContent {

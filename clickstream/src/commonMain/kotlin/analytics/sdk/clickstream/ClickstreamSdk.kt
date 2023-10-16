@@ -11,7 +11,7 @@ import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.common.AnalyticsEventSender
-import analytics.sdk.common.AnalyticsJobScheduler
+import analytics.sdk.clickstream.AnalyticsJobScheduler
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.platform.PlatformDependencies
@@ -43,6 +43,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.jvm.Synchronized
 import kotlin.jvm.Volatile
 import kotlin.properties.Delegates
 
@@ -98,8 +99,6 @@ class ClickstreamSdk(
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
 
         dependencies.utils.registerScreenCallbacks(eventPropertiesDelegate)
-
-        initPeriodicWork()
     }
 
     fun getDataForWorker() =
@@ -142,9 +141,9 @@ class ClickstreamSdk(
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
+        initPeriodicWork()
         send(ClickstreamBuilder().builder())
     }
-
 
     fun exposure(
         experimentId: String,

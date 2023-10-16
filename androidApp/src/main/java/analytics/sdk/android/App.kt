@@ -1,12 +1,13 @@
 package analytics.sdk.android
 
-import analytics.sdk.common.AnalyticsJobScheduler
+import analytics.sdk.clickstream.AnalyticsJobScheduler
 import analytics.sdk.clickstream.ClickstreamSdk
 import analytics.sdk.clickstream.AnalyticsSdkWorkerFactory
 import analytics.sdk.platform.AndroidDependencies
 import android.app.Application
 import androidx.work.Configuration
 import androidx.work.DelegatingWorkerFactory
+import androidx.work.Logger
 
 class App: Application(), Configuration.Provider {
     override fun onCreate() {

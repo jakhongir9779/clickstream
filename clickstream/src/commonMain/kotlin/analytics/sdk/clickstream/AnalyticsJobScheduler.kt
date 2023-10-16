@@ -1,6 +1,4 @@
-package analytics.sdk.common
-
-import analytics.sdk.clickstream.ClickstreamConfig
+package analytics.sdk.clickstream
 
 expect class AnalyticsJobScheduler {
     fun init(clickStreamConfig: ClickstreamConfig)
