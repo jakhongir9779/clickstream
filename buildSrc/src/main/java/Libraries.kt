@@ -200,6 +200,7 @@ object Libraries {
 
         const val work = "androidx.work:work-runtime-ktx:${Versions.AndroidX.work}"
         const val workTesting = "androidx.work:work-testing:${Versions.AndroidX.work}"
+        const val startup = "androidx.startup:startup-runtime:${Versions.AndroidX.startup}"
 
         fun DependencyHandler.androidX() {
             implementation(coreCtx)

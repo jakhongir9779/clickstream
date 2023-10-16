@@ -45,13 +45,6 @@ kotlin {
                 implementation(Libraries.Ktor.clientJson)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-//              implementation(Libraries.Kotlin.Coroutines.android)
-//              implementation(Libraries.Kotlin.Coroutines.jdk)
-
-//              implementation(Libraries.Kotlin.androidExtensionsRuntime)
-//              implementation(Libraries.AndroidX.annotation)
-//              implementation(Libraries.Google.Services.gmsAds)
-
                 implementation(Libraries.Logging.kermit)
             }
         }
@@ -63,7 +56,7 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-                api("androidx.work:work-runtime-ktx:2.8.1")
+                api(Libraries.AndroidX.work)
             }
         }
     }

@@ -50,8 +50,8 @@ dependencies {
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.activity:activity-compose:1.7.1")
 
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
-    implementation("androidx.startup:startup-runtime:1.0.0")
+    implementation(Libraries.AndroidX.work)
+    implementation(Libraries.AndroidX.startup)
 
     implementation(Libraries.settings)
 }
