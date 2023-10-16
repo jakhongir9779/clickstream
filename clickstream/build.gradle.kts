@@ -35,7 +35,7 @@ kotlin {
                 implementation(project(":common"))
                 implementation(project(":event"))
                 implementation(project(":platform"))
-                implementation(project(":properties"))
+                api(project(":properties"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
                 implementation(Libraries.Ktor.clientCore)
@@ -45,19 +45,18 @@ kotlin {
                 implementation(Libraries.Ktor.clientJson)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-//              implementation(Libraries.Kotlin.Coroutines.android)
-//              implementation(Libraries.Kotlin.Coroutines.jdk)
-
-//              implementation(Libraries.Kotlin.androidExtensionsRuntime)
-//              implementation(Libraries.AndroidX.annotation)
-//              implementation(Libraries.Google.Services.gmsAds)
-
                 implementation(Libraries.Logging.kermit)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                api(Libraries.AndroidX.work)
             }
         }
     }

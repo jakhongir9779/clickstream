@@ -3,6 +3,7 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
+import analytics.sdk.clickstream.data.DataForPeriodicJob
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.clickstream.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.exposure.ExposureExperimentsImpl
@@ -10,6 +11,7 @@ import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.common.AnalyticsEventSender
+import analytics.sdk.clickstream.AnalyticsJobScheduler
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.platform.PlatformDependencies
@@ -41,6 +43,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.jvm.Synchronized
 import kotlin.jvm.Volatile
 import kotlin.properties.Delegates
 
@@ -48,7 +51,8 @@ class ClickstreamSdk(
     url: String,
     dependencies: PlatformDependencies,
     propertiesProvider: PropertiesProvider,
-    clickStreamConfig: ClickstreamConfig,
+    private val clickStreamConfig: ClickstreamConfig,
+    private val analyticsJobScheduler: AnalyticsJobScheduler,
     requestHeaders: Map<String, () -> String>,
 ) {
 
@@ -66,7 +70,6 @@ class ClickstreamSdk(
 
     private var api: ClickstreamAnalyticsApi by Delegates.notNull()
     private var remoteGateway: ClickstreamRemoteGateway by Delegates.notNull()
-    private var worker: AnalyticsWorker by Delegates.notNull()
 
     private var exposureExperimentsApi: ExposureExperimentsApi by Delegates.notNull()
 
@@ -94,12 +97,16 @@ class ClickstreamSdk(
         api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, url))
         createGrowthExposure(propertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
-        worker = AnalyticsWorker.get(
-            localEventsGateway, remoteGateway, clickStreamConfig
-        )
 
         dependencies.utils.registerScreenCallbacks(eventPropertiesDelegate)
     }
+
+    fun getDataForWorker() =
+        DataForPeriodicJob(
+            localEventsGateway = localEventsGateway,
+            remoteGateway = remoteGateway,
+            clickstreamConfig = clickStreamConfig
+        )
 
     // TODO: move client init to network module
     private fun buildCioHttpClient(
@@ -134,9 +141,9 @@ class ClickstreamSdk(
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
+        initPeriodicWork()
         send(ClickstreamBuilder().builder())
     }
-
 
     fun exposure(
         experimentId: String,
@@ -158,6 +165,11 @@ class ClickstreamSdk(
             lazyMessage = { "should be defined" }
         )
         exposureExperimentsApi = ExposureExperimentsImpl(api = api, installId = installId)
+    }
+
+    private fun initPeriodicWork() {
+        analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
+        analyticsJobScheduler.startWork()
     }
 
     fun sender(): AnalyticsEventSender = sender
@@ -196,6 +208,7 @@ class ClickstreamSdk(
             propertiesProvider: PropertiesProvider?,
             config: ClickstreamConfig = ClickstreamConfig(5, 20),
             requestHeaders: Map<String, () -> String> = emptyMap(),
+            analyticsJobScheduler: AnalyticsJobScheduler
         ): ClickstreamSdk {
             synchronized(this) {
                 if (INSTANCE != null) error("already initialized")
@@ -205,6 +218,7 @@ class ClickstreamSdk(
                     dependencies = dependencies,
                     clickStreamConfig = config,
                     requestHeaders = requestHeaders,
+                    analyticsJobScheduler = analyticsJobScheduler,
                     propertiesProvider = mergePropertiesWithDefault(
                         dependencies = dependencies,
                         propertiesProvider = propertiesProvider
