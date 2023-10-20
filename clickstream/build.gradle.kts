@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform").version("1.8.21")
+    kotlin("multiplatform")
     id("com.android.library")
-    kotlin("plugin.serialization") version "1.8.21"
+    kotlin("plugin.serialization") version Versions.Kotlin.core
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)

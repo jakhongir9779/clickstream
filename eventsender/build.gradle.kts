@@ -2,7 +2,7 @@ import Libraries.Kotlin.kotlin
 
 plugins {
     id("maven-publish")
-    kotlin("multiplatform").version("1.8.21")
+    kotlin("multiplatform")
     id("com.android.library")
 }
 //

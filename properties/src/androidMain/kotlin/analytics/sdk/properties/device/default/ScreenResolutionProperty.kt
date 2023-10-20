@@ -11,7 +11,7 @@ internal actual class ScreenResolutionProperty actual constructor(
 
     override fun getValue(): String {
         return with((dependencies as AndroidDependencies).context.resources.displayMetrics) {
-            "$heightPixels:$widthPixels"
+            "$widthPixels:$heightPixels"
         }
     }
 }

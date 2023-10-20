@@ -6,7 +6,7 @@ import app.cash.sqldelight.ColumnAdapter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class ClickstreamDatabase(driverFactory: DriverFactory) {
+class ClickstreamDatabase(driverFactory: PlatformDriverFactory) {
 
     private val database = Database(
         driver = driverFactory.createDriver(),

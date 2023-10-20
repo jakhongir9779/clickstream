@@ -53,7 +53,7 @@ object Versions {
 
     // kotlin
     object Kotlin {
-        const val core = "1.8.21"
+        const val core = "1.9.10"
         const val serialization = "1.5.1"
     }
 
@@ -191,7 +191,7 @@ object Versions {
     }
 
     object Logging {
-        const val kermit = "2.0.1"
+        const val kermit = "2.0.2"
         const val anrWatchDog = "1.4.0"
     }
 

@@ -5,5 +5,5 @@ import analytics.sdk.properties.device.DeviceAnalyticsProperties
 internal actual class OsNameProperty : DeviceAnalyticsProperties {
     override val key: String = osNamePropertyKey
 
-    override fun getValue(): String = ""
+    override fun getValue(): String = "iOS"
 }

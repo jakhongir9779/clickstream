@@ -8,11 +8,13 @@ class UserInstallIdProperty(
 ) : UserAnalyticsProperties {
     override val key: String = KEY
 
-    override fun getValue(): String {
-        with(dependencies) {
-            utils.getExistingInstallId?.let { return it() }
-            return with(settings.clickStreamSettings) {
-                installId ?: run { utils.generateUUID().also { installId = it } }
+    override fun getValue(): String? = with(dependencies) {
+        when {
+            existingInstallId.isNullOrBlank().not() -> existingInstallId
+            settings.clickStream.installId.isNullOrBlank().not() -> settings.clickStream.installId
+            else -> {
+                settings.clickStream.installId = utils.generateUUID()
+                settings.clickStream.installId
             }
         }
     }

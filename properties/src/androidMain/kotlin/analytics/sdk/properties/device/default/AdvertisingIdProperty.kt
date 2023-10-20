@@ -8,10 +8,10 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
 
-internal actual class GoogleAdvertisingIdProperty actual constructor(
+internal actual class AdvertisingIdProperty actual constructor(
     private val dependencies: PlatformDependencies
 ) : DeviceAnalyticsProperties {
-    override val key: String = googleAdvertisingIdPropertyKey
+    override val key: String = "gaid" // "oaid" for huawei
 
     override fun getValue(): String {
         val context = (dependencies as AndroidDependencies).context

@@ -9,14 +9,12 @@ import android.os.Bundle
 
 internal class ClickstreamLifecycleCallbacks(
     private val context: Context,
-    private val updateSessionId: UpdateSessionId,
     private val updateCounter: UpdateCounter,
 ) : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityResumed(activity: Activity) {
         if (isApplicationBroughtToBackground()) {
             updateCounter.resetCounter()
-            updateSessionId.updateSessionId()
         }
     }
     override fun onActivityPaused(activity: Activity) = Unit

@@ -1,6 +1,6 @@
 package analytics.sdk.platform
 
-import analytics.sdk.database.DriverFactory
+import analytics.sdk.database.PlatformDriverFactory
 import analytics.sdk.settings.PlatformSettings
 
 interface PlatformDependencies {
@@ -9,7 +9,9 @@ interface PlatformDependencies {
 
     val packageName: String
 
-    val databaseDriverFactory: DriverFactory
+    val existingInstallId: String?
+
+    val databaseDriverFactory: PlatformDriverFactory
 
     val settings: PlatformSettings
 

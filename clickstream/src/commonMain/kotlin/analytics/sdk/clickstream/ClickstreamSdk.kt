@@ -98,7 +98,7 @@ class ClickstreamSdk(
         createGrowthExposure(propertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
 
-        dependencies.utils.registerScreenCallbacks(eventPropertiesDelegate)
+        dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
     }
 
     fun getDataForWorker() =

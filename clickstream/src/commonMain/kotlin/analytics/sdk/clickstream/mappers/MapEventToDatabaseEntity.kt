@@ -7,6 +7,7 @@ import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
 import analytics.sdk.database.model.EventSnapshotEntity
 import analytics.sdk.platform.PlatformDependencies
+import analytics.sdk.platform.model.PlatformConnectionType
 import analytics.sdk.platform.properties.EventPropertiesDelegate
 import analytics.sdk.properties.PropertiesProvider
 import kotlinx.serialization.encodeToString
@@ -49,10 +50,10 @@ internal class MapEventToDatabaseEntity(
             timestamp = dependencies.utils.generateTimestamp(),
             event_properties = clickStreamEvent.eventProperties?.toDb(),
             is_interactive = clickStreamEvent.isInteractive,
-            connection_type = if (dependencies.utils.isWifiConnection()) {
-                ConnectionType.WIFI
-            } else {
-                ConnectionType.CELL
+            connection_type = when (dependencies.utils.getConnectionType()) {
+                PlatformConnectionType.WIFI -> ConnectionType.WIFI
+                PlatformConnectionType.CELLULAR -> ConnectionType.CELL
+                PlatformConnectionType.UNKNOWN -> ConnectionType.UNKNOWN
             },
         )
 

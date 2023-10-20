@@ -14,7 +14,8 @@ internal fun getDefaultDeviceProperties(
         DeviceManufacturerProperty(),
         ModelManufacturerProperty(),
         DeviceLocaleProperty(dependencies),
-        GoogleAdvertisingIdProperty(dependencies),
+        AdvertisingIdProperty(dependencies),
         DeviceTypeProperty(),
+        VendorIdProperty(),
     )
 

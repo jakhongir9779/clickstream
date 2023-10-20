@@ -22,6 +22,5 @@ data class ViewId(
 data class EventAdditionalProperties(
     val timeZone: String?,
     val timestamp: String?,
-    val sessionId: String?,
     val counter: Long,
 )

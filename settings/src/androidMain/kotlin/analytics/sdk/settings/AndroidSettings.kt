@@ -3,17 +3,13 @@ package analytics.sdk.settings
 import android.content.Context
 import com.russhwolf.settings.SharedPreferencesSettings
 
-class AndroidSettings(context: Context): PlatformSettings() {
+class AndroidSettings(context: Context) : PlatformSettings() {
 
-    override val clickStreamSettings: ClickStreamSettings = ClickStreamSettings(
-        SharedPreferencesSettings(
-            context.getSharedPreferences("clickstream", Context.MODE_PRIVATE)
-        )
+    override val clickStream: ClickStreamSettings = ClickStreamSettings(
+        SharedPreferencesSettings.Factory(context).create("clickstream")
     )
 
-    override val eventPropertiesSettings: EventPropertiesSettings = EventPropertiesSettings(
-        SharedPreferencesSettings(
-            context.getSharedPreferences("event_properties", Context.MODE_PRIVATE)
-        )
+    override val eventProperties: EventPropertiesSettings = EventPropertiesSettings(
+        SharedPreferencesSettings.Factory(context).create("event_properties")
     )
 }

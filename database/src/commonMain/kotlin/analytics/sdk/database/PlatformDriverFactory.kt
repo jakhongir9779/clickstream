@@ -2,7 +2,7 @@ package analytics.sdk.database
 
 import app.cash.sqldelight.db.SqlDriver
 
- interface DriverFactory {
+ interface PlatformDriverFactory {
 
     fun createDriver(): SqlDriver
 }

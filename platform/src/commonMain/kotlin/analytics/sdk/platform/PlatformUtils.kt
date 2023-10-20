@@ -1,10 +1,9 @@
 package analytics.sdk.platform
 
+import analytics.sdk.platform.model.PlatformConnectionType
 import analytics.sdk.platform.properties.EventPropertiesDelegate
 
 interface PlatformUtils {
-
-    val getExistingInstallId: (() -> String)?
 
     fun getTimezone(): String
 
@@ -12,7 +11,7 @@ interface PlatformUtils {
 
     fun generateTimestamp(): Long
 
-    fun isWifiConnection(): Boolean
+    fun getConnectionType(): PlatformConnectionType
 
-    fun registerScreenCallbacks(delegate: EventPropertiesDelegate)
+    fun subscribeOnSessionUpdate(delegate: EventPropertiesDelegate)
 }
