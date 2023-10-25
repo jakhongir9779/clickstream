@@ -18,8 +18,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("Try to get instance")
         val clickstreamSdk = ClickstreamSdk.getInstance()
+
+        clickstreamSdk.send {
+            event {
+                type("CHECK_KMM")
+                parameter(key = "name", value = "Android") }.build()
+
+        }
+        clickstreamSdk.send {
+            event {
+                type("CHECK_KMM")
+                parameter(key = "name", value = "Android") }.build()
+        }
 
         setContent {
             MyApplicationTheme {
@@ -27,10 +38,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-
-                    clickstreamSdk.send {
-                        event { parameter(key = "name", value = "Android") }.build()
-                    }
 //                    GreetingView(Greeting().greet())
                 }
             }

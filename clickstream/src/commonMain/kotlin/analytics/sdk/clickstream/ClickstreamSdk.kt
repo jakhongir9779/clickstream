@@ -11,7 +11,6 @@ import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.common.AnalyticsEventSender
-import analytics.sdk.clickstream.AnalyticsJobScheduler
 import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.platform.PlatformDependencies
@@ -113,6 +112,7 @@ class ClickstreamSdk(
         headers: Map<String, () -> String>,
         baseUrl: String
     ): HttpClient {
+
         val httpClient = HttpClient(CIO) {
             expectSuccess = true
             defaultRequest {
@@ -131,9 +131,11 @@ class ClickstreamSdk(
                 })
             }
         }
+
         httpClient.plugin(HttpSend).intercept { request ->
             headers.forEach { (k, v) ->
-                request.header(k, v)
+                request.header(k, v.invoke())
+
             }
             execute(request)
         }
@@ -206,8 +208,8 @@ class ClickstreamSdk(
             url: String,
             dependencies: PlatformDependencies,
             propertiesProvider: PropertiesProvider?,
-            config: ClickstreamConfig = ClickstreamConfig(5, 20),
-            requestHeaders: Map<String, () -> String> = emptyMap(),
+            config: ClickstreamConfig = ClickstreamConfig(5, 15),
+            requestHeaders: Map<String, () -> String>,
             analyticsJobScheduler: AnalyticsJobScheduler
         ): ClickstreamSdk {
             synchronized(this) {

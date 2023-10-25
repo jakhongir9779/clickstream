@@ -13,15 +13,14 @@ import androidx.work.WorkRequest
 import java.util.concurrent.TimeUnit
 
 actual class AnalyticsJobScheduler(private val context: Context) {
-    private var periodicRequest : WorkRequest? = null
+    private var request : WorkRequest? = null
     actual fun init(clickStreamConfig: ClickstreamConfig) {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        periodicRequest =
-            PeriodicWorkRequestBuilder<SendToAnalyticsPeriodicTask>(
+        request = PeriodicWorkRequestBuilder<SendToAnalyticsPeriodicTask>(
                 repeatInterval = clickStreamConfig.sendDataPeriodicityInMinutes,
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
             )
@@ -30,22 +29,24 @@ actual class AnalyticsJobScheduler(private val context: Context) {
     }
 
     actual fun startWork() {
-        when(periodicRequest) {
+        when(request) {
             is PeriodicWorkRequest -> {
                 WorkManager.getInstance(context)
                     .enqueueUniquePeriodicWork(
                         AnalyticsJobScheduler::class.java.name,
                         ExistingPeriodicWorkPolicy.KEEP,
-                        periodicRequest as PeriodicWorkRequest
+                        request as PeriodicWorkRequest
                     )
+
+
             }
 
             is OneTimeWorkRequest -> {
                 WorkManager.getInstance(context)
                     .enqueueUniqueWork(
                         "${AnalyticsJobScheduler::class.java.name}.debugVersion",
-                        ExistingWorkPolicy.KEEP,
-                        periodicRequest as OneTimeWorkRequest
+                        ExistingWorkPolicy.REPLACE,
+                        request as OneTimeWorkRequest
                     )
             }
         }

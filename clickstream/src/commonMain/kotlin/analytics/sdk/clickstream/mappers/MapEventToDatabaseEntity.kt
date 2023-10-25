@@ -61,7 +61,7 @@ internal class MapEventToDatabaseEntity(
 
     private fun EventProperties.toDb(): analytics.sdk.clickstream.data.model.EventProperties =
         analytics.sdk.clickstream.data.model.EventProperties(
-            eventType = type,
-            eventParameters = parameters
+            event_type = type,
+            event_parameters = parameters
         )
 }
