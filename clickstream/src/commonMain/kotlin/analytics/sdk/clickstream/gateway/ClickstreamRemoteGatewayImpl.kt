@@ -4,10 +4,14 @@ import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.database.model.EventSnapshotEntity
 import co.touchlab.kermit.Logger
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
 
 
 internal class ClickstreamRemoteGatewayImpl(
-    private val api: ClickstreamAnalyticsApi,
+    private val api: ClickstreamAnalyticsApi
 ) : ClickstreamRemoteGateway {
 
     override suspend fun send(events: List<EventSnapshotEntity>): List<EventResult> {
@@ -21,49 +25,47 @@ internal class ClickstreamRemoteGatewayImpl(
     private suspend fun sendBatchedByTheSameHash(
         events: List<EventSnapshotEntity>,
     ): List<EventResult> = try {
-        val body = mapEntityToJsonBodyString(events)
-        val result = api.sendEvents(body)
-//        if (result.isSuccessful) {
-//            events.map { EventResult.Succeed(it.id) }
-//        } else {
-            events.map { EventResult.Failed(it.id) }
-//        }
+        val bodyJson = mapEntityToJsonBodyString(events)
+        api.sendEventsTest(bodyJson)
+        events.map { EventResult.Succeed(it.id) }
     } catch (e: Exception) {
         Logger.e(e) { "Failed to send events $events" }
         events.map { EventResult.Failed(it.id) }
     }
 
-    // TODO refactor double work string <-> json <-> string
     private fun mapEntityToJsonBodyString(events: List<EventSnapshotEntity>): String {
-//        val jsonObject = JsonObject()
-//
-//        events.first().properties.forEach { (k, v) ->
-//            val j = JsonObject()
-//
-//            val map = gson.fromJson(v, Map::class.java)
-//            map.forEach { (kk, vv) ->
-//                check(kk is String)
-//                check(vv is String)
-//                j.addProperty(kk, vv)
-//            }
-//            jsonObject.add(k, j)
-//        }
-//
-//        val eventArray = JsonArray(events.size)
-//        events.forEach {
-//            val fromJson = it.event
-//            eventArray.add(fromJson)
-//        }
-//        jsonObject.add(EVENTS_JSON_KEY, eventArray)
-//
-//
-//        // TODO change to production
-//        val body = gson.toJson(jsonObject)
-        return "body"
+        val jsonObject = JsonObject(
+            content = emptyMap()
+        )
+
+        val finalMap = jsonObject.toMutableMap()
+        events.first().properties.forEach { (k, v) ->
+            val j = JsonObject(
+                content = emptyMap()
+            )
+
+            val jMap = j.toMutableMap()
+
+            val map = Json.decodeFromString<Map<String, String>>(v)
+            map.forEach { (kk, vv) ->
+                jMap[kk] = JsonPrimitive(vv)
+            }
+
+            finalMap[k] = JsonObject(jMap)
+        }
+
+        val eventArray = buildJsonArray {
+            events.forEach {
+                add(Json.parseToJsonElement(it.event))
+            }
+        }
+
+        finalMap[EVENTS_JSON_KEY] = eventArray
+        return JsonObject(finalMap).toString()
     }
 
     private companion object {
         private const val EVENTS_JSON_KEY = "events"
-//        private val gson = Gson()
     }
 }
+
