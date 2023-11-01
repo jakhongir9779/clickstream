@@ -135,7 +135,6 @@ class ClickstreamSdk(
         httpClient.plugin(HttpSend).intercept { request ->
             headers.forEach { (k, v) ->
                 request.header(k, v.invoke())
-
             }
             execute(request)
         }
