@@ -8,8 +8,6 @@ import android.content.Context
 
 class AndroidDependencies(
     val context: Context,
-    override val appVersion: String,
-    override val packageName: String,
     override val existingInstallId: String? = null,
 ) : PlatformDependencies {
 

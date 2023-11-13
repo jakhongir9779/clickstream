@@ -6,8 +6,6 @@ import analytics.sdk.settings.IosSettings
 import analytics.sdk.settings.PlatformSettings
 
 class IosDependencies(
-    override val appVersion: String,
-    override val packageName: String,
     override val existingInstallId: String? = null,
 ): PlatformDependencies {
 

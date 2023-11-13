@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -68,4 +71,11 @@ android {
     defaultConfig {
         minSdk = 24
     }
+}
+
+project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
+    targets
+        .filterIsInstance<KotlinNativeTarget>()
+        .flatMap { it.binaries }
+        .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
 }

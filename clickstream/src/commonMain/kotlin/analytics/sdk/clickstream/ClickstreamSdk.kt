@@ -37,23 +37,12 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlin.jvm.Synchronized
-import kotlin.jvm.Volatile
 import kotlin.properties.Delegates
 
-class ClickstreamSdk(
-    url: String,
-    dependencies: PlatformDependencies,
-    propertiesProvider: PropertiesProvider,
-    private val clickStreamConfig: ClickstreamConfig,
-    private val analyticsJobScheduler: AnalyticsJobScheduler,
-    requestHeaders: Map<String, () -> String>,
-) {
+object ClickstreamSdk {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Logger.e(throwable) { "ClickStreamSdk" }
@@ -62,6 +51,9 @@ class ClickstreamSdk(
     private val coroutineScope = CoroutineScope(
         SupervisorJob() + Dispatchers.IO + coroutineExceptionHandler,
     )
+
+    private var clickStreamConfig: ClickstreamConfig by Delegates.notNull()
+    private var analyticsJobScheduler: AnalyticsJobScheduler by Delegates.notNull()
 
     private var database: ClickstreamDatabase by Delegates.notNull()
     private var sender: AnalyticsEventSender by Delegates.notNull()
@@ -74,14 +66,29 @@ class ClickstreamSdk(
 
     // ORDER MATTERS
     // DO NOT CHANGE
-    init {
+    fun initialize(
+        url: String,
+        dependencies: PlatformDependencies,
+        propertiesProvider: PropertiesProvider?,
+        clickStreamConfig: ClickstreamConfig = ClickstreamConfig(),
+        requestHeaders: Map<String, () -> String>,
+        analyticsJobScheduler: AnalyticsJobScheduler
+    ) {
+        if (dependencies.utils.initAllowed().not()) return
+
+        this.clickStreamConfig = clickStreamConfig
+        this.analyticsJobScheduler = analyticsJobScheduler
+
         database = ClickstreamDatabase(dependencies.databaseDriverFactory)
         localEventsGateway = database.queries()
+
+        val defaultPropertiesProvider = mergePropertiesWithDefault(dependencies, propertiesProvider)
         val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
+
         sender = createAnalyticsClickStreamSender(
             localEventsGateway, createMapEventToDatabaseEntity(
                 dependencies,
-                propertiesProvider,
+                defaultPropertiesProvider,
                 eventPropertiesDelegate,
             )
         )
@@ -94,7 +101,7 @@ class ClickstreamSdk(
         */
 
         api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, url))
-        createGrowthExposure(propertiesProvider)
+        createGrowthExposure(defaultPropertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
 
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
@@ -194,46 +201,6 @@ class ClickstreamSdk(
     private fun send(event: ClickstreamEvent) {
         coroutineScope.launch {
             sender.send(event)
-        }
-    }
-
-    @OptIn(InternalCoroutinesApi::class)
-    companion object {
-
-        @Volatile
-        private var INSTANCE: ClickstreamSdk? = null
-
-        fun initialize(
-            url: String,
-            dependencies: PlatformDependencies,
-            propertiesProvider: PropertiesProvider?,
-            config: ClickstreamConfig = ClickstreamConfig(5, 15),
-            requestHeaders: Map<String, () -> String>,
-            analyticsJobScheduler: AnalyticsJobScheduler
-        ): ClickstreamSdk {
-            synchronized(this) {
-                if (INSTANCE != null) error("already initialized")
-
-                INSTANCE = ClickstreamSdk(
-                    url = url,
-                    dependencies = dependencies,
-                    clickStreamConfig = config,
-                    requestHeaders = requestHeaders,
-                    analyticsJobScheduler = analyticsJobScheduler,
-                    propertiesProvider = mergePropertiesWithDefault(
-                        dependencies = dependencies,
-                        propertiesProvider = propertiesProvider
-                    ),
-                )
-            }
-            return INSTANCE ?: throw IllegalStateException("can't be null")
-        }
-
-        @OptIn(InternalCoroutinesApi::class)
-        fun getInstance(): ClickstreamSdk {
-            synchronized(this) {
-                return INSTANCE ?: throw IllegalStateException("Must be initialized first")
-            }
         }
     }
 }

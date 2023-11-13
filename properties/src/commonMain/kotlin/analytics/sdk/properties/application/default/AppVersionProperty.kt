@@ -11,7 +11,7 @@ internal class AppVersionProperty(
 ) : ApplicationAnalyticsProperties {
     override val key: String = KEY
 
-    override fun getValue(): String = dependencies.appVersion
+    override fun getValue(): String = dependencies.utils.getAppVersion()
 
     internal companion object {
         const val KEY = "app_version"

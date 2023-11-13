@@ -1,7 +1,6 @@
 package analytics.sdk.android
 
 import analytics.sdk.clickstream.ClickstreamSdk
-import analytics.sdk.platform.AndroidDependencies
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,18 +17,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val clickstreamSdk = ClickstreamSdk.getInstance()
 
-        clickstreamSdk.send {
+        ClickstreamSdk.send {
             event {
                 type("CHECK_KMM")
-                parameter(key = "name", value = "Android") }.build()
+                parameter(key = "name", value = "Android")
+            }.build()
 
         }
-        clickstreamSdk.send {
+        ClickstreamSdk.send {
             event {
                 type("CHECK_KMM")
-                parameter(key = "name", value = "Android") }.build()
+                parameter(key = "name", value = "Android")
+            }.build()
         }
 
         setContent {

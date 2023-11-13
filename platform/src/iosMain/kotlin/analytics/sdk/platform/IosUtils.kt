@@ -2,6 +2,7 @@ package analytics.sdk.platform
 
 import analytics.sdk.platform.model.PlatformConnectionType
 import analytics.sdk.platform.properties.EventPropertiesDelegate
+import platform.Foundation.NSBundle
 import platform.Foundation.NSDate
 import platform.Foundation.NSNotificationCenter
 import platform.Foundation.NSOperationQueue
@@ -13,6 +14,13 @@ import platform.UIKit.UIApplicationDidEnterBackgroundNotification
 import kotlin.time.Duration.Companion.milliseconds
 
 class IosUtils : PlatformUtils {
+
+    override fun initAllowed(): Boolean = true
+
+    override fun getAppPackage(): String = NSBundle.mainBundle.bundleIdentifier ?: ""
+
+    override fun getAppVersion(): String =
+        NSBundle.mainBundle.infoDictionary?.get("CFBundleShortVersionString") as String? ?: ""
 
     override fun getTimezone(): String = NSTimeZone.localTimeZone.name
 

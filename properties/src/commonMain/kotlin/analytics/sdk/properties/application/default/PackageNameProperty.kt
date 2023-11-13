@@ -11,7 +11,7 @@ internal class PackageNameProperty(
 ) : ApplicationAnalyticsProperties {
     override val key: String = KEY
 
-    override fun getValue(): String = dependencies.packageName
+    override fun getValue(): String = dependencies.utils.getAppPackage()
 
     internal companion object {
         const val KEY = "package_name"
