@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packaging {
         resources {
@@ -40,9 +40,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":clickstream"))
-    implementation(project(":platform"))
-    implementation(project(":common"))
+    implementation(Libraries.Analytics.clickstream)
+    implementation(Libraries.Analytics.platformAndroid)
+    implementation(Libraries.Analytics.properties)
+    implementation(Libraries.Analytics.common)
 
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling:1.4.3")
@@ -53,6 +54,4 @@ dependencies {
 
     implementation(Libraries.AndroidX.work)
     implementation(Libraries.AndroidX.startup)
-
-    implementation(Libraries.settings)
 }

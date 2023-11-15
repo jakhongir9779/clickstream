@@ -2,44 +2,46 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
+    id("maven-publish")
     kotlin("multiplatform")
     id("com.android.library")
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
         }
+        publishLibraryVariants("release")
     }
-    
+
+    /*
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "platform"
+            baseName = Artifacts.Analytics.platform
         }
     }
+    */
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":settings"))
-                api(project(":database"))
+                implementation(Libraries.Analytics.settings)
+                implementation(Libraries.Analytics.database)
             }
         }
     }
 }
 
 android {
-    namespace = "analytics.sdk.platform"
+    namespace = Libraries.Analytics.group
     compileSdk = 34
     defaultConfig {
         minSdk = 24
@@ -51,4 +53,23 @@ project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
         .filterIsInstance<KotlinNativeTarget>()
         .flatMap { it.binaries }
         .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+}
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.platform
+            version = Versions.Analytics.platform
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+            }
+        }
+    }
 }

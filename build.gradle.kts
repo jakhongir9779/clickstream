@@ -1,9 +1,10 @@
 plugins {
     //trick: for the same plugin versions in all sub-modules
-    id("com.android.application").version("8.0.2").apply(false)
-    id("com.android.library").version("8.0.2").apply(false)
+    id("com.android.application").version("8.1.3").apply(false)
+    id("com.android.library").version("8.1.3").apply(false)
     kotlin("android").version(Versions.Kotlin.core).apply(false)
     kotlin("multiplatform").version(Versions.Kotlin.core).apply(false)
+    id("org.gradle.maven-publish")
 }
 
 tasks.register("clean", Delete::class) {
@@ -36,15 +37,13 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        /*
         maven {
-            url = uri(java.lang.System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
             credentials(PasswordCredentials::class) {
-                username = java.lang.System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-                password = java.lang.System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
             }
         }
-        */
         mavenLocal()
     }
 }

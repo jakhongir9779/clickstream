@@ -1,75 +1,64 @@
-import Libraries.Kotlin.kotlin
-
 plugins {
     id("maven-publish")
     kotlin("multiplatform")
     id("com.android.library")
 }
-//
-//java {
-//    withSourcesJar()
-//}
 
-//publishing {
-//    publications {
-//        register<MavenPublication>("library") {
-//            groupId = "analytics.sdk"
-//            artifactId = "analyticstype"
-//            version = Versions.Analytics.analyticsType
-//
-//            afterEvaluate {
-//                from(components["java"])
-//
-//            }
-//        }
-//    }
-//    repositories {
-//        maven {
-//            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
-//            credentials(PasswordCredentials::class) {
-//                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-//                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
-//            }
-//        }
-//    }
-//}
-
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
         }
+        publishLibraryVariants("release")
     }
 
+    /*
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "event"
+            baseName = Artifacts.Analytics.event
         }
     }
+    */
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
-                implementation(project(":analyticstype"))
+                implementation(Libraries.Analytics.analyticsType)
             }
         }
     }
 }
 
 android {
-    namespace = "analytics.sdk"
+    namespace = Libraries.Analytics.group
     compileSdk = 33
     defaultConfig {
         minSdk = 24
+    }
+}
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.event
+            version = Versions.Analytics.event
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+            }
+        }
     }
 }

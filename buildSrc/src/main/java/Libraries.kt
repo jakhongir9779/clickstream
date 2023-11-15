@@ -566,15 +566,20 @@ object Libraries {
     }
 
     object Analytics {
-        const val clickstream = "analytics.sdk:clickstream:${Versions.Analytics.clickstream}"
-        const val clickstreamTest =
-            "analytics.sdk:clickstream-test:${Versions.Analytics.clickstreamTest}"
-        const val clickstreamEventSenderTest =
-            "analytics.sdk:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
-        const val composite = "analytics.sdk:composite:${Versions.Analytics.composite}"
-        const val analyticstype = "analytics.sdk:analyticstype:${Versions.Analytics.analyticsType}"
-        const val common = "analytics.sdk:common:${Versions.Analytics.common}"
-        const val event = "analytics.sdk:event:${Versions.Analytics.event}"
-        const val eventsender = "analytics.sdk:eventsender:${Versions.Analytics.eventsender}"
+        const val group = "analytics.sdk"
+
+        const val clickstream = "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
+        const val clickstreamTest = "$group:clickstream-test:${Versions.Analytics.clickstreamTest}"
+        const val clickstreamEventSenderTest = "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
+        const val composite = "$group:composite:${Versions.Analytics.composite}"
+        const val analyticsType = "$group:${Artifacts.Analytics.analyticsType}-android:${Versions.Analytics.analyticsType}"
+        const val common = "$group:${Artifacts.Analytics.common}-android:${Versions.Analytics.common}"
+        const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"
+        const val eventSender = "$group:${Artifacts.Analytics.eventSender}-android:${Versions.Analytics.eventSender}"
+        const val database = "$group:${Artifacts.Analytics.database}:${Versions.Analytics.database}"
+        const val settings = "$group:${Artifacts.Analytics.settings}:${Versions.Analytics.settings}"
+        const val platform = "$group:${Artifacts.Analytics.platform}:${Versions.Analytics.platform}"
+        const val platformAndroid = "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
+        const val properties = "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
     }
 }
