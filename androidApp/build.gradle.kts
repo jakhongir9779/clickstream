@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace = "analytics.sdk.android"
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         applicationId = "analytics.sdk.android"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = Versions.Android.minSdkVersion
+        targetSdk = Versions.Android.targetSdkVersion
         versionCode = 1
         versionName = "1.0"
     }

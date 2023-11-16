@@ -30,9 +30,9 @@ kotlin {
 
 android {
     namespace = Libraries.Analytics.group
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        minSdk = 24
+        minSdk = Versions.Android.minSdkVersion
     }
 }
 
