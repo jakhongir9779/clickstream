@@ -15,7 +15,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    /*
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +24,6 @@ kotlin {
             baseName = Artifacts.Analytics.common
         }
     }
-    */
 
     sourceSets {
         val commonMain by getting {
@@ -50,7 +48,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.common
             version = Versions.Analytics.common
         }
     }

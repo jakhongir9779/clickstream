@@ -17,7 +17,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    /*
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,7 +26,8 @@ kotlin {
             baseName = Artifacts.Analytics.database
         }
     }
-    */
+
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         val commonMain by getting {
@@ -40,13 +40,11 @@ kotlin {
                 implementation(Libraries.SqlDelight.Driver.android)
             }
         }
-        /*
-        val nativeMain by getting {
+        val iosMain by getting {
             dependencies {
                 implementation(Libraries.SqlDelight.Driver.native)
             }
         }
-        */
     }
 }
 
@@ -70,7 +68,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.database
             version = Versions.Analytics.database
         }
     }
