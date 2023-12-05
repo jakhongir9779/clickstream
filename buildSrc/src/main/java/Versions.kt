@@ -58,7 +58,7 @@ object Versions {
     }
 
     // sqlDelight
-    const val sqlDelight = "2.0.0-rc02"
+    const val sqlDelight = "2.0.1"
 
     // design
     const val materialDesignVersion = "1.6.1"
@@ -207,11 +207,11 @@ object Versions {
         const val common = "1.0"
         const val event = "1.0"
         const val eventSender = "1.0"
-        const val clickstream = "1.0.1"
-        const val database = "1.0"
+        const val clickstream = "1.0.2"
+        const val database = "1.0.1"
         const val settings = "1.0"
-        const val platform = "1.0"
-        const val properties = "1.0"
+        const val platform = "1.0.1"
+        const val properties = "1.0.1"
 
         const val composite = "1.0"
 
