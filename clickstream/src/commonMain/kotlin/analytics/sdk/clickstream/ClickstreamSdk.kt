@@ -107,7 +107,7 @@ object ClickstreamSdk {
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
     }
 
-    fun getDataForWorker() =
+    fun getDataForPeriodicJob() =
         DataForPeriodicJob(
             localEventsGateway = localEventsGateway,
             remoteGateway = remoteGateway,
@@ -177,7 +177,7 @@ object ClickstreamSdk {
 
     private fun initPeriodicWork() {
         analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
-        analyticsJobScheduler.startWork()
+        analyticsJobScheduler.startWork(coroutineScope = coroutineScope)
     }
 
     fun sender(): AnalyticsEventSender = sender

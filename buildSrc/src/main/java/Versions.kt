@@ -207,7 +207,7 @@ object Versions {
         const val common = "1.0"
         const val event = "1.0"
         const val eventSender = "1.0"
-        const val clickstream = "1.0"
+        const val clickstream = "1.0.1"
         const val database = "1.0"
         const val settings = "1.0"
         const val platform = "1.0"
