@@ -10,6 +10,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
+import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.TimeUnit
 
 actual class AnalyticsJobScheduler(private val context: Context) {
@@ -28,7 +29,7 @@ actual class AnalyticsJobScheduler(private val context: Context) {
 
     }
 
-    actual fun startWork() {
+    actual fun startWork(coroutineScope: CoroutineScope) {
         when(request) {
             is PeriodicWorkRequest -> {
                 WorkManager.getInstance(context)
