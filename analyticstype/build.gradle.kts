@@ -15,7 +15,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    /*
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +24,6 @@ kotlin {
             baseName = Artifacts.Analytics.analyticsType
         }
     }
-    */
 }
 
 android {
@@ -40,7 +38,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.analyticsType
             version = Versions.Analytics.analyticsType
         }
     }

@@ -24,7 +24,7 @@ class App : Application(), Configuration.Provider {
         val myWorkerFactory = DelegatingWorkerFactory()
 
         myWorkerFactory.addFactory(
-            AnalyticsSdkWorkerFactory(ClickstreamSdk.getDataForWorker())
+            AnalyticsSdkWorkerFactory(ClickstreamSdk.getDataForPeriodicJob())
         )
 
         return Configuration.Builder()
