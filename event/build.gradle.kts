@@ -15,7 +15,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    /*
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +24,6 @@ kotlin {
             baseName = Artifacts.Analytics.event
         }
     }
-    */
 
     sourceSets {
         val commonMain by getting {
@@ -38,9 +36,9 @@ kotlin {
 
 android {
     namespace = Libraries.Analytics.group
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        minSdk = 24
+        minSdk = Versions.Android.minSdkVersion
     }
 }
 
@@ -48,7 +46,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.event
             version = Versions.Analytics.event
         }
     }

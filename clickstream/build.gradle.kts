@@ -19,7 +19,6 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    /*
     listOf(
         iosX64(),
         iosArm64(),
@@ -29,7 +28,6 @@ kotlin {
             baseName = Artifacts.Analytics.clickstream
         }
     }
-    */
 
     sourceSets {
         val commonMain by getting {
@@ -37,10 +35,10 @@ kotlin {
                 implementation(Libraries.Analytics.analyticsType)
                 implementation(Libraries.Analytics.eventSender)
                 implementation(Libraries.Analytics.event)
-                implementation(Libraries.Analytics.common)
                 implementation(Libraries.Analytics.platform)
                 implementation(Libraries.Analytics.database)
-                implementation(Libraries.Analytics.properties)
+                api(Libraries.Analytics.properties)
+                api(Libraries.Analytics.common)
 
                 implementation(Libraries.Ktor.clientCore)
                 implementation(Libraries.Ktor.clientCio)
@@ -62,6 +60,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api(Libraries.AndroidX.work)
+                api(Libraries.Analytics.platformAndroid)
             }
         }
     }
@@ -69,9 +68,9 @@ kotlin {
 
 android {
     namespace = Libraries.Analytics.group
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        minSdk = 24
+        minSdk = Versions.Android.minSdkVersion
     }
 }
 
@@ -86,7 +85,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.clickstream
             version = Versions.Analytics.clickstream
         }
     }

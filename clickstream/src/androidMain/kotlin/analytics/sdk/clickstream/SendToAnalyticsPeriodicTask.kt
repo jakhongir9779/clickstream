@@ -1,6 +1,7 @@
 package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.data.EventResult
+import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents
 import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
 import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
@@ -17,19 +18,25 @@ import kotlin.jvm.Volatile
 internal class SendToAnalyticsPeriodicTask(
     context: Context,
     params: WorkerParameters,
-    private val localEventsGateway: LocalEventsGateway,
+    localEventsGateway: LocalEventsGateway,
     clickstreamRemoteGateway: ClickstreamRemoteGateway,
-    private val clickstreamConfig: ClickstreamConfig
+    clickstreamConfig: ClickstreamConfig
 ) : CoroutineWorker(context, params) {
+
+    private val getUnDispatchedEvents = GetUnDispatchedEvents(
+        localEventsGateway,
+        clickstreamConfig,
+    )
 
     private val sendBatchOfEventsToClickstream = SendBatchOfEventsToClickstream(
         localEventsGateway,
         clickstreamRemoteGateway,
-        clickstreamConfig
+        getUnDispatchedEvents,
     )
+
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
-            while (haveUnDispatchedData()) {
+            while (getUnDispatchedEvents().isNotEmpty()) {
                 try {
                     val sentResult = sendBatchOfEventsToClickstream()
 
@@ -47,9 +54,6 @@ internal class SendToAnalyticsPeriodicTask(
             return@withContext Result.retry()
         }
     }
-
-    private fun haveUnDispatchedData(): Boolean =
-        localEventsGateway.getAllByCount(clickstreamConfig.sizeOfBatch).isNotEmpty()
 
     internal companion object {
         @Volatile
