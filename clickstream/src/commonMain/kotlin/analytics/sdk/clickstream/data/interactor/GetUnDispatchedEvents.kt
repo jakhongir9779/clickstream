@@ -9,6 +9,6 @@ class GetUnDispatchedEvents(
     private val clickstreamConfig: ClickstreamConfig,
 ) {
     operator fun invoke(): List<EventSnapshotEntity> {
-        return localEventsGateway.getAllByCount(clickstreamConfig.sizeOfBatch)
+        return localEventsGateway.getAllByCount(clickstreamConfig.sizeOfBatch.toInt())
     }
 }

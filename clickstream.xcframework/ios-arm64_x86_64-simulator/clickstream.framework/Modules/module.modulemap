@@ -1,0 +1,6 @@
+framework module clickstream {
+    umbrella header "clickstream.h"
+
+    export *
+    module * { export * }
+}

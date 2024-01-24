@@ -1,10 +1,10 @@
 package analytics.sdk.properties.device.default
 
-import analytics.sdk.properties.user.UserAnalyticsProperties
+import analytics.sdk.properties.device.DeviceAnalyticsProperties
 
 class AppMetricaDeviceIdProperty(
     private val appMetricaDeviceId: String
-) : UserAnalyticsProperties {
+) : DeviceAnalyticsProperties {
     override val key: String = KEY
 
     override fun getValue(): String = appMetricaDeviceId

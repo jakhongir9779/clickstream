@@ -22,7 +22,7 @@ actual class AnalyticsJobScheduler(private val context: Context) {
             .build()
 
         request = PeriodicWorkRequestBuilder<SendToAnalyticsPeriodicTask>(
-                repeatInterval = clickStreamConfig.sendDataPeriodicityInMinutes,
+                repeatInterval = clickStreamConfig.sendDataPeriodicityInMinutes.toLong(),
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
             )
                 .setConstraints(constraints).build()

@@ -10,6 +10,6 @@ internal fun getDefaultUserProperties(
         OperatorNameProperty(dependencies),
         OperatorCountryCodeProperty(dependencies),
         OperatorNetworkCodeProperty(dependencies),
-        UserInstallIdProperty(dependencies)
+        DefaultInstallIdProperty(dependencies)
     )
 

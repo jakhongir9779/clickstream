@@ -3,14 +3,20 @@ package analytics.sdk.properties.user.default
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.user.UserAnalyticsProperties
 
-class UserInstallIdProperty(
+interface InstallIdProperties: UserAnalyticsProperties {
+
+    companion object {
+        const val KEY = "install_id"
+    }
+}
+
+internal class DefaultInstallIdProperty(
     private val dependencies: PlatformDependencies,
-) : UserAnalyticsProperties {
-    override val key: String = KEY
+) : InstallIdProperties {
+    override val key: String = InstallIdProperties.KEY
 
     override fun getValue(): String? = with(dependencies) {
         when {
-            existingInstallId.isNullOrBlank().not() -> existingInstallId
             settings.clickStream.installId.isNullOrBlank().not() -> settings.clickStream.installId
             else -> {
                 settings.clickStream.installId = utils.generateUUID()
@@ -18,8 +24,13 @@ class UserInstallIdProperty(
             }
         }
     }
+}
 
-    companion object {
-        const val KEY = "install_id"
-    }
+class InstallIdProperty(
+    private val installId: String
+) : InstallIdProperties {
+    override val key: String = InstallIdProperties.KEY
+
+    override fun getValue(): String =
+        installId
 }

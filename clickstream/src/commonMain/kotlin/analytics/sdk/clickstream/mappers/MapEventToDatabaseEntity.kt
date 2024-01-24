@@ -38,19 +38,23 @@ internal class MapEventToDatabaseEntity(
             clickStreamEvent.uiProperties?.action == UiProperties.Action.SPACE_OPEN
         val eventAdditionalProperties = eventPropertiesDelegate.get(shouldIncrementCounter)
 
-        val uiProperties = clickStreamEvent.uiProperties?.let {
+        val uiProperties = clickStreamEvent.uiProperties?.let { uiProps ->
+            val screenResolution = propertiesProvider.deviceProps.properties()
+                .find { it.key == "screen_resolution" }
+                ?.getValue()
+                ?: ""
             val (viewId, previousViewId) = eventPropertiesDelegate.getViewId()
-            it.toDb(viewId, previousViewId)
+            uiProps.toDb(viewId, previousViewId, screenResolution)
         }
 
         val event = Event(
             counter = eventAdditionalProperties.counter,
-            time_zone = eventAdditionalProperties.timeZone,
-            ui_properties = uiProperties,
+            timeZone = eventAdditionalProperties.timeZone,
+            uiProperties = uiProperties,
             timestamp = dependencies.utils.generateTimestamp(),
-            event_properties = clickStreamEvent.eventProperties?.toDb(),
-            is_interactive = clickStreamEvent.isInteractive,
-            connection_type = when (dependencies.utils.getConnectionType()) {
+            eventProperties = clickStreamEvent.eventProperties?.toDb(),
+            isInteractive = clickStreamEvent.isInteractive,
+            connectionType = when (dependencies.utils.getConnectionType()) {
                 PlatformConnectionType.WIFI -> ConnectionType.WIFI
                 PlatformConnectionType.CELLULAR -> ConnectionType.CELL
                 PlatformConnectionType.UNKNOWN -> ConnectionType.UNKNOWN

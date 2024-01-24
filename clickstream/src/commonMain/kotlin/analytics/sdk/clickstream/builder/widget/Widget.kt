@@ -10,19 +10,21 @@ sealed class Widget private constructor(
 
     class Button internal constructor(
         override val name: String,
-        val text: String
+        val text: String,
+        val position: Int?,
     ) : Widget(name, Type.BUTTON)
 
     class Image internal constructor(
         override val name: String,
-        val text: String,
         val url: String,
+        val position: Int?,
     ) : Widget(name, Type.IMAGE)
 
     class Input internal constructor(
         override val name: String,
         val text: String,
         val prompt: String?,
+        val position: Int?,
     ) : Widget(name, Type.INPUT)
 
     class Select internal constructor(
@@ -34,6 +36,7 @@ sealed class Widget private constructor(
     class Text internal constructor(
         override val name: String,
         val text: String,
+        val position: Int?,
     ) : Widget(name, Type.TEXT)
 
     enum class Type {

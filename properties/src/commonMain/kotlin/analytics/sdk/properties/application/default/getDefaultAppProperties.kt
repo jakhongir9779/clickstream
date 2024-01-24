@@ -8,6 +8,6 @@ internal fun getDefaultAppProperties(
 ): Set<ApplicationAnalyticsProperties> =
     setOf(
         SdkVersionProperty(),
-        AppVersionProperty(dependencies),
+        DefaultAppVersionProperty(dependencies),
         PackageNameProperty(dependencies),
     )

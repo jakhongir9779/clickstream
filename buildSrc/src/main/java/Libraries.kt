@@ -18,11 +18,15 @@ object Libraries {
 
 
     object Ktor {
-        const val clientCore = "io.ktor:ktor-client-core:${Versions.ktor}"
-        const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
-        const val clientLogging = "io.ktor:ktor-client-logging:${Versions.ktor}"
-        const val clientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
-        const val clientJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
+        const val core = "io.ktor:ktor-client-core:${Versions.ktor}"
+        const val logging = "io.ktor:ktor-client-logging:${Versions.ktor}"
+        const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
+        const val json = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
+
+        object Engine {
+            const val okHttp = "io.ktor:ktor-client-okhttp:${Versions.ktor}"
+            const val darwin = "io.ktor:ktor-client-darwin:${Versions.ktor}"
+        }
     }
 
     object Google {

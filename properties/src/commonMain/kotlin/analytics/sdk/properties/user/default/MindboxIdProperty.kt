@@ -6,12 +6,12 @@ import analytics.sdk.properties.user.UserAnalyticsProperties
  * Идентификатор клиента Mindbox
  */
 class MindboxIdProperty(
-    private val muid: String
+    private val mindboxId: String
 ) : UserAnalyticsProperties {
     override val key: String = KEY
 
     override fun getValue(): String =
-        muid
+        mindboxId
 
     internal companion object {
         const val KEY = "mindbox_id"

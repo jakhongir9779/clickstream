@@ -4,6 +4,8 @@ import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.database.model.EventSnapshotEntity
 import co.touchlab.kermit.Logger
+import io.ktor.client.plugins.ServerResponseException
+import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -26,10 +28,16 @@ internal class ClickstreamRemoteGatewayImpl(
         events: List<EventSnapshotEntity>,
     ): List<EventResult> = try {
         val bodyJson = mapEntityToJsonBodyString(events)
-        api.sendEventsTest(bodyJson)
+        api.sendEvents(bodyJson)
         events.map { EventResult.Succeed(it.id) }
+    } catch (e: ServerResponseException) {
+        if (e.response.status == HttpStatusCode.NoContent) {
+            events.map { EventResult.Succeed(it.id) }
+        } else {
+            error(e)
+        }
     } catch (e: Exception) {
-        Logger.e(e) { "Failed to send events $events" }
+        Logger.e(e) { "Failed to send events, $e, $events" }
         events.map { EventResult.Failed(it.id) }
     }
 

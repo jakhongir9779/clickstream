@@ -19,7 +19,7 @@ fun mergePropertiesWithDefault(
 ): PropertiesProvider {
 
     val defaultPropertiesProvider = PropertiesProvider(
-        appProvider = ApplicationAnalyticsPropertyProvider(
+        appProps = ApplicationAnalyticsPropertyProvider(
             getDefaultAppProperties(dependencies)
         ),
         deviceProps = DeviceAnalyticsPropertyProvider(
@@ -31,50 +31,23 @@ fun mergePropertiesWithDefault(
     )
 
     // should drop default in case of conflict
-    val appProps = defaultPropertiesProvider.appProvider.properties().apply {
-        propertiesProvider?.appProvider?.let { provider ->
-            val replaced = provider.properties()
-                .map { it.key }
-                .intersect(this.map { it.key }.toSet())
-            Logger.w {
-                "This app properties conflicted " +
-                        "${replaced.joinToString(separator = ",") { it }}, " +
-                        "default keys will be replaced"
-            }
-            plus(provider.properties())
-        }
-    }
+    val appProps = mergeProperties(
+        defaultPropertiesProvider.appProps.properties(),
+        propertiesProvider?.appProps?.properties(),
+    )
 
-    val userProps = defaultPropertiesProvider.userProps.properties().apply {
-        propertiesProvider?.userProps?.let { provider ->
-            val replaced = provider.properties()
-                .map { it.key }
-                .intersect(this.map { it.key }.toSet())
-            Logger.w {
-                "This user properties conflicted " +
-                        "${replaced.joinToString(separator = ",") { it }}, " +
-                        "default keys will be replaced"
-            }
-            plus(provider.properties())
-        }
-    }
+    val userProps = mergeProperties(
+        defaultPropertiesProvider.userProps.properties(),
+        propertiesProvider?.userProps?.properties(),
+    )
 
-    val deviceProps = defaultPropertiesProvider.deviceProps.properties().apply {
-        propertiesProvider?.deviceProps?.let { provider ->
-            val replaced = provider.properties()
-                .map { it.key }
-                .intersect(this.map { it.key }.toSet())
-            Logger.w {
-                "This device properties conflicted " +
-                        "${replaced.joinToString(separator = ",") { it }}, " +
-                        "default keys will be replaced"
-            }
-            plus(provider.properties())
-        }
-    }
+    val deviceProps = mergeProperties(
+        defaultPropertiesProvider.deviceProps.properties(),
+        propertiesProvider?.deviceProps?.properties(),
+    )
 
     return PropertiesProvider(
-        appProvider = ApplicationAnalyticsPropertyProvider(
+        appProps = ApplicationAnalyticsPropertyProvider(
             appProps as Set<ApplicationAnalyticsProperties>
         ),
         userProps = UserAnalyticsPropertyProvider(
@@ -84,4 +57,47 @@ fun mergePropertiesWithDefault(
             deviceProps as Set<DeviceAnalyticsProperties>
         )
     )
+}
+
+
+private fun mergeProperties(
+    baseProperties: Set<AnalyticsPropertyValue>,
+    customProperties: Set<AnalyticsPropertyValue>?
+): Set<AnalyticsPropertyValue> {
+    val userProps = baseProperties.toMutableSet()
+
+    customProperties?.let { custom ->
+        val keysToReplace = findConflictingKeys(userProps, custom)
+
+        if (keysToReplace.isNotEmpty()) {
+            logConflictWarning(keysToReplace)
+        }
+
+        // Remove conflicting keys from the userProps set.
+        userProps.removeAll { it.key in keysToReplace }
+
+        // Add all properties from the custom set.
+        userProps.addAll(custom)
+    }
+
+    return userProps
+}
+
+private fun findConflictingKeys(
+    baseProperties: Set<AnalyticsPropertyValue>,
+    customProperties: Set<AnalyticsPropertyValue>
+): Set<String> {
+    return customProperties
+        .distinctBy { it.key }
+        .map { it.key }
+        .intersect(baseProperties.map { it.key }.toSet())
+        .toSet()
+}
+
+private fun logConflictWarning(keysToReplace: Set<String>) {
+    Logger.w {
+        """This user properties 
+        |conflicted: ${keysToReplace.joinToString(separator = ",")}. 
+        |Default keys will be replaced.""".trimMargin()
+    }
 }

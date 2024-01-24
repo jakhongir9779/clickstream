@@ -5,8 +5,6 @@ import analytics.sdk.settings.PlatformSettings
 
 interface PlatformDependencies {
 
-    val existingInstallId: String?
-
     val databaseDriverFactory: PlatformDriverFactory
 
     val settings: PlatformSettings

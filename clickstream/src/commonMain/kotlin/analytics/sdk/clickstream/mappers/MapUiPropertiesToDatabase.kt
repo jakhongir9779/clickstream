@@ -8,10 +8,11 @@ import analytics.sdk.clickstream.builder.widget.Widget
 
 internal fun UiProperties.toDb(
     viewId: String,
-    previousViewId: String?
+    previousViewId: String?,
+    screenResolution: String,
 ): analytics.sdk.clickstream.data.model.UiProperties {
     val widget = widget?.toDb()
-    val space = space?.toDb(viewId, previousViewId)
+    val space = space?.toDb(viewId, previousViewId, screenResolution)
     val section = section?.toDb()
     val action = action?.toDb()
     val group = group?.toDb()
@@ -24,6 +25,40 @@ internal fun UiProperties.toDb(
         action = action,
     )
 }
+
+private fun Space.toDb(
+    viewId: String,
+    previousViewId: String?,
+    screenResolution: String,
+): analytics.sdk.clickstream.data.model.Space =
+    analytics.sdk.clickstream.data.model.Space(
+        id = id,
+        name = name,
+        viewId = viewId,
+        previousViewId = previousViewId,
+        type = type.toDb(),
+        screenSize = screenSize.ifEmpty { screenResolution },
+    )
+
+private fun Space.Type.toDb(): String =
+    when (this) {
+        Space.Type.MODAL -> "MODAL"
+        Space.Type.PAGE -> "PAGE"
+    }
+
+private fun Section.toDb(): analytics.sdk.clickstream.data.model.Section =
+    analytics.sdk.clickstream.data.model.Section(
+        id = id,
+        type = type,
+        name = name,
+        position = position,
+    )
+
+private fun Group.toDb(): analytics.sdk.clickstream.data.model.Group =
+    analytics.sdk.clickstream.data.model.Group(
+        name = name,
+        position = position
+    )
 
 private fun Widget.toDb(): analytics.sdk.clickstream.data.model.Widget =
     when (this) {
@@ -38,34 +73,22 @@ private fun Widget.Button.toDb() = analytics.sdk.clickstream.data.model.Widget(
     name = name,
     type = type.toDb(),
     text = text,
+    position = position,
 )
 
 private fun Widget.Image.toDb() = analytics.sdk.clickstream.data.model.Widget(
     name = name,
     type = type.toDb(),
-    text = text,
     url = url,
+    position = position,
 )
-
-private fun Section.toDb(): analytics.sdk.clickstream.data.model.Section =
-    analytics.sdk.clickstream.data.model.Section(
-        id = id,
-        position = position,
-        name = name,
-        type = type
-    )
-
-private fun Group.toDb(): analytics.sdk.clickstream.data.model.Group =
-    analytics.sdk.clickstream.data.model.Group(
-        name = name,
-        position = position
-    )
 
 private fun Widget.Input.toDb() = analytics.sdk.clickstream.data.model.Widget(
     name = name,
     type = type.toDb(),
     text = text,
     prompt = prompt,
+    position = position,
 )
 
 private fun Widget.Select.toDb() = analytics.sdk.clickstream.data.model.Widget(
@@ -79,6 +102,7 @@ private fun Widget.Text.toDb() = analytics.sdk.clickstream.data.model.Widget(
     name = name,
     type = type.toDb(),
     text = text,
+    position = position,
 )
 
 private fun Widget.Type.toDb(): String =
@@ -104,23 +128,4 @@ private fun UiProperties.Action?.toDb(): String =
         UiProperties.Action.SCROLL -> "SCROLL"
         UiProperties.Action.SPACE_OPEN -> "SPACE_OPEN"
         else -> ""
-    }
-
-private fun Space.toDb(
-    viewId: String,
-    previousViewId: String?,
-): analytics.sdk.clickstream.data.model.Space =
-    analytics.sdk.clickstream.data.model.Space(
-        id,
-        name,
-        viewId,
-        previousViewId,
-        screenSize,
-        type.toDb()
-    )
-
-private fun Space.Type.toDb(): String =
-    when (this) {
-        Space.Type.MODAL -> "MODAL"
-        Space.Type.PAGE -> "PAGE"
     }

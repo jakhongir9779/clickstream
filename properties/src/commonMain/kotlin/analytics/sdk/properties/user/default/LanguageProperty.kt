@@ -6,12 +6,12 @@ import analytics.sdk.properties.user.UserAnalyticsProperties
  * Язык установленный внутри приложения в ISO 639-1 формате
  */
 class LanguageProperty(
-    private val getLanguage: () -> String
+    private val language: String
 ) : UserAnalyticsProperties {
     override val key: String = KEY
 
     override fun getValue(): String =
-        getLanguage()
+        language
 
     internal companion object {
         const val KEY = "language"

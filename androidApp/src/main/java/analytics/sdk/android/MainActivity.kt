@@ -1,6 +1,9 @@
 package analytics.sdk.android
 
 import analytics.sdk.clickstream.ClickstreamSdk
+import analytics.sdk.clickstream.builder.UiProperties
+import analytics.sdk.clickstream.builder.section.Section
+import analytics.sdk.clickstream.builder.space.Space
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,16 +22,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         ClickstreamSdk.send {
+            space {
+                id(1)
+                name("space_name")
+                type(Space.Type.PAGE)
+                screenSize("1920:1080")
+            }
+            section {
+                id(2)
+                type(Section.Type.PRODUCT_LIST_TYPE)
+                name("section_name")
+                position(1)
+            }
+            group {
+                name("group_name")
+                position(2)
+            }
+            widget {
+                input(
+                    name = "input_name",
+                    text = "input_text",
+                    prompt = "input_prompt",
+                    position = 3,
+                )
+            }
+            action(UiProperties.Action.SHOW)
+            interaction(true)
             event {
-                type("CHECK_KMM")
-                parameter(key = "name", value = "Android")
-            }.build()
-
-        }
-        ClickstreamSdk.send {
-            event {
-                type("CHECK_KMM")
-                parameter(key = "name", value = "Android")
+                type("event_type")
+                parameter(
+                    key = "parameter_key",
+                    value = "parameter_value"
+                )
             }.build()
         }
 
@@ -38,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-//                    GreetingView(Greeting().greet())
+                    GreetingView("Clickstream SDK app")
                 }
             }
         }
@@ -47,7 +72,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun GreetingView(text: String) {
-    Text(text = text)
+    Text(
+        text = text
+    )
 }
 
 @Preview

@@ -6,10 +6,7 @@ import analytics.sdk.settings.PlatformSettings
 import analytics.sdk.settings.AndroidSettings
 import android.content.Context
 
-class AndroidDependencies(
-    val context: Context,
-    override val existingInstallId: String? = null,
-) : PlatformDependencies {
+class AndroidDependencies(val context: Context) : PlatformDependencies {
 
     override val databaseDriverFactory: PlatformDriverFactory = AndroidDriverFactory(context)
 

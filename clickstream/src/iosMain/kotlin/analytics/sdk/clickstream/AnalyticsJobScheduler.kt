@@ -36,7 +36,7 @@ actual class AnalyticsJobScheduler {
                     if (getUnDispatchedEvents().isNotEmpty()) {
                         sendBatchOfEventsToClickstream()
                     }
-                    delay(data.clickstreamConfig.sendDataPeriodicityInMinutes * 60 * 1000)
+                    delay((data.clickstreamConfig.sendDataPeriodicityInMinutes * 60 * 1000).toLong())
                 }
             }
         }

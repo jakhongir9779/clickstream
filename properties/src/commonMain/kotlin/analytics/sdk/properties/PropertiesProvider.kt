@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PropertiesProvider(
-    val appProvider: ApplicationAnalyticsPropertyProvider,
+    val appProps: ApplicationAnalyticsPropertyProvider,
     val userProps: UserAnalyticsPropertyProvider,
     val deviceProps: DeviceAnalyticsPropertyProvider,
 )

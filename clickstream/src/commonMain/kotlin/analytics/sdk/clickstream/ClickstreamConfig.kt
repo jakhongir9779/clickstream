@@ -1,6 +1,6 @@
 package analytics.sdk.clickstream
 
 class ClickstreamConfig(
-    val sizeOfBatch: Int = 5,
-    val sendDataPeriodicityInMinutes: Long = 15,
+    val sizeOfBatch: Long = 5,
+    val sendDataPeriodicityInMinutes: Double = 15.0,
 )

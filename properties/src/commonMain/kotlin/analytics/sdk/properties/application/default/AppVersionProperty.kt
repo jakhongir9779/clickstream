@@ -6,14 +6,26 @@ import analytics.sdk.properties.application.ApplicationAnalyticsProperties
 /**
  * Версия приложения в semVer формате
  */
-internal class AppVersionProperty(
-    private val dependencies: PlatformDependencies
-) : ApplicationAnalyticsProperties {
-    override val key: String = KEY
+internal interface AppVersionProperties : ApplicationAnalyticsProperties {
 
-    override fun getValue(): String = dependencies.utils.getAppVersion()
-
-    internal companion object {
+    companion object {
         const val KEY = "app_version"
     }
+}
+
+internal class DefaultAppVersionProperty(
+    private val dependencies: PlatformDependencies
+) : AppVersionProperties {
+    override val key: String = AppVersionProperties.KEY
+
+    override fun getValue(): String = dependencies.utils.getAppVersion()
+}
+
+class AppVersionProperty(
+    private val version: String
+) : AppVersionProperties {
+    override val key: String = AppVersionProperties.KEY
+
+    override fun getValue(): String =
+        version
 }

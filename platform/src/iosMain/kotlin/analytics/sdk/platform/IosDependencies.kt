@@ -5,9 +5,7 @@ import analytics.sdk.database.IosDriverFactory
 import analytics.sdk.settings.IosSettings
 import analytics.sdk.settings.PlatformSettings
 
-class IosDependencies(
-    override val existingInstallId: String? = null,
-): PlatformDependencies {
+class IosDependencies: PlatformDependencies {
 
     override val databaseDriverFactory: PlatformDriverFactory = IosDriverFactory()
 

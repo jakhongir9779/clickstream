@@ -104,12 +104,14 @@ class ClickstreamBuilder : AnalyticsBuilder() {
      *  - event_props != null, ui_props = null
      */
     fun build(): ClickstreamEvent {
-        val eventWithUi = eventProperties.isValid() && uiProperties.isValid()
-        val eventWithoutUi = eventProperties.isValid() && uiProperties == null
+        val eventWithUiIsValid = eventProperties.isValid() && uiProperties.isValid()
+        val eventWithoutUiIsValid = eventProperties.isValid() && uiProperties == null
 
-        Logger.e {
-            "Should be defined at least event-properties or ui-properties; " +
-                    "eventWithUi: $eventWithUi, eventWithoutUi: $eventWithoutUi"
+        if (!(eventWithUiIsValid || eventWithoutUiIsValid)) {
+            Logger.e {
+                "Should be defined at least event-properties or ui-properties; " +
+                        "eventWithUi: $eventWithUiIsValid, eventWithoutUi: $eventWithoutUiIsValid"
+            }
         }
 
         return ClickstreamEvent(

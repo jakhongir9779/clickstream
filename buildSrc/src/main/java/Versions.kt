@@ -7,6 +7,7 @@ object Versions {
         const val cacheFix = "2.5.5"
         const val nuStuderCredentials = "2.1"
         const val benManesDependencyUpdate = "0.42.0"
+        const val swiftPackage = "2.2.1"
 
         object StatisAnalyze {
             const val detekt = "1.22.0"
@@ -139,9 +140,14 @@ object Versions {
 
     object Android {
         const val minSdkVersion = 23
-        const val targetSdkVersion = 33
-        const val compileSdkVersion = 33
+        const val targetSdkVersion = 34
+        const val compileSdkVersion = 34
         const val buildToolsVersion = "33.0.0"
+    }
+
+    object Ios {
+        const val swiftToolsVersion = "5.3"
+        const val targetPlatformVersion = "13"
     }
 
     object Firebase {
@@ -207,11 +213,11 @@ object Versions {
         const val common = "1.0"
         const val event = "1.0"
         const val eventSender = "1.0"
-        const val clickstream = "1.0.2"
+        const val clickstream = "1.0.22"
         const val database = "1.0.1"
         const val settings = "1.0"
-        const val platform = "1.0.1"
-        const val properties = "1.0.1"
+        const val platform = "1.0.3"
+        const val properties = "1.0.9"
 
         const val composite = "1.0"
 

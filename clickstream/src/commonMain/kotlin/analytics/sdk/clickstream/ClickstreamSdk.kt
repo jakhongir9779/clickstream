@@ -17,21 +17,16 @@ import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.platform.properties.EventPropertiesDelegate
 import analytics.sdk.properties.PropertiesProvider
 import analytics.sdk.properties.mergePropertiesWithDefault
-import analytics.sdk.properties.user.default.UserInstallIdProperty
+import analytics.sdk.properties.user.default.InstallIdProperties
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.plugin
 import io.ktor.client.request.header
-import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
-import io.ktor.http.Url
-import io.ktor.http.encodedPath
-import io.ktor.http.takeFrom
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -66,17 +61,17 @@ object ClickstreamSdk {
 
     // ORDER MATTERS
     // DO NOT CHANGE
-    fun initialize(
+    internal fun initialize(
         url: String,
         dependencies: PlatformDependencies,
         propertiesProvider: PropertiesProvider?,
-        clickStreamConfig: ClickstreamConfig = ClickstreamConfig(),
+        config: ClickstreamConfig = ClickstreamConfig(),
         requestHeaders: Map<String, () -> String>,
         analyticsJobScheduler: AnalyticsJobScheduler
     ) {
         if (dependencies.utils.initAllowed().not()) return
 
-        this.clickStreamConfig = clickStreamConfig
+        this.clickStreamConfig = config
         this.analyticsJobScheduler = analyticsJobScheduler
 
         database = ClickstreamDatabase(dependencies.databaseDriverFactory)
@@ -100,7 +95,7 @@ object ClickstreamSdk {
         }
         */
 
-        api = ClickStreamAnalyticsApiImpl(buildCioHttpClient(requestHeaders, url))
+        api = ClickStreamAnalyticsApiImpl(buildHttpClient(requestHeaders, url))
         createGrowthExposure(defaultPropertiesProvider)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
 
@@ -115,37 +110,34 @@ object ClickstreamSdk {
         )
 
     // TODO: move client init to network module
-    private fun buildCioHttpClient(
+    private fun buildHttpClient(
         headers: Map<String, () -> String>,
         baseUrl: String
-    ): HttpClient {
-
-        val httpClient = HttpClient(CIO) {
-            expectSuccess = true
-            defaultRequest {
-                url.protocol = URLProtocol.HTTPS
-                val urlBuilder = URLBuilder(Url(baseUrl))
-                urlBuilder.encodedPath += urlBuilder.encodedPath
-                url.takeFrom(urlBuilder)
+    ): HttpClient = HttpClient {
+        expectSuccess = true
+        defaultRequest {
+            url(baseUrl)
+            headers.forEach { (key, value) ->
+                header(key, value)
             }
-            // TODO: check, that logging working only on debug
-            install(Logging)
-            install(ContentNegotiation) {
-                json(Json {
+        }
+        install(Logging) {
+            level = LogLevel.ALL
+            logger = object : io.ktor.client.plugins.logging.Logger {
+                override fun log(message: String) {
+                    Logger.i { message }
+                }
+            }
+        }
+        install(ContentNegotiation) {
+            json(
+                Json {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
-                })
-            }
+                }
+            )
         }
-
-        httpClient.plugin(HttpSend).intercept { request ->
-            headers.forEach { (k, v) ->
-                request.header(k, v.invoke())
-            }
-            execute(request)
-        }
-        return httpClient
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
@@ -169,7 +161,7 @@ object ClickstreamSdk {
         val installId = requireNotNull(
             value = propertiesProvider.userProps
                 .properties()
-                .find { it.key == UserInstallIdProperty.KEY },
+                .find { it.key == InstallIdProperties.KEY },
             lazyMessage = { "should be defined" }
         )
         exposureExperimentsApi = ExposureExperimentsImpl(api = api, installId = installId)

@@ -68,19 +68,19 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
         return event
     }
 
-    fun parameter(key: String, @ObjCName(swiftName = "intArray") value: List<Int>): EventProperties {
-        parameters += key to value
-        event = event.copy(parameters = buildJsonObjectFromParams())
-        return event
-    }
-
     fun parameter(key: String, @ObjCName(swiftName = "int32") value: Int): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
     }
 
-    fun parameter(key: String, @ObjCName(swiftName = "int64") value: Long): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "int") value: Long): EventProperties {
+        parameters += key to value
+        event = event.copy(parameters = buildJsonObjectFromParams())
+        return event
+    }
+
+    fun parameter(key: String, @ObjCName(swiftName = "intArray") value: List<Long>): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
@@ -110,7 +110,7 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
     }
 
     @ObjCName("addIfNotNil")
-    fun addIfNotNull(key: String, @ObjCName(swiftName = "int64") value: Long?): EventProperties {
+    fun addIfNotNull(key: String, @ObjCName(swiftName = "int") value: Long?): EventProperties {
         if (value == null) return event
         return parameter(key, value)
     }

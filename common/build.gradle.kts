@@ -30,7 +30,7 @@ kotlin {
             dependencies {
                 implementation(Libraries.Analytics.analyticsType)
                 implementation(Libraries.Analytics.event)
-                implementation(Libraries.Ktor.clientCore)
+                implementation(Libraries.Ktor.core)
             }
         }
     }
