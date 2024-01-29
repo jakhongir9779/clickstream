@@ -1,11 +1,14 @@
 package analytics.sdk.clickstream.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
 internal class EventProperties(
-    val eventType: String,
+    @SerialName("event_type")
+    val event_type: String,
 
-    val eventParameters: JsonObject
+    @SerialName("event_parameters")
+    val event_parameters: JsonObject
 )

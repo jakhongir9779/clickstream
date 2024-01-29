@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 data class ClickstreamEvent internal constructor(
      val eventProperties: EventProperties? = null,
      val uiProperties: UiProperties?,
-     val isInteractive: Boolean = true,
+     val isInteractive: Boolean,
 ) : Event {
     override val analyticsType: AnalyticsType = Clickstream
 }

@@ -7,6 +7,7 @@ object Versions {
         const val cacheFix = "2.5.5"
         const val nuStuderCredentials = "2.1"
         const val benManesDependencyUpdate = "0.42.0"
+        const val swiftPackage = "2.2.1"
 
         object StatisAnalyze {
             const val detekt = "1.22.0"
@@ -53,12 +54,12 @@ object Versions {
 
     // kotlin
     object Kotlin {
-        const val core = "1.8.21"
+        const val core = "1.9.20"
         const val serialization = "1.5.1"
     }
 
     // sqlDelight
-    const val sqlDelight = "2.0.0-rc02"
+    const val sqlDelight = "2.0.1"
 
     // design
     const val materialDesignVersion = "1.6.1"
@@ -96,10 +97,11 @@ object Versions {
         const val annotation = "1.4.0"
         const val coreKtx = "1.3.2"
         const val pagingRuntime = "2.1.2"
-        const val work = "2.7.1"
+        const val work = "2.8.1"
         const val constraintLayout = "1.1.3" // todo: DON'T upgrade this one until u check that it's OK on all the screens.
         const val transition = "1.4.1"
         const val legacySupport = "1.0.0"
+        const val startup = "1.1.1"
 
         object Lifecycle {
             const val core = "2.2.0"
@@ -126,10 +128,6 @@ object Versions {
         }
     }
 
-    object Acquiring {
-        const val tinkoff = "2.5.9"
-    }
-
     object Facebook {
         const val stetho = "1.6.0"
         const val shimmer = "0.5.0"
@@ -142,9 +140,14 @@ object Versions {
 
     object Android {
         const val minSdkVersion = 23
-        const val targetSdkVersion = 33
-        const val compileSdkVersion = 33
+        const val targetSdkVersion = 34
+        const val compileSdkVersion = 34
         const val buildToolsVersion = "33.0.0"
+    }
+
+    object Ios {
+        const val swiftToolsVersion = "5.3"
+        const val targetPlatformVersion = "13"
     }
 
     object Firebase {
@@ -194,7 +197,7 @@ object Versions {
     }
 
     object Logging {
-        const val kermit = "2.0.1"
+        const val kermit = "2.0.2"
         const val anrWatchDog = "1.4.0"
     }
 
@@ -209,8 +212,12 @@ object Versions {
         const val analyticsType = "1.0"
         const val common = "1.0"
         const val event = "1.0"
-        const val eventsender = "1.0"
-        const val clickstream = "1.0"
+        const val eventSender = "1.0"
+        const val clickstream = "1.0.22"
+        const val database = "1.0.1"
+        const val settings = "1.0"
+        const val platform = "1.0.3"
+        const val properties = "1.0.9"
 
         const val composite = "1.0"
 

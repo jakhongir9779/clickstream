@@ -1,13 +1,12 @@
 package analytics.sdk.clickstream.mappers
 
-import analytics.sdk.clickstream.properties.PropertiesProvider
-
+import analytics.sdk.properties.PropertiesProvider
 
 internal fun PropertiesProvider.toMapWithJsonValues(): Map<String, String> {
     val map = mutableMapOf<String, String>()
 
-    if (appProvider.properties().isNotEmpty()) {
-        map += appProvider.key to appProvider.toJsonValues()
+    if (appProps.properties().isNotEmpty()) {
+        map += appProps.key to appProps.toJsonValues()
     }
 
     if (userProps.properties().isNotEmpty()) {

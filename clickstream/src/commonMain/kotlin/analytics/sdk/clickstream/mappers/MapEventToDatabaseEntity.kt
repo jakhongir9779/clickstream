@@ -1,22 +1,22 @@
 package analytics.sdk.clickstream.mappers
 
-//import com.squareup.moshi.JsonAdapter
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
-import analytics.sdk.clickstream.properties.EventPropertiesDelegate
-import analytics.sdk.clickstream.properties.PropertiesProvider
 import analytics.sdk.database.model.EventSnapshotEntity
+import analytics.sdk.platform.PlatformDependencies
+import analytics.sdk.platform.model.PlatformConnectionType
+import analytics.sdk.platform.properties.EventPropertiesDelegate
+import analytics.sdk.properties.PropertiesProvider
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 internal class MapEventToDatabaseEntity(
+    private val dependencies: PlatformDependencies,
     private val propertiesProvider: PropertiesProvider,
     private val eventPropertiesDelegate: EventPropertiesDelegate,
-    private val timestamp: () -> Long,
-    private val isWifiConnection: () -> Boolean,
 ) {
 
     operator fun invoke(event: ClickstreamEvent): EventSnapshotEntity {
@@ -38,19 +38,27 @@ internal class MapEventToDatabaseEntity(
             clickStreamEvent.uiProperties?.action == UiProperties.Action.SPACE_OPEN
         val eventAdditionalProperties = eventPropertiesDelegate.get(shouldIncrementCounter)
 
-        val uiProperties = clickStreamEvent.uiProperties?.let {
+        val uiProperties = clickStreamEvent.uiProperties?.let { uiProps ->
+            val screenResolution = propertiesProvider.deviceProps.properties()
+                .find { it.key == "screen_resolution" }
+                ?.getValue()
+                ?: ""
             val (viewId, previousViewId) = eventPropertiesDelegate.getViewId()
-            it.toDb(viewId, previousViewId)
+            uiProps.toDb(viewId, previousViewId, screenResolution)
         }
 
         val event = Event(
             counter = eventAdditionalProperties.counter,
-            time_zone = eventAdditionalProperties.timeZone,
-            ui_properties = uiProperties,
-            timestamp = timestamp(),
-            event_properties = clickStreamEvent.eventProperties?.toDb(),
-            connection_type = if (isWifiConnection()) ConnectionType.WIFI else ConnectionType.CELL,
-            is_interactive = clickStreamEvent.isInteractive
+            timeZone = eventAdditionalProperties.timeZone,
+            uiProperties = uiProperties,
+            timestamp = dependencies.utils.generateTimestamp(),
+            eventProperties = clickStreamEvent.eventProperties?.toDb(),
+            isInteractive = clickStreamEvent.isInteractive,
+            connectionType = when (dependencies.utils.getConnectionType()) {
+                PlatformConnectionType.WIFI -> ConnectionType.WIFI
+                PlatformConnectionType.CELLULAR -> ConnectionType.CELL
+                PlatformConnectionType.UNKNOWN -> ConnectionType.UNKNOWN
+            },
         )
 
         return Json.encodeToString(event)
@@ -58,7 +66,7 @@ internal class MapEventToDatabaseEntity(
 
     private fun EventProperties.toDb(): analytics.sdk.clickstream.data.model.EventProperties =
         analytics.sdk.clickstream.data.model.EventProperties(
-            eventType = type,
-            eventParameters = parameters
+            event_type = type,
+            event_parameters = parameters
         )
 }

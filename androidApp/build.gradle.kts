@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace = "analytics.sdk.android"
-    compileSdk = 33
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         applicationId = "analytics.sdk.android"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = Versions.Android.minSdkVersion
+        targetSdk = Versions.Android.targetSdkVersion
         versionCode = 1
         versionName = "1.0"
     }
@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packaging {
         resources {
@@ -40,9 +40,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":clickstream"))
-    implementation(project(":database"))
-    implementation(project(":common"))
+
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
@@ -50,5 +48,6 @@ dependencies {
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.activity:activity-compose:1.7.1")
 
-    implementation(Libraries.settings)
+    implementation(Libraries.AndroidX.startup)
+    implementation(Libraries.Analytics.clickstream)
 }

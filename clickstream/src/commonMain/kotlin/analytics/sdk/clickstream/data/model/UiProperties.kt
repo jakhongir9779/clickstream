@@ -1,5 +1,6 @@
 package analytics.sdk.clickstream.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
@@ -65,12 +66,15 @@ internal class Space(
     val name: String,
 
     // example: 24a4904c-64ff-4cd1-8857-d897116f6c34
+    @SerialName("view_id")
     val viewId: String,
 
     // example: 522904c-64ff-4cd1-8857-d897116f6c34
+    @SerialName("previous_view_id")
     val previousViewId: String?,
 
     // example: 1920:1080
+    @SerialName("screen_size")
     val screenSize: String,
 
     val type: String,

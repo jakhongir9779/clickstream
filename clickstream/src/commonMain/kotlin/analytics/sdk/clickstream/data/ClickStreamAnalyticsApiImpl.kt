@@ -3,7 +3,6 @@ package analytics.sdk.clickstream.data
 import analytics.sdk.clickstream.exposure.ExposureExperiment
 import analytics.sdk.common.extensions.postJson
 import io.ktor.client.HttpClient
-import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 internal class ClickStreamAnalyticsApiImpl(private val httpClient: HttpClient) :

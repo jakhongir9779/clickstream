@@ -1,6 +1,6 @@
 package analytics.sdk.clickstream.data
 
-internal sealed class EventResult(
+sealed class EventResult(
     open val id: Long,
 ) {
     data class Succeed(override val id: Long) : EventResult(id)

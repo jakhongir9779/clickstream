@@ -13,46 +13,19 @@ object Libraries {
     const val redMadRobotInputMask =
         "com.github.RedMadRobot:input-mask-android:${Versions.redMadRobotInputMask}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottieVersion}"
-    const val drakeetMultiTypeAdapter =
-        "com.drakeet.multitype:multitype:${Versions.multiTypeAdapterVersion}"
-
-    //TODO Suspicious,old libraries with lack of support, that must be removed ASAP
-    const val razirProgressButton =
-        "com.github.razir.progressbutton:progressbutton:${Versions.progressbuttonVersion}"
-    const val cachapaExpandableLayout =
-        "com.github.cachapa:ExpandableLayout:${Versions.cachapaExpandableLayout}"
-    const val romanDanylykPageIndicatorView =
-        "com.github.romandanylyk:PageIndicatorView:${Versions.pageindicatorviewVersion}"
-    const val circularProgressBar =
-        "com.mikhaellopez:circularprogressbar:${Versions.circularProgressBar}"
-    const val hdodenhofCircleImageView =
-        "de.hdodenhof:circleimageview:${Versions.circleimageviewVersion}"
-    const val chrisbanesPhotoView = "com.github.chrisbanes:PhotoView:${Versions.photoViewVersion}"
-    const val caverockSvg = "com.caverock:androidsvg-aar:${Versions.androidSvgVersion}"
-    const val mongoDbDriver = "org.mongodb:mongodb-driver-sync:${Versions.mongodbDriverSyncVersion}"
 
     const val settings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
 
-    object Acquiring {
-        const val tinkoff = "ru.tinkoff.acquiring:ui:${Versions.Acquiring.tinkoff}"
-    }
+
     object Ktor {
-        const val clientCore = "io.ktor:ktor-client-core:${Versions.ktor}"
-        const val clientCio = "io.ktor:ktor-client-cio:${Versions.ktor}"
-        const val clientLogging = "io.ktor:ktor-client-logging:${Versions.ktor}"
-        const val clientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
-        const val clientJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
-    }
+        const val core = "io.ktor:ktor-client-core:${Versions.ktor}"
+        const val logging = "io.ktor:ktor-client-logging:${Versions.ktor}"
+        const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
+        const val json = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
 
-    object ExoPlayer {
-        const val core = "com.google.android.exoplayer:exoplayer-core:${Versions.exoplayerVersion}"
-        const val dash = "com.google.android.exoplayer:exoplayer-dash:${Versions.exoplayerVersion}"
-        const val ui = "com.google.android.exoplayer:exoplayer-ui:${Versions.exoplayerVersion}"
-
-        fun DependencyHandler.exoPlayer() {
-            implementation(core)
-            implementation(dash)
-            implementation(ui)
+        object Engine {
+            const val okHttp = "io.ktor:ktor-client-okhttp:${Versions.ktor}"
+            const val darwin = "io.ktor:ktor-client-darwin:${Versions.ktor}"
         }
     }
 
@@ -66,7 +39,7 @@ object Libraries {
             private const val core = "$prefix.play:core:${Versions.Google.Services.playCore}"
             const val installreferrer =
                 "com.android.installreferrer:installreferrer:${Versions.Google.Services.installreferrer}"
-            private const val gmsBase =
+            const val gmsBase =
                 "$prefix.gms:play-services-base:${Versions.Google.Services.playServicesBase}"
             const val gmsAds =
                 "$prefix.gms:play-services-ads-identifier:${Versions.Google.Services.adsService}"
@@ -231,6 +204,7 @@ object Libraries {
 
         const val work = "androidx.work:work-runtime-ktx:${Versions.AndroidX.work}"
         const val workTesting = "androidx.work:work-testing:${Versions.AndroidX.work}"
+        const val startup = "androidx.startup:startup-runtime:${Versions.AndroidX.startup}"
 
         fun DependencyHandler.androidX() {
             implementation(coreCtx)
@@ -596,15 +570,20 @@ object Libraries {
     }
 
     object Analytics {
-        const val clickstream = "analytics.sdk:clickstream:${Versions.Analytics.clickstream}"
-        const val clickstreamTest =
-            "analytics.sdk:clickstream-test:${Versions.Analytics.clickstreamTest}"
-        const val clickstreamEventSenderTest =
-            "analytics.sdk:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
-        const val composite = "analytics.sdk:composite:${Versions.Analytics.composite}"
-        const val analyticstype = "analytics.sdk:analyticstype:${Versions.Analytics.analyticsType}"
-        const val common = "analytics.sdk:common:${Versions.Analytics.common}"
-        const val event = "analytics.sdk:event:${Versions.Analytics.event}"
-        const val eventsender = "analytics.sdk:eventsender:${Versions.Analytics.eventsender}"
+        const val group = "analytics.sdk"
+
+        const val clickstream = "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
+        const val clickstreamTest = "$group:clickstream-test:${Versions.Analytics.clickstreamTest}"
+        const val clickstreamEventSenderTest = "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
+        const val composite = "$group:composite:${Versions.Analytics.composite}"
+        const val analyticsType = "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
+        const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
+        const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"
+        const val eventSender = "$group:${Artifacts.Analytics.eventSender}:${Versions.Analytics.eventSender}"
+        const val database = "$group:${Artifacts.Analytics.database}:${Versions.Analytics.database}"
+        const val settings = "$group:${Artifacts.Analytics.settings}:${Versions.Analytics.settings}"
+        const val platform = "$group:${Artifacts.Analytics.platform}:${Versions.Analytics.platform}"
+        const val platformAndroid = "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
+        const val properties = "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
     }
 }

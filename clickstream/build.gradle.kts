@@ -1,58 +1,72 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
-    kotlin("multiplatform").version("1.8.21")
+    id("maven-publish")
+    kotlin("multiplatform")
     id("com.android.library")
-    kotlin("plugin.serialization") version "1.8.21"
+    kotlin("plugin.serialization") version Versions.Kotlin.core
+    id("io.github.luca992.multiplatform-swiftpackage") version Versions.Plugins.swiftPackage
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
-kotlin {
-    targetHierarchy.default()
+version = Versions.Analytics.clickstream
 
-    android {
+kotlin {
+
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
         }
+        publishLibraryVariants("release")
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "clickstream"
+            baseName = Artifacts.Analytics.clickstream
+            export(Libraries.Analytics.properties)
         }
     }
+
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                // put your multiplatform dependencies here
-                implementation(project(":analyticstype"))
-                implementation(project(":eventsender"))
-                implementation(project(":common"))
-                implementation(project(":event"))
-                implementation(project(":database"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                implementation(Libraries.Analytics.analyticsType)
+                implementation(Libraries.Analytics.eventSender)
+                implementation(Libraries.Analytics.event)
+                implementation(Libraries.Analytics.database)
+                implementation(Libraries.Analytics.platform)
+                api(Libraries.Analytics.properties)
+                api(Libraries.Analytics.common)
 
-                implementation(Libraries.Ktor.clientCore)
-                implementation(Libraries.Ktor.clientCio)
-                implementation(Libraries.Ktor.clientLogging)
-                implementation(Libraries.Ktor.clientContentNegotiation)
-                implementation(Libraries.Ktor.clientJson)
+                implementation(Libraries.Ktor.core)
+                implementation(Libraries.Ktor.json)
+                implementation(Libraries.Ktor.logging)
+                implementation(Libraries.Ktor.contentNegotiation)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-//              implementation(Libraries.Kotlin.Coroutines.android)
-//              implementation(Libraries.Kotlin.Coroutines.jdk)
-
-//              implementation(Libraries.Kotlin.androidExtensionsRuntime)
-//              implementation(Libraries.AndroidX.annotation)
-//              implementation(Libraries.Google.Services.gmsAds)
-
+                implementation(Libraries.Kotlin.serialization)
                 implementation(Libraries.Logging.kermit)
-                implementation(Libraries.settings)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                api(Libraries.AndroidX.work)
+                implementation(Libraries.Analytics.platformAndroid)
+                implementation(Libraries.Ktor.Engine.okHttp)
+            }
+        }
+        val iosMain by getting {
+            dependencies {
+                api(Libraries.Analytics.properties)
+                implementation(Libraries.Ktor.Engine.darwin)
             }
         }
         val commonTest by getting {
@@ -61,12 +75,45 @@ kotlin {
             }
         }
     }
+
+    multiplatformSwiftPackage {
+        swiftToolsVersion(Versions.Ios.swiftToolsVersion)
+        targetPlatforms {
+            iOS { v(Versions.Ios.targetPlatformVersion) }
+        }
+        outputDirectory(File(rootDir, "/"))
+    }
 }
 
 android {
-    namespace = "analytics.sdk"
-    compileSdk = 33
+    namespace = Libraries.Analytics.group
+    compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        minSdk = 24
+        minSdk = Versions.Android.minSdkVersion
+    }
+}
+
+project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
+    targets
+        .filterIsInstance<KotlinNativeTarget>()
+        .flatMap { it.binaries }
+        .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+}
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            groupId = Libraries.Analytics.group
+            version = Versions.Analytics.clickstream
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+            }
+        }
     }
 }

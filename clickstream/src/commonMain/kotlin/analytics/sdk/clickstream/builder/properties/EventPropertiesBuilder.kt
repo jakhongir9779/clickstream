@@ -4,12 +4,15 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
+@OptIn(ExperimentalObjCName::class)
 class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties() {
     private val parameters = mutableMapOf<String, Any>()
     private var event = EventProperties("", JsonObject(mapOf()))
 
-    fun parameter(key: String, value: String): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "string") value: String): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
@@ -49,7 +52,7 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
             }
         }
 
-    fun parameter(key: String, value: Boolean): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "bool") value: Boolean): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObject {
             parameters.forEach {
@@ -59,25 +62,25 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
         return event
     }
 
-    fun parameter(key: String, value: Double): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "double") value: Double): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
     }
 
-    fun parameter(key: String, value: List<Int>): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "int32") value: Int): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
     }
 
-    fun parameter(key: String, value: Int): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "int") value: Long): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
     }
 
-    fun parameter(key: String, value: Long): EventProperties {
+    fun parameter(key: String, @ObjCName(swiftName = "intArray") value: List<Long>): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event
@@ -88,22 +91,26 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
         return event
     }
 
-    fun addIfNotNull(key: String, value: String?): EventProperties {
+    @ObjCName("addIfNotNil")
+    fun addIfNotNull(key: String, @ObjCName(swiftName = "string") value: String?): EventProperties {
         if (value.isNullOrEmpty()) return event
         return parameter(key, value)
     }
 
-    fun addIfNotNull(key: String, value: Int?): EventProperties {
+    @ObjCName("addIfNotNil")
+    fun addIfNotNull(key: String, @ObjCName(swiftName = "int32") value: Int?): EventProperties {
         if (value == null) return event
         return parameter(key, value)
     }
 
-    fun addIfNotNull(key: String, value: Double?): EventProperties {
+    @ObjCName("addIfNotNil")
+    fun addIfNotNull(key: String, @ObjCName(swiftName = "double") value: Double?): EventProperties {
         if (value == null) return event
         return parameter(key, value)
     }
 
-    fun addIfNotNull(key: String, value: Long?): EventProperties {
+    @ObjCName("addIfNotNil")
+    fun addIfNotNull(key: String, @ObjCName(swiftName = "int") value: Long?): EventProperties {
         if (value == null) return event
         return parameter(key, value)
     }
