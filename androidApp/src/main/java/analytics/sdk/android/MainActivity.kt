@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
             }
             section {
                 id(2)
-                type(Section.Type.PRODUCT_LIST_TYPE)
+                type("section_type")
                 name("section_name")
                 position(1)
             }
