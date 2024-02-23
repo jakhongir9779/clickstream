@@ -6,6 +6,8 @@ class EventPropertiesDelegate(
     private val dependencies: PlatformDependencies,
 ) : UpdateCounter {
 
+    private var lastViewId: String? = dependencies.settings.eventProperties.lastViewId
+    private var currentViewId: String? = dependencies.settings.eventProperties.currentViewId
     private var counter = 1L
 
     fun get(incrementCounter: Boolean): EventAdditionalProperties =
@@ -16,8 +18,14 @@ class EventPropertiesDelegate(
         )
 
     fun getViewId(): ViewId {
-        val generateNewViewId = dependencies.utils.generateUUID()
-        return ViewId(generateNewViewId, dependencies.settings.eventProperties.lastViewId)
+        lastViewId = if (lastViewId == null) {
+            dependencies.utils.generateUUID()
+        } else {
+            currentViewId
+        }
+        val newCurrentViewId = dependencies.utils.generateUUID()
+        currentViewId = newCurrentViewId
+        return ViewId(newCurrentViewId, lastViewId)
     }
 
     override fun resetCounter() {
