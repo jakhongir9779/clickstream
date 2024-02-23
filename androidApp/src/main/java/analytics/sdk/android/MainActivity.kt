@@ -67,6 +67,43 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+
+        ClickstreamSdk.send {
+            space {
+                id(1)
+                name("space_name")
+                type(Space.Type.PAGE)
+                screenSize("1920:1080")
+            }
+            section {
+                id(2)
+                type("section_type")
+                name("section_name")
+                position(1)
+            }
+            group {
+                name("group_name")
+                position(2)
+            }
+            widget {
+                input(
+                    name = "input_name",
+                    text = "input_text",
+                    prompt = "input_prompt",
+                    position = 3,
+                )
+            }
+            action(UiProperties.Action.SHOW)
+            interaction(true)
+            event {
+                type("event_type")
+                parameter(
+                    key = "parameter_key",
+                    value = "parameter_value"
+                )
+            }.build()
+        }
     }
 }
 

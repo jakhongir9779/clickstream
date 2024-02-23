@@ -216,7 +216,7 @@ object Versions {
         const val clickstream = "1.1"
         const val database = "1.0"
         const val settings = "1.1"
-        const val platform = "1.0"
+        const val platform = "1.1"
         const val properties = "1.0"
 
         const val composite = "1.0"
