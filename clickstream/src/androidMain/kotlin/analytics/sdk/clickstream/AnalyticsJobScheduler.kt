@@ -1,11 +1,13 @@
 package analytics.sdk.clickstream
 
+import analytics.sdk.android.BuildConfig
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -14,23 +16,25 @@ import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.TimeUnit
 
 actual class AnalyticsJobScheduler(private val context: Context) {
-    private var request : WorkRequest? = null
+    private var request: WorkRequest? = null
     actual fun init(clickStreamConfig: ClickstreamConfig) {
-
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        request = PeriodicWorkRequestBuilder<SendToAnalyticsPeriodicTask>(
+        request = if (BuildConfig.DEBUG) {
+            OneTimeWorkRequestBuilder<SendToAnalyticsPeriodicTask>().setConstraints(constraints)
+                .build()
+        } else {
+            PeriodicWorkRequestBuilder<SendToAnalyticsPeriodicTask>(
                 repeatInterval = clickStreamConfig.sendDataPeriodicityInMinutes.toLong(),
                 repeatIntervalTimeUnit = TimeUnit.MINUTES
-            )
-                .setConstraints(constraints).build()
-
+            ).setConstraints(constraints).build()
+        }
     }
 
     actual fun startWork(coroutineScope: CoroutineScope) {
-        when(request) {
+        when (request) {
             is PeriodicWorkRequest -> {
                 WorkManager.getInstance(context)
                     .enqueueUniquePeriodicWork(
@@ -38,8 +42,6 @@ actual class AnalyticsJobScheduler(private val context: Context) {
                         ExistingPeriodicWorkPolicy.KEEP,
                         request as PeriodicWorkRequest
                     )
-
-
             }
 
             is OneTimeWorkRequest -> {
@@ -51,6 +53,5 @@ actual class AnalyticsJobScheduler(private val context: Context) {
                     )
             }
         }
-
     }
 }
