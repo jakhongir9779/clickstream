@@ -1,18 +1,18 @@
 package analytics.sdk.database.mapper
 
-import analytics.sdk.database.Event_snapshot
-import analytics.sdk.database.model.EventSnapshotEntity
+import analytics.sdk.database.EventsTable
+import analytics.sdk.database.model.DbEventEntity
 
-internal fun EventSnapshotEntity.toLocalModel() = Event_snapshot(
+internal fun DbEventEntity.toLocalModel() = EventsTable(
     id = id,
-    event_json = event,
-    properties_map_json = properties,
-    properties_hash = propertyHash,
+    eventJson = event,
+    propertiesMapJson = properties,
+    propertiesHash = propertyHash,
 )
 
-internal fun Event_snapshot.toPublicModel() = EventSnapshotEntity(
+internal fun EventsTable.toPublicModel() = DbEventEntity(
     id = id,
-    event = event_json,
-    properties = properties_map_json,
-    propertyHash = properties_hash,
+    event = eventJson,
+    properties = propertiesMapJson,
+    propertyHash = propertiesHash,
 )

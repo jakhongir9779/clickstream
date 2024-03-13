@@ -36,7 +36,7 @@ class App : Application(), Configuration.Provider {
                 "b25lX251bWJlciI6Ijk5ODU1MDAxMTExMSIsImV4cCI6MTY5ODE1MDQ1Mn0.XXnwVmFbcZt1QhbGKSp" +
                 "k4RRrAS-ULpRKKU1eRcLTemVGkQHpTuQAa0nzLVDqIYv6qs4PDteP-esO0w-9GZ_ODA"
 
-        ClickstreamSdk.initialize(
+        ClickstreamSdk.getInstance().initialize(
             context = applicationContext,
             url = "https://clickstream-b2c.dev.cluster.kznexpess.com/api/analytics/v2/",
             requestHeaders = mapOf("Authorization" to { header }),
@@ -73,7 +73,7 @@ class App : Application(), Configuration.Provider {
         val myWorkerFactory = DelegatingWorkerFactory()
 
         myWorkerFactory.addFactory(
-            AnalyticsSdkWorkerFactory(ClickstreamSdk.getDataForPeriodicJob())
+            AnalyticsSdkWorkerFactory(ClickstreamSdk.getInstance().getDataForPeriodicJob())
         )
 
         return Configuration.Builder()

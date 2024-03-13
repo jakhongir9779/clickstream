@@ -5,7 +5,7 @@ import analytics.sdk.clickstream.builder.properties.EventProperties
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
 import analytics.sdk.clickstream.event.ClickstreamEvent
-import analytics.sdk.database.model.EventSnapshotEntity
+import analytics.sdk.database.model.DbEventEntity
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.platform.model.PlatformConnectionType
 import analytics.sdk.platform.properties.EventPropertiesDelegate
@@ -19,13 +19,13 @@ internal class MapEventToDatabaseEntity(
     private val eventPropertiesDelegate: EventPropertiesDelegate,
 ) {
 
-    operator fun invoke(event: ClickstreamEvent): EventSnapshotEntity {
+    operator fun invoke(event: ClickstreamEvent): DbEventEntity {
         val properties = propertiesProvider.toMapWithJsonValues()
         val propertiesHash = properties.hashCode().toString()
 
         val jsonEvent = populateEvent(event)
 
-        return EventSnapshotEntity(
+        return DbEventEntity(
             event = jsonEvent,
             properties = properties,
             propertyHash = propertiesHash,

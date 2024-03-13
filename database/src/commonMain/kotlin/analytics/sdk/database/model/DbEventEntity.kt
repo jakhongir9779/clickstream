@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class  EventSnapshotEntity(
+data class  DbEventEntity(
     val id: Long = 0,
     val event: String,
     val properties: Map<String, String>,

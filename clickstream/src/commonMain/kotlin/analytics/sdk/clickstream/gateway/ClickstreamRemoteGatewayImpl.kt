@@ -2,7 +2,7 @@ package analytics.sdk.clickstream.gateway
 
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
-import analytics.sdk.database.model.EventSnapshotEntity
+import analytics.sdk.database.model.DbEventEntity
 import co.touchlab.kermit.Logger
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.http.HttpStatusCode
@@ -16,7 +16,7 @@ internal class ClickstreamRemoteGatewayImpl(
     private val api: ClickstreamAnalyticsApi
 ) : ClickstreamRemoteGateway {
 
-    override suspend fun send(events: List<EventSnapshotEntity>): List<EventResult> {
+    override suspend fun send(events: List<DbEventEntity>): List<EventResult> {
         val sentResults = mutableListOf<EventResult>()
         events.groupBy { it.propertyHash }.forEach {
                 sentResults += sendBatchedByTheSameHash(it.value)
@@ -25,7 +25,7 @@ internal class ClickstreamRemoteGatewayImpl(
     }
 
     private suspend fun sendBatchedByTheSameHash(
-        events: List<EventSnapshotEntity>,
+        events: List<DbEventEntity>,
     ): List<EventResult> = try {
         val bodyJson = mapEntityToJsonBodyString(events)
         api.sendEvents(bodyJson)
@@ -41,7 +41,7 @@ internal class ClickstreamRemoteGatewayImpl(
         events.map { EventResult.Failed(it.id) }
     }
 
-    private fun mapEntityToJsonBodyString(events: List<EventSnapshotEntity>): String {
+    private fun mapEntityToJsonBodyString(events: List<DbEventEntity>): String {
         val jsonObject = JsonObject(
             content = emptyMap()
         )

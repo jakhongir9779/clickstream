@@ -6,7 +6,7 @@ import app.cash.sqldelight.driver.native.NativeSqliteDriver
 class IosDriverFactory : PlatformDriverFactory {
 
     override fun createDriver(): SqlDriver = NativeSqliteDriver(
-        name = "clickstream.db",
-        schema = Database.Schema,
+        name = PlatformDriverFactory.DB_NAME,
+        schema = ClickstreamDatabase.Schema,
     )
 }

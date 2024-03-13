@@ -41,7 +41,8 @@ kotlin {
                 implementation(Libraries.Analytics.analyticsType)
                 implementation(Libraries.Analytics.eventSender)
                 implementation(Libraries.Analytics.event)
-                implementation(Libraries.Analytics.database)
+//                implementation(Libraries.Analytics.database)
+                implementation(project(":database"))
                 implementation(Libraries.Analytics.platform)
                 api(Libraries.Analytics.properties)
                 api(Libraries.Analytics.common)
@@ -90,6 +91,9 @@ android {
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         minSdk = Versions.Android.minSdkVersion
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

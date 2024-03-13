@@ -1,3 +1,5 @@
+import Libraries.Tests.testLibs
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -49,5 +51,10 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.1")
 
     implementation(Libraries.AndroidX.startup)
-    implementation(Libraries.Analytics.clickstream)
+    implementation(project(":clickstream"))
+//    implementation(Libraries.Analytics.clickstream)
+    implementation(Libraries.Analytics.event)
+    implementation(Libraries.Analytics.analyticsType)
+    implementation(Libraries.Analytics.platform)
+    testLibs()
 }

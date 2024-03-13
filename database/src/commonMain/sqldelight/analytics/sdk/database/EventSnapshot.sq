@@ -1,20 +1,19 @@
 import kotlin.String;
 import kotlin.collections.Map;
 
-CREATE TABLE event_snapshot (
+-- This table stores event entities as string
+CREATE TABLE EventsTable (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    event_json TEXT AS String NOT NULL,
-    properties_map_json TEXT AS Map<String, String> NOT NULL,
-    properties_hash TEXT NOT NULL
+    eventJson TEXT AS String NOT NULL,
+    propertiesMapJson TEXT AS Map<String, String> NOT NULL,
+    propertiesHash TEXT NOT NULL
 );
 
-
-
 save:
-INSERT INTO event_snapshot VALUES(?,?,?,?);
+INSERT INTO EventsTable VALUES(?,?,?,?);
 
 getAllByCount:
-SELECT * FROM event_snapshot LIMIT :count;
+SELECT * FROM EventsTable LIMIT :count;
 
 removeByIds:
-DELETE FROM event_snapshot WHERE id IN :ids;
+DELETE FROM EventsTable WHERE id IN :ids;
