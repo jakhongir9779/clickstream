@@ -17,7 +17,7 @@ actual class AnalyticsJobScheduler {
     private var job: Job? = null
 
     actual fun init(clickStreamConfig: ClickstreamConfig) {
-        data = ClickstreamSdk.getDataForPeriodicJob()
+        data = ClickstreamSdk.getInstance().getDataForPeriodicJob()
         getUnDispatchedEvents = GetUnDispatchedEvents(
             data.localEventsGateway,
             data.clickstreamConfig,

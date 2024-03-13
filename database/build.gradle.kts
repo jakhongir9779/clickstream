@@ -33,6 +33,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Libraries.Kotlin.serialization)
+
             }
         }
         val androidMain by getting {

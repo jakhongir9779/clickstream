@@ -20,7 +20,6 @@ import analytics.sdk.platform.properties.EventPropertiesDelegate
 import analytics.sdk.properties.PropertiesProvider
 import analytics.sdk.properties.mergePropertiesWithDefault
 import analytics.sdk.properties.user.default.InstallIdProperties
-import app.cash.sqldelight.ColumnAdapter
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -29,13 +28,13 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
+import dbJsonAdapter
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ClickstreamSdk {
@@ -51,7 +50,6 @@ class ClickstreamSdk {
     private lateinit var analyticsJobScheduler: AnalyticsJobScheduler
     private lateinit var localEventsGateway: LocalEventsGateway
     private lateinit var sender: AnalyticsEventSender
-    private lateinit var api: ClickstreamAnalyticsApi
     private lateinit var remoteGateway: ClickstreamRemoteGateway
     private lateinit var exposureExperimentsApi: ExposureExperimentsApi
 
@@ -69,12 +67,13 @@ class ClickstreamSdk {
 
         this.clickStreamConfig = config
         this.analyticsJobScheduler = analyticsJobScheduler
+
         localEventsGateway = LocalEventsGatewayImpl(
             ClickstreamDatabase(
                 dependencies.databaseDriverFactory.createDriver(),
                 EventsTable.Adapter(
-                    jsonAdapter(),
-                    jsonAdapter()
+                    dbJsonAdapter(),
+                    dbJsonAdapter()
                 )
             )
         )
@@ -97,8 +96,8 @@ class ClickstreamSdk {
         }
         */
 
-        api = ClickStreamAnalyticsApiImpl(buildHttpClient(requestHeaders, url))
-        createGrowthExposure(defaultPropertiesProvider)
+        val api = ClickStreamAnalyticsApiImpl(buildHttpClient(requestHeaders, url))
+        createGrowthExposure(defaultPropertiesProvider, api)
         remoteGateway = ClickstreamRemoteGatewayImpl(api)
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
     }
@@ -158,7 +157,7 @@ class ClickstreamSdk {
         }
     }
 
-    private fun createGrowthExposure(propertiesProvider: PropertiesProvider) {
+    private fun createGrowthExposure(propertiesProvider: PropertiesProvider, api: ClickstreamAnalyticsApi) {
         val installId = requireNotNull(
             value = propertiesProvider.userProps
                 .properties()
@@ -172,8 +171,6 @@ class ClickstreamSdk {
         analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
         analyticsJobScheduler.startWork(coroutineScope = coroutineScope)
     }
-
-    fun sender(): AnalyticsEventSender = sender
 
     private fun createAnalyticsClickStreamSender(
         localEventsGateway: LocalEventsGateway,
@@ -206,8 +203,5 @@ class ClickstreamSdk {
         }
     }
 
-    private inline fun <reified T : Any> jsonAdapter() = object : ColumnAdapter<T, String> {
-        override fun decode(databaseValue: String): T = Json.decodeFromString(databaseValue)
-        override fun encode(value: T): String = Json.encodeToString(value)
-    }
+
 }
