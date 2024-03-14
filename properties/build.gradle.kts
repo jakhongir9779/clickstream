@@ -35,8 +35,6 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-//                implementation(Libraries.Analytics.platform)
-//                implementation(Libraries.Analytics.settings)
                 implementation(project(":platform"))
                 implementation(project(":settings"))
                 implementation(Libraries.Kotlin.serialization)

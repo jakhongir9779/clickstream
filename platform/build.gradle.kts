@@ -33,8 +33,6 @@ kotlin {
             dependencies {
                 implementation(project(":settings"))
                 implementation(project(":database"))
-//              implementation(Libraries.Analytics.settings)
-//              implementation(Libraries.Analytics.database)
             }
         }
     }

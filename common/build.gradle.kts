@@ -29,8 +29,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":analyticstype"))
-//                implementation(Libraries.Analytics.analyticsType)
-//                implementation(Libraries.Analytics.event)
                 implementation(project(":event"))
                 implementation(Libraries.Ktor.core)
                 // DI
