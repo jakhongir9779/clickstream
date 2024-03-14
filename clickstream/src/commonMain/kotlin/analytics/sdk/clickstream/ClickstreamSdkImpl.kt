@@ -40,12 +40,12 @@ class ClickstreamSdkImpl(
     dependencies: PlatformDependencies,
     requestHeaders: Map<String, () -> String>,
     val clickStreamConfig: ClickstreamConfig,
-    val analyticsJobScheduler: AnalyticsJobScheduler,
+    analyticsJobScheduler: AnalyticsJobScheduler,
     propertiesProvider: PropertiesProvider?,
 ) {
-    val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
+    private val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
-    val localEventsGateway = LocalEventsGatewayImpl(
+    private val localEventsGateway = LocalEventsGatewayImpl(
         ClickstreamDatabase(
             driver = dependencies.databaseDriverFactory.createDriver(),
             event_entityAdapter = Event_entity.Adapter(
@@ -67,7 +67,7 @@ class ClickstreamSdkImpl(
 
     private val remoteGateway = ClickstreamRemoteGatewayImpl(api)
 
-    val defaultPropertiesProvider = mergePropertiesWithDefault(dependencies, propertiesProvider)
+    private val defaultPropertiesProvider = mergePropertiesWithDefault(dependencies, propertiesProvider)
     private val exposureExperimentsApi = createGrowthExposure(defaultPropertiesProvider, api)
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -82,6 +82,8 @@ class ClickstreamSdkImpl(
             throw Exception("Init is not allowed due to dependencies configuration")
         }
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
+
+        initPeriodicWork(analyticsJobScheduler)
     }
 
     fun getDataForPeriodicJob() =
@@ -123,7 +125,6 @@ class ClickstreamSdkImpl(
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
-        initPeriodicWork()
         send(ClickstreamBuilder().builder())
     }
 
@@ -152,9 +153,9 @@ class ClickstreamSdkImpl(
         return ExposureExperimentsImpl(api = api, installId = installId)
     }
 
-    private fun initPeriodicWork() {
-        analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
-        analyticsJobScheduler.startWork(coroutineScope = coroutineScope)
+    private fun initPeriodicWork(analyticsJobScheduler: AnalyticsJobScheduler) = with(analyticsJobScheduler) {
+        init(clickStreamConfig = clickStreamConfig)
+        startWork(coroutineScope = coroutineScope)
     }
 
 
