@@ -55,6 +55,10 @@ kotlin {
                 implementation(Libraries.Kotlin.Coroutines.core)
                 implementation(Libraries.Kotlin.serialization)
                 implementation(Libraries.Logging.kermit)
+
+                // DI
+                implementation(Libraries.Koin.core)
+                implementation(Libraries.Koin.test)
             }
         }
         val androidMain by getting {
@@ -62,6 +66,10 @@ kotlin {
                 api(Libraries.AndroidX.work)
                 implementation(Libraries.Analytics.platformAndroid)
                 implementation(Libraries.Ktor.Engine.okHttp)
+
+                // DI
+                implementation(Libraries.Koin.android)
+
             }
         }
         val iosMain by getting {

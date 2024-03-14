@@ -3,6 +3,7 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.data.DataForPeriodicJob
 import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents
 import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
+import analytics.sdk.clickstream.domain.ClickstreamConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,7 +18,7 @@ actual class AnalyticsJobScheduler {
     private var job: Job? = null
 
     actual fun init(clickStreamConfig: ClickstreamConfig) {
-        data = ClickstreamSdk.getInstance().getDataForPeriodicJob()
+        data = ClickstreamSdkImpl.getInstance().getDataForPeriodicJob()
         getUnDispatchedEvents = GetUnDispatchedEvents(
             data.localEventsGateway,
             data.clickstreamConfig,

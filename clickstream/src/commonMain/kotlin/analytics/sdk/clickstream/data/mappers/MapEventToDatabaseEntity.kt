@@ -1,10 +1,10 @@
-package analytics.sdk.clickstream.mappers
+package analytics.sdk.clickstream.data.mappers
 
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
 import analytics.sdk.clickstream.data.model.ConnectionType
 import analytics.sdk.clickstream.data.model.Event
-import analytics.sdk.clickstream.event.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.database.model.DbEventEntity
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.platform.model.PlatformConnectionType

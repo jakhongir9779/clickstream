@@ -3,7 +3,8 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents
 import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
-import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
+import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
 import android.content.Context
 import androidx.work.CoroutineWorker

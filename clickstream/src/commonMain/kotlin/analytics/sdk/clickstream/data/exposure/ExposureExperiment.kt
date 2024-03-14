@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream.exposure
+package analytics.sdk.clickstream.data.exposure
 
 
 

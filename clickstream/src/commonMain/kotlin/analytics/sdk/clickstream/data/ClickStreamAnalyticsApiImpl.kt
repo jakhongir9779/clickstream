@@ -1,6 +1,6 @@
 package analytics.sdk.clickstream.data
 
-import analytics.sdk.clickstream.exposure.ExposureExperiment
+import analytics.sdk.clickstream.data.exposure.ExposureExperiment
 import analytics.sdk.common.extensions.postJson
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody

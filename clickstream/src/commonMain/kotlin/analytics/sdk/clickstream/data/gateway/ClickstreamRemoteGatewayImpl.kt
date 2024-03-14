@@ -1,7 +1,8 @@
-package analytics.sdk.clickstream.gateway
+package analytics.sdk.clickstream.data.gateway
 
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.EventResult
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.model.DbEventEntity
 import co.touchlab.kermit.Logger
 import io.ktor.client.plugins.ServerResponseException

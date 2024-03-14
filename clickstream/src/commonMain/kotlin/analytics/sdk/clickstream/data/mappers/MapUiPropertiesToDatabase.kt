@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream.mappers
+package analytics.sdk.clickstream.data.mappers
 
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.group.Group

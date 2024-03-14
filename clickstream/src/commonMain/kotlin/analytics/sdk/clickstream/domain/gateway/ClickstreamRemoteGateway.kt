@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream.gateway
+package analytics.sdk.clickstream.domain.gateway
 
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.database.model.DbEventEntity

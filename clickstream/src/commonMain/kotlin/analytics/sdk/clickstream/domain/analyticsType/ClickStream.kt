@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream.type
+package analytics.sdk.clickstream.domain.analyticsType
 
 import analytics.sdk.AnalyticsType
 

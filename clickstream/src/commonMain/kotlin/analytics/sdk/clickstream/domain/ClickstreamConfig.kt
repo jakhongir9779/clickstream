@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream
+package analytics.sdk.clickstream.domain
 
 class ClickstreamConfig(
     val sizeOfBatch: Long = 5,

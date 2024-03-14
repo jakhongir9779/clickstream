@@ -1,6 +1,6 @@
 package analytics.sdk.clickstream.data.interactor
 
-import analytics.sdk.clickstream.ClickstreamConfig
+import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.database.model.DbEventEntity
 

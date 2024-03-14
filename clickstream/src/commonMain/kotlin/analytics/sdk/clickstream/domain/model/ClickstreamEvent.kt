@@ -1,9 +1,9 @@
-package analytics.sdk.clickstream.event
+package analytics.sdk.clickstream.domain.model
 
 import analytics.sdk.AnalyticsType
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.properties.EventProperties
-import analytics.sdk.clickstream.type.Clickstream
+import analytics.sdk.clickstream.domain.analyticsType.Clickstream
 import analytics.sdk.event.Event
 import kotlinx.serialization.Serializable
 

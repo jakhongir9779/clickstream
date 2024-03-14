@@ -1,6 +1,6 @@
 package analytics.sdk.clickstream.builder
 
-import analytics.sdk.clickstream.event.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.event.Event
 
 // ext for composite analytics

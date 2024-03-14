@@ -1,7 +1,7 @@
 package analytics.sdk.clickstream.data
 
-import analytics.sdk.clickstream.ClickstreamConfig
-import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
+import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
 
 data class DataForPeriodicJob(

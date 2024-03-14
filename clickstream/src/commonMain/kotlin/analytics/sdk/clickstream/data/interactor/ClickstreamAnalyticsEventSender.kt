@@ -1,9 +1,9 @@
-package analytics.sdk.clickstream
+package analytics.sdk.clickstream.data.interactor
 
 import analytics.sdk.AnalyticsType
-import analytics.sdk.clickstream.event.ClickstreamEvent
-import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
-import analytics.sdk.clickstream.type.Clickstream
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
+import analytics.sdk.clickstream.data.mappers.MapEventToDatabaseEntity
+import analytics.sdk.clickstream.domain.analyticsType.Clickstream
 import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.event.Event

@@ -1,9 +1,9 @@
 import analytics.sdk.clickstream.AnalyticsJobScheduler
-import analytics.sdk.clickstream.ClickstreamConfig
-import analytics.sdk.clickstream.ClickstreamSdk
+import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.ClickstreamSdkImpl
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
-import analytics.sdk.clickstream.event.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.platform.PlatformDependencies
 import io.mockk.coEvery
@@ -27,7 +27,7 @@ class ClickStreamEventTest {
     @Test
     fun clickStreamEventSent() = runTest {
         lateinit var someEvent: ClickstreamEvent
-        val mock = spyk(ClickstreamSdk, recordPrivateCalls = true)
+        val mock = spyk(ClickstreamSdkImpl, recordPrivateCalls = true)
         val dependencies = mockk<PlatformDependencies>(relaxed = true)
         val scheduler = mockk<AnalyticsJobScheduler>(relaxed = true)
         every { dependencies.utils } returns mockk(relaxed = true)
@@ -42,7 +42,7 @@ class ClickStreamEventTest {
             requestHeaders = mapOf()
         )
         val sender = mockk<AnalyticsEventSender>()
-        val senderField = ClickstreamSdk::class.java.getDeclaredField("sender")
+        val senderField = ClickstreamSdkImpl::class.java.getDeclaredField("sender")
         senderField.isAccessible = true
         senderField.set(mock.getInstance(), sender)
 
