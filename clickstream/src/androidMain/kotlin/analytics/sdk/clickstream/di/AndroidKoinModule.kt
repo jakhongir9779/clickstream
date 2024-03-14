@@ -15,24 +15,4 @@ import org.koin.dsl.module
 
 val AndroidKoinModule  = module {
 
-    factory<PlatformDependencies> { (context: Context) ->
-        AndroidDependencies(context)
-    }
-
-    single<ClickstreamSdkImpl> {
-            (
-                clickstreamDatabase: ClickstreamDatabase,
-                analyticsJobScheduler: AnalyticsJobScheduler,
-                sender: AnalyticsEventSender,
-                remoteGateway: ClickstreamRemoteGateway,
-                exposureExperimentsApi: ExposureExperimentsApi,
-            ) ->
-
-        ClickstreamSdkImpl()
-
-    }
-
-    single<LocalEventsGateway> { (clickstreamDatabase: ClickstreamDatabase) ->
-        LocalEventsGatewayImpl(clickstreamDatabase)
-    }
 }

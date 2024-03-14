@@ -5,16 +5,13 @@ import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.DataForPeriodicJob
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
-import analytics.sdk.clickstream.data.exposure.ExposureExperimentsApi
 import analytics.sdk.clickstream.data.exposure.ExposureExperimentsImpl
-import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.clickstream.data.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.data.interactor.ClickstreamAnalyticsEventSender
 import analytics.sdk.clickstream.data.mappers.MapEventToDatabaseEntity
 import analytics.sdk.clickstream.domain.ClickstreamConfig
-import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.database.ClickstreamDatabase
-import analytics.sdk.database.EventsTable
+import analytics.sdk.database.Event_entity
 import analytics.sdk.database.gateway.LocalEventsGatewayImpl
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.platform.properties.EventPropertiesDelegate
@@ -40,21 +37,21 @@ import kotlinx.serialization.json.Json
 
 class ClickstreamSdkImpl
     (
-    val url: String,
-    val dependencies: PlatformDependencies,
-    val requestHeaders: Map<String, () -> String>,
+    url: String,
+    dependencies: PlatformDependencies,
+    requestHeaders: Map<String, () -> String>,
     val clickStreamConfig: ClickstreamConfig,
     val analyticsJobScheduler: AnalyticsJobScheduler,
-    val propertiesProvider: PropertiesProvider?,
+    propertiesProvider: PropertiesProvider?,
 ) {
     val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
     val localEventsGateway = LocalEventsGatewayImpl(
         ClickstreamDatabase(
-            dependencies.databaseDriverFactory.createDriver(),
-            EventsTable.Adapter(
-                dbJsonAdapter(),
-                dbJsonAdapter()
+            driver = dependencies.databaseDriverFactory.createDriver(),
+            event_entityAdapter = Event_entity.Adapter(
+                eventJsonAdapter = dbJsonAdapter(),
+                propertiesMapJsonAdapter = dbJsonAdapter()
             )
         )
     )
@@ -81,8 +78,6 @@ class ClickstreamSdkImpl
     private val coroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.IO + coroutineExceptionHandler)
 
-    // ORDER MATTERS
-    // DO NOT CHANGE
     init {
         if (dependencies.utils.initAllowed().not()) {
             throw Exception("Init is not allowed due to dependencies configuration")
@@ -148,7 +143,7 @@ class ClickstreamSdkImpl
     private fun createGrowthExposure(
         propertiesProvider: PropertiesProvider,
         api: ClickstreamAnalyticsApi
-    ) : ExposureExperimentsImpl {
+    ): ExposureExperimentsImpl {
         val installId = requireNotNull(
             value = propertiesProvider.userProps
                 .properties()

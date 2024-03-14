@@ -1,6 +1,6 @@
 package analytics.sdk.android
 
-import analytics.sdk.clickstream.ClickstreamSdkImpl
+import analytics.sdk.clickstream.ClickstreamSdk
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
 import android.os.Bundle
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ClickstreamSdkImpl.getInstance().send {
+        ClickstreamSdk.instance.send {
             space {
                 id(1)
                 name("space_name")
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun sendSomeEvent() {
-        ClickstreamSdkImpl.getInstance().send {
+        ClickstreamSdk.instance.send {
             space {
                 id(Random.nextLong())
                 name("space_name")
