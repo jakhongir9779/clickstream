@@ -8,6 +8,6 @@ class AndroidDriverFactory(val context: Context) : PlatformDriverFactory {
     override fun createDriver(): SqlDriver = AndroidSqliteDriver(
         context = context,
         name = PlatformDriverFactory.DB_NAME,
-        schema = Database.Schema,
+        schema = ClickstreamDatabase.Schema,
     )
 }

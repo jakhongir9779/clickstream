@@ -10,7 +10,7 @@ import analytics.sdk.clickstream.data.interactor.ClickstreamAnalyticsEventSender
 import analytics.sdk.clickstream.data.mappers.MapEventToDatabaseEntity
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
-import analytics.sdk.database.Database
+import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.Event_entity
 import analytics.sdk.database.gateway.LocalEventsGatewayImpl
 import analytics.sdk.platform.PlatformDependencies
@@ -46,7 +46,7 @@ class ClickstreamSdkImpl(
     val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
     val localEventsGateway = LocalEventsGatewayImpl(
-        Database(
+        ClickstreamDatabase(
             driver = dependencies.databaseDriverFactory.createDriver(),
             event_entityAdapter = Event_entity.Adapter(
                 eventJsonAdapter = dbJsonAdapter(),

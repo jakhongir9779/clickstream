@@ -1,11 +1,11 @@
 package analytics.sdk.database.gateway
 
-import analytics.sdk.database.Database
+import analytics.sdk.database.ClickstreamDatabase
 import analytics.sdk.database.mapper.toPublicModel
 import analytics.sdk.database.model.DbEventEntity
 
 class LocalEventsGatewayImpl(
-    private val clickStreamDatabase: Database,
+    private val clickStreamDatabase: ClickstreamDatabase,
 ) : LocalEventsGateway {
 
     override fun save(event: DbEventEntity) {
