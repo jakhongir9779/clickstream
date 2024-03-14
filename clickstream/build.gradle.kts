@@ -70,7 +70,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api(Libraries.AndroidX.work)
-                implementation(Libraries.Analytics.platformAndroid)
+//                implementation(Libraries.Analytics.platformAndroid)
+                implementation(project(":platform"))
                 implementation(Libraries.Ktor.Engine.okHttp)
 
                 // DI

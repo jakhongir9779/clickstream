@@ -4,12 +4,12 @@ import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.data.ClickStreamAnalyticsApiImpl
 import analytics.sdk.clickstream.data.ClickstreamAnalyticsApi
 import analytics.sdk.clickstream.data.DataForPeriodicJob
-import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.clickstream.data.exposure.ExposureExperimentsImpl
 import analytics.sdk.clickstream.data.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.data.interactor.ClickstreamAnalyticsEventSender
 import analytics.sdk.clickstream.data.mappers.MapEventToDatabaseEntity
 import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.database.Database
 import analytics.sdk.database.Event_entity
 import analytics.sdk.database.gateway.LocalEventsGatewayImpl
@@ -19,6 +19,7 @@ import analytics.sdk.properties.PropertiesProvider
 import analytics.sdk.properties.mergePropertiesWithDefault
 import analytics.sdk.properties.user.default.InstallIdProperties
 import co.touchlab.kermit.Logger
+import dbJsonAdapter
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -26,7 +27,6 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
-import dbJsonAdapter
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +35,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-class ClickstreamSdkImpl
-    (
+class ClickstreamSdkImpl(
     url: String,
     dependencies: PlatformDependencies,
     requestHeaders: Map<String, () -> String>,

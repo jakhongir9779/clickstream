@@ -31,8 +31,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libraries.Analytics.settings)
-                implementation(Libraries.Analytics.database)
+                implementation(project(":settings"))
+                implementation(project(":database"))
+//              implementation(Libraries.Analytics.settings)
+//              implementation(Libraries.Analytics.database)
             }
         }
     }
