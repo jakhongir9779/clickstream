@@ -34,6 +34,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.CoroutineContext
 
 class ClickstreamSdkImpl(
     url: String,
@@ -42,7 +43,7 @@ class ClickstreamSdkImpl(
     val clickStreamConfig: ClickstreamConfig,
     val analyticsJobScheduler: AnalyticsJobScheduler,
     propertiesProvider: PropertiesProvider?,
-) {
+) : CoroutineScope {
     private val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
     private val localEventsGateway = LocalEventsGatewayImpl(
@@ -74,8 +75,6 @@ class ClickstreamSdkImpl(
         Logger.e(throwable) { "ClickStreamSdk" }
     }
 
-    private val coroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.IO + coroutineExceptionHandler)
 
     init {
         if (dependencies.utils.initAllowed().not()) {
@@ -124,7 +123,7 @@ class ClickstreamSdkImpl(
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
-        initPeriodicWork(analyticsJobScheduler)
+        initPeriodicWork()
         send(ClickstreamBuilder().builder())
     }
 
@@ -133,7 +132,7 @@ class ClickstreamSdkImpl(
         variantId: String,
         exposedAt: String,
     ) {
-        coroutineScope.launch {
+        launch {
             exposureExperimentsApi(
                 experimentId, variantId, exposedAt
             )
@@ -153,15 +152,17 @@ class ClickstreamSdkImpl(
         return ExposureExperimentsImpl(api = api, installId = installId)
     }
 
-    private fun initPeriodicWork(analyticsJobScheduler: AnalyticsJobScheduler) = with(analyticsJobScheduler) {
-        init(clickStreamConfig = clickStreamConfig)
-        startWork(coroutineScope = coroutineScope)
+    private fun initPeriodicWork() {
+        analyticsJobScheduler.init(clickStreamConfig = clickStreamConfig)
+        analyticsJobScheduler.startWork(coroutineScope = this)
     }
 
 
     private fun send(event: ClickstreamEvent) {
-        coroutineScope.launch {
+        launch {
             sender.send(event)
         }
     }
+
+    override val coroutineContext: CoroutineContext = SupervisorJob() + Dispatchers.IO + coroutineExceptionHandler
 }
