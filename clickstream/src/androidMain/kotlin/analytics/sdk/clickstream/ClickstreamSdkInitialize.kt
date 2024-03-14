@@ -6,7 +6,7 @@ import analytics.sdk.properties.PropertiesProvider
 import android.content.Context
 
 // Initialize for Android
-fun Clickstream.initialize(
+fun Clickstream.initializeForAndroid(
     context: Context,
     url: String,
     requestHeaders: Map<String, () -> String>,

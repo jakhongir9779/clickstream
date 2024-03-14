@@ -33,6 +33,8 @@ kotlin {
 //                implementation(Libraries.Analytics.event)
                 implementation(project(":event"))
                 implementation(Libraries.Ktor.core)
+                // DI
+                implementation(Libraries.Koin.core)
             }
         }
     }
