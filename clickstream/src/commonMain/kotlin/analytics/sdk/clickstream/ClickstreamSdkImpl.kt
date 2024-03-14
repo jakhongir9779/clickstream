@@ -40,7 +40,7 @@ class ClickstreamSdkImpl(
     dependencies: PlatformDependencies,
     requestHeaders: Map<String, () -> String>,
     val clickStreamConfig: ClickstreamConfig,
-    analyticsJobScheduler: AnalyticsJobScheduler,
+    val analyticsJobScheduler: AnalyticsJobScheduler,
     propertiesProvider: PropertiesProvider?,
 ) {
     private val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
@@ -83,7 +83,6 @@ class ClickstreamSdkImpl(
         }
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
 
-        initPeriodicWork(analyticsJobScheduler)
     }
 
     fun getDataForPeriodicJob() =
@@ -125,6 +124,7 @@ class ClickstreamSdkImpl(
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
+        initPeriodicWork(analyticsJobScheduler)
         send(ClickstreamBuilder().builder())
     }
 
