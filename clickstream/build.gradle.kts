@@ -38,14 +38,20 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libraries.Analytics.analyticsType)
-                implementation(Libraries.Analytics.eventSender)
-                implementation(Libraries.Analytics.event)
-//                implementation(Libraries.Analytics.database)
                 implementation(project(":database"))
-                implementation(Libraries.Analytics.platform)
-                api(Libraries.Analytics.properties)
-                api(Libraries.Analytics.common)
+                implementation(project(":analyticstype"))
+//                implementation(project(":eventSender"))
+                implementation(project(":event"))
+                implementation(project(":platform"))
+                api(project(":properties"))
+                api(project(":common"))
+
+//                implementation(Libraries.Analytics.analyticsType)
+//                implementation(Libraries.Analytics.eventSender)
+//                implementation(Libraries.Analytics.event)
+//                implementation(Libraries.Analytics.platform)
+//                api(Libraries.Analytics.properties)
+//                api(Libraries.Analytics.common)
 
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)

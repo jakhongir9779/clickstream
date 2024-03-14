@@ -9,7 +9,7 @@ android {
     namespace = "analytics.sdk.android"
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        applicationId = "analytics.sdk.android"
+        applicationId = "analytics.sdk.android.app"
         minSdk = Versions.Android.minSdkVersion
         targetSdk = Versions.Android.targetSdkVersion
         versionCode = 1
@@ -52,9 +52,12 @@ dependencies {
 
     implementation(Libraries.AndroidX.startup)
     implementation(project(":clickstream"))
+    implementation(project(":event"))
+    implementation(project(":analyticstype"))
+    implementation(project(":platform"))
 //    implementation(Libraries.Analytics.clickstream)
-    implementation(Libraries.Analytics.event)
-    implementation(Libraries.Analytics.analyticsType)
-    implementation(Libraries.Analytics.platform)
+//    implementation(Libraries.Analytics.event)
+//    implementation(Libraries.Analytics.analyticsType)
+//    implementation(Libraries.Analytics.platform)
     testLibs()
 }

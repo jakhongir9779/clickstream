@@ -7,6 +7,6 @@ class IosDriverFactory : PlatformDriverFactory {
 
     override fun createDriver(): SqlDriver = NativeSqliteDriver(
         name = PlatformDriverFactory.DB_NAME,
-        schema = ClickstreamDatabase.Schema,
+        schema = Database.Schema,
     )
 }

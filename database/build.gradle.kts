@@ -59,8 +59,9 @@ android {
 
 sqldelight {
     databases {
-        create("ClickstreamDatabase") {
-            packageName.set("${Libraries.Analytics.group}.${Artifacts.Analytics.database}")
+        create("Database") {
+            packageName.set("analytics.sdk.database")
+            version = 2
         }
     }
 }

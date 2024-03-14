@@ -2,7 +2,7 @@ import kotlin.String;
 import kotlin.collections.Map;
 
 -- This table stores event entities as string
-CREATE TABLE event_entity (
+CREATE TABLE IF NOT EXISTS event_entity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eventJson TEXT AS String NOT NULL,
     propertiesMapJson TEXT AS Map<String, String> NOT NULL,
