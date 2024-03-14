@@ -53,7 +53,6 @@ dependencies {
     implementation(Libraries.AndroidX.startup)
     implementation(project(":clickstream"))
     implementation(project(":event"))
-    implementation(project(":analyticstype"))
     implementation(project(":platform"))
 //    implementation(Libraries.Analytics.clickstream)
 //    implementation(Libraries.Analytics.event)

@@ -169,8 +169,6 @@ object Libraries {
         const val clickstreamTest = "$group:clickstream-test:${Versions.Analytics.clickstreamTest}"
         const val clickstreamEventSenderTest = "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
         const val composite = "$group:composite:${Versions.Analytics.composite}"
-        const val analyticsType = "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
-        const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
         const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"
         const val eventSender = "$group:${Artifacts.Analytics.eventSender}:${Versions.Analytics.eventSender}"
         const val database = "$group:${Artifacts.Analytics.database}:${Versions.Analytics.database}"
