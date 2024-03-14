@@ -12,10 +12,10 @@ fun ClickstreamSdkImpl.initialize(
 ) {
     initialize(
         url = url,
-        dependencies = IosDependencies(),
+//        dependencies = IosDependencies(),
         propertiesProvider = propertiesProvider,
         config = config,
         requestHeaders = requestHeaders,
-        analyticsJobScheduler = AnalyticsJobScheduler(),
+//        analyticsJobScheduler = AnalyticsJobScheduler(),
     )
 }
