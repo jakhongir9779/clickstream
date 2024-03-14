@@ -12,7 +12,7 @@ import analytics.sdk.clickstream.gateway.ClickstreamRemoteGatewayImpl
 import analytics.sdk.clickstream.mappers.MapEventToDatabaseEntity
 import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.database.ClickstreamDatabase
-import analytics.sdk.database.EventsTable
+import analytics.sdk.database.Event_entity
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.database.gateway.LocalEventsGatewayImpl
 import analytics.sdk.platform.PlatformDependencies
@@ -70,10 +70,10 @@ class ClickstreamSdk {
 
         localEventsGateway = LocalEventsGatewayImpl(
             ClickstreamDatabase(
-                dependencies.databaseDriverFactory.createDriver(),
-                EventsTable.Adapter(
-                    dbJsonAdapter(),
-                    dbJsonAdapter()
+                driver = dependencies.databaseDriverFactory.createDriver(),
+                event_entityAdapter = Event_entity.Adapter(
+                    eventJsonAdapter = dbJsonAdapter(),
+                    propertiesMapJsonAdapter = dbJsonAdapter()
                 )
             )
         )

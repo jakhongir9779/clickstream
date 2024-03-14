@@ -2,7 +2,7 @@ import kotlin.String;
 import kotlin.collections.Map;
 
 -- This table stores event entities as string
-CREATE TABLE EventsTable (
+CREATE TABLE event_entity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eventJson TEXT AS String NOT NULL,
     propertiesMapJson TEXT AS Map<String, String> NOT NULL,
@@ -10,10 +10,10 @@ CREATE TABLE EventsTable (
 );
 
 save:
-INSERT INTO EventsTable VALUES(?,?,?,?);
+INSERT INTO event_entity VALUES(?,?,?,?);
 
 getAllByCount:
-SELECT * FROM EventsTable LIMIT :count;
+SELECT * FROM event_entity LIMIT :count;
 
 removeByIds:
-DELETE FROM EventsTable WHERE id IN :ids;
+DELETE FROM event_entity WHERE id IN :ids;
