@@ -5,7 +5,7 @@ import analytics.sdk.common.extensions.postJson
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-internal class ClickStreamAnalyticsApiImpl(private val httpClient: HttpClient) :
+internal class ClickstreamAnalyticsApiImpl(private val httpClient: HttpClient) :
     ClickstreamAnalyticsApi {
 
     override suspend fun sendEvents(body: String) {
