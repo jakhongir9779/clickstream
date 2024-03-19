@@ -7,7 +7,6 @@ import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.PropertiesProvider
-import org.koin.core.component.KoinComponent
 
 object Clickstream {
 
@@ -33,15 +32,12 @@ object Clickstream {
             )
         }
     }
-    fun getDataForPeriodicJob() = clickstreamSdk?.getDataForPeriodicJob()
-        ?: throw Exception("Run ClickstreamSdk.initialize() first")
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
         instance.send(builder)
     }
 
-    private val instance
+    val instance
         get() = clickstreamSdk ?: throw Exception("Run ClickstreamSdk.initalize() first")
-
 
 }
