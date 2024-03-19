@@ -70,10 +70,7 @@ class App : Application(), Configuration.Provider {
 
     override fun getWorkManagerConfiguration(): Configuration {
         val myWorkerFactory = DelegatingWorkerFactory()
-
-        myWorkerFactory.addFactory(
-            AnalyticsSdkWorkerFactory(Clickstream.getDataForPeriodicJob())
-        )
+        myWorkerFactory.addFactory(AnalyticsSdkWorkerFactory())
 
         return Configuration.Builder()
             .setMinimumLoggingLevel(android.util.Log.DEBUG)

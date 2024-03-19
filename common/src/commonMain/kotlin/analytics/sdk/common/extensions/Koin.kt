@@ -15,7 +15,7 @@ class MultiParameter(vararg val parameters: Any?) {
 
     operator fun <T> get(i: Int) = parameters[i] as T
 
-    inline fun <reified T> get() = parameters.first { it is T }
+    inline fun <reified T> get() = parameters.first { it is T } as T
 }
 
 fun multiParametersOf(vararg parameters: Any?) = parametersOf(MultiParameter(*parameters))
