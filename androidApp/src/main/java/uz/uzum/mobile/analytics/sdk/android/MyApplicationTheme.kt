@@ -1,4 +1,4 @@
-package analytics.sdk.android
+package uz.uzum.mobile.analytics.sdk.android
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
