@@ -36,11 +36,10 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(project(":database"))
                 implementation(project(":analyticstype"))
-//                implementation(project(":eventSender"))
                 implementation(project(":event"))
                 implementation(project(":platform"))
                 api(project(":properties"))
@@ -60,7 +59,8 @@ kotlin {
                 implementation(Libraries.Koin.test)
             }
         }
-        val androidMain by getting {
+
+        androidMain {
             dependencies {
                 api(Libraries.AndroidX.work)
                 implementation(project(":platform"))
@@ -68,16 +68,17 @@ kotlin {
 
                 // DI
                 implementation(Libraries.Koin.android)
-
             }
         }
-        val iosMain by getting {
+
+        iosMain {
             dependencies {
                 api(Libraries.Analytics.properties)
                 implementation(Libraries.Ktor.Engine.darwin)
             }
         }
-        val commonTest by getting {
+
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
             }

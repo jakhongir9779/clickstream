@@ -22,19 +22,8 @@ include(
     ":event",
     ":analyticstype",
 
-
     // composite feature
-    ":eventsender",
-//    ":composite",
-
-    // clickstream
     ":clickstream",
-//    ":clickstream-test",
-//    ":clickstream-eventsender-test",
-
-    // testing
-//    ":app",
-
     ":platform",
     ":properties",
     ":database",
