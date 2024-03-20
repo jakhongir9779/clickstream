@@ -55,5 +55,6 @@ dependencies {
     implementation(project(":event"))
     implementation(project(":platform"))
     testImplementation(project(":database"))
+    testImplementation(project(":clickstream-test"))
     testLibs()
 }

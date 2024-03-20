@@ -21,6 +21,7 @@ include(
     ":common",
     ":event",
     ":analyticstype",
+    ":clickstream-test",
 
     // composite feature
     ":clickstream",
