@@ -68,7 +68,6 @@ kotlin {
 
                 // DI
                 implementation(Libraries.Koin.android)
-
             }
         }
         val iosMain by getting {
