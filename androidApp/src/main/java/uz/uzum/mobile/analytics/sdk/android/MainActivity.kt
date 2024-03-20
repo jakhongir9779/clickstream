@@ -1,4 +1,4 @@
-package analytics.sdk.android
+package uz.uzum.mobile.analytics.sdk.android
 
 import analytics.sdk.clickstream.Clickstream
 import analytics.sdk.clickstream.builder.UiProperties

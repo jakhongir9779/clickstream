@@ -23,10 +23,8 @@ include(
     ":analyticstype",
     ":clickstream-test",
 
-
     // composite feature
     ":clickstream",
-
     ":platform",
     ":properties",
     ":database",

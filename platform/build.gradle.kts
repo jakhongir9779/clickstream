@@ -29,7 +29,7 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(project(":settings"))
                 implementation(project(":database"))
