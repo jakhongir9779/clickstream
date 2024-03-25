@@ -19,17 +19,6 @@ buildscript {
         maven("https://plugins.gradle.org/m2/")
         gradlePluginPortal()
     }
-
-    dependencies {
-        // Don't forget to update version of plugin 'org.gradle.android.cache-fix' too
-        // https://github.com/gradle/android-cache-fix-gradle-plugin
-//        classpath("com.android.tools.build:gradle:7.2.1")
-//        classpath("com.google.gms:google-services:${Versions.googleServices}")
-//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
-//        classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
-//        classpath("com.google.firebase:firebase-crashlytics-gradle:${Versions.Firebase.crashlytics}")
-//        classpath("com.google.firebase:firebase-appdistribution-gradle:${Versions.Firebase.appDistribution}")
-    }
 }
 
 allprojects {

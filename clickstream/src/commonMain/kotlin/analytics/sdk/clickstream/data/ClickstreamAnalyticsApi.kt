@@ -1,8 +1,8 @@
 package analytics.sdk.clickstream.data
 
-import analytics.sdk.clickstream.exposure.ExposureExperiment
+import analytics.sdk.clickstream.data.exposure.ExposureExperiment
 
-internal interface ClickstreamAnalyticsApi {
+interface ClickstreamAnalyticsApi {
 
     suspend fun sendEvents(body: String)
 

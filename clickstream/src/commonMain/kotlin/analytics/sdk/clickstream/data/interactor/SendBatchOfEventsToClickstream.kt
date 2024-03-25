@@ -1,7 +1,7 @@
 package analytics.sdk.clickstream.data.interactor
 
 import analytics.sdk.clickstream.data.EventResult
-import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
 
 class SendBatchOfEventsToClickstream(

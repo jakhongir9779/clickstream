@@ -3,7 +3,9 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents
 import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
-import analytics.sdk.clickstream.gateway.ClickstreamRemoteGateway
+import analytics.sdk.clickstream.di.ClickstreamSdkKoinContext
+import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
 import analytics.sdk.database.gateway.LocalEventsGateway
 import android.content.Context
 import androidx.work.CoroutineWorker
@@ -13,26 +15,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.withContext
-import kotlin.jvm.Volatile
+import org.koin.core.Koin
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 internal class SendToAnalyticsPeriodicTask(
     context: Context,
     params: WorkerParameters,
-    localEventsGateway: LocalEventsGateway,
-    clickstreamRemoteGateway: ClickstreamRemoteGateway,
-    clickstreamConfig: ClickstreamConfig
-) : CoroutineWorker(context, params) {
+) : CoroutineWorker(context, params), KoinComponent {
 
-    private val getUnDispatchedEvents = GetUnDispatchedEvents(
-        localEventsGateway,
-        clickstreamConfig,
-    )
+    val localEventsGateway by inject<LocalEventsGateway>()
+    val remoteGateway by inject<ClickstreamRemoteGateway>()
+    val clickstreamConfig by inject<ClickstreamConfig>()
 
-    private val sendBatchOfEventsToClickstream = SendBatchOfEventsToClickstream(
-        localEventsGateway,
-        clickstreamRemoteGateway,
-        getUnDispatchedEvents,
-    )
+    private val getUnDispatchedEvents by lazy {
+        GetUnDispatchedEvents(localEventsGateway, clickstreamConfig)
+    }
+
+    private val sendBatchOfEventsToClickstream by lazy {
+        SendBatchOfEventsToClickstream(localEventsGateway, remoteGateway, getUnDispatchedEvents)
+    }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
@@ -63,27 +65,18 @@ internal class SendToAnalyticsPeriodicTask(
         internal fun get(
             context: Context,
             params: WorkerParameters,
-            localEventsGateway: LocalEventsGateway,
-            clickStreamRemoteGateway: ClickstreamRemoteGateway,
-            clickstreamConfig: ClickstreamConfig
         ): SendToAnalyticsPeriodicTask {
             synchronized(this) {
                 val instance: SendToAnalyticsPeriodicTask?
-
                 if (INSTANCE == null) {
-                    instance =
-                        SendToAnalyticsPeriodicTask(
-                            context,
-                            params,
-                            localEventsGateway,
-                            clickStreamRemoteGateway,
-                            clickstreamConfig
-                        )
+                    instance = SendToAnalyticsPeriodicTask(context, params)
                     INSTANCE = instance
                 }
-
                 return INSTANCE!!
             }
         }
     }
+
+    override fun getKoin(): Koin = ClickstreamSdkKoinContext.koin
+
 }

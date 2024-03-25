@@ -11,7 +11,7 @@ import analytics.sdk.clickstream.builder.space.Space
 import analytics.sdk.clickstream.builder.space.SpaceBuilder
 import analytics.sdk.clickstream.builder.widget.Widget
 import analytics.sdk.clickstream.builder.widget.WidgetBuilder
-import analytics.sdk.clickstream.event.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.common.builder.AnalyticsBuilder
 import co.touchlab.kermit.Logger
 

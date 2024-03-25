@@ -1,13 +1,15 @@
+import Libraries.Tests.testLibs
+
 plugins {
     id("com.android.application")
     kotlin("android")
 }
 
 android {
-    namespace = "analytics.sdk.android"
+    namespace = "uz.uzum.mobile.analytics.sdk.android"
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
-        applicationId = "analytics.sdk.android"
+        applicationId = "uz.uzum.mobile.analytics.sdk.android.app"
         minSdk = Versions.Android.minSdkVersion
         targetSdk = Versions.Android.targetSdkVersion
         versionCode = 1
@@ -49,5 +51,10 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.1")
 
     implementation(Libraries.AndroidX.startup)
-    implementation(Libraries.Analytics.clickstream)
+    implementation(project(":clickstream"))
+    implementation(project(":event"))
+    implementation(project(":platform"))
+    testImplementation(project(":database"))
+    testImplementation(project(":clickstream-test"))
+    testLibs()
 }

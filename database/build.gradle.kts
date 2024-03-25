@@ -30,17 +30,19 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(Libraries.Kotlin.serialization)
             }
         }
-        val androidMain by getting {
+
+        androidMain {
             dependencies {
                 implementation(Libraries.SqlDelight.Driver.android)
             }
         }
-        val iosMain by getting {
+
+        iosMain {
             dependencies {
                 implementation(Libraries.SqlDelight.Driver.native)
             }
@@ -58,8 +60,9 @@ android {
 
 sqldelight {
     databases {
-        create("Database") {
-            packageName.set("${Libraries.Analytics.group}.${Artifacts.Analytics.database}")
+        create("ClickstreamDatabase") {
+            packageName.set("analytics.sdk.database")
+            version = 2
         }
     }
 }

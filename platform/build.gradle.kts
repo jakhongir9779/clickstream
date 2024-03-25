@@ -29,10 +29,10 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
-                implementation(Libraries.Analytics.settings)
-                implementation(Libraries.Analytics.database)
+                implementation(project(":settings"))
+                implementation(project(":database"))
             }
         }
     }

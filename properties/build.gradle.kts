@@ -27,16 +27,17 @@ kotlin {
     }
 
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(Libraries.Google.Services.gmsBase)
                 implementation(Libraries.Google.Services.gmsAds)
             }
         }
-        val commonMain by getting {
+
+        commonMain {
             dependencies {
-                implementation(Libraries.Analytics.platform)
-                implementation(Libraries.Analytics.settings)
+                implementation(project(":platform"))
+                implementation(project(":settings"))
                 implementation(Libraries.Kotlin.serialization)
                 implementation(Libraries.Logging.kermit)
             }

@@ -3,28 +3,33 @@ package analytics.sdk.clickstream
 import analytics.sdk.clickstream.data.DataForPeriodicJob
 import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents
 import analytics.sdk.clickstream.data.interactor.SendBatchOfEventsToClickstream
+import analytics.sdk.clickstream.di.ClickstreamSdkIsolatedKoinComponent
+import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.domain.gateway.ClickstreamRemoteGateway
+import analytics.sdk.database.gateway.LocalEventsGateway
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.koin.core.component.inject
 
-actual class AnalyticsJobScheduler {
+actual class AnalyticsJobScheduler : ClickstreamSdkIsolatedKoinComponent() {
 
     private lateinit var getUnDispatchedEvents: GetUnDispatchedEvents
     private lateinit var sendBatchOfEventsToClickstream: SendBatchOfEventsToClickstream
     private lateinit var data: DataForPeriodicJob
     private var job: Job? = null
 
+    val localEventsGateway by inject<LocalEventsGateway>()
+    val remoteGateway by inject<ClickstreamRemoteGateway>()
+    val clickstreamConfig by inject<ClickstreamConfig>()
+
     actual fun init(clickStreamConfig: ClickstreamConfig) {
-        data = ClickstreamSdk.getDataForPeriodicJob()
-        getUnDispatchedEvents = GetUnDispatchedEvents(
-            data.localEventsGateway,
-            data.clickstreamConfig,
-        )
+        getUnDispatchedEvents = GetUnDispatchedEvents(localEventsGateway, clickstreamConfig)
         sendBatchOfEventsToClickstream = SendBatchOfEventsToClickstream(
-            data.localEventsGateway,
-            data.remoteGateway,
+            localEventsGateway,
+            remoteGateway,
             getUnDispatchedEvents,
         )
     }

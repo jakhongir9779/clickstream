@@ -36,15 +36,14 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
-                implementation(Libraries.Analytics.analyticsType)
-                implementation(Libraries.Analytics.eventSender)
-                implementation(Libraries.Analytics.event)
-                implementation(Libraries.Analytics.database)
-                implementation(Libraries.Analytics.platform)
-                api(Libraries.Analytics.properties)
-                api(Libraries.Analytics.common)
+                implementation(project(":database"))
+                implementation(project(":analyticstype"))
+                implementation(project(":event"))
+                implementation(project(":platform"))
+                api(project(":properties"))
+                api(project(":common"))
 
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)
@@ -54,22 +53,32 @@ kotlin {
                 implementation(Libraries.Kotlin.Coroutines.core)
                 implementation(Libraries.Kotlin.serialization)
                 implementation(Libraries.Logging.kermit)
+
+                // DI
+                implementation(Libraries.Koin.core)
+                implementation(Libraries.Koin.test)
             }
         }
-        val androidMain by getting {
+
+        androidMain {
             dependencies {
                 api(Libraries.AndroidX.work)
-                implementation(Libraries.Analytics.platformAndroid)
+                implementation(project(":platform"))
                 implementation(Libraries.Ktor.Engine.okHttp)
+
+                // DI
+                implementation(Libraries.Koin.android)
             }
         }
-        val iosMain by getting {
+
+        iosMain {
             dependencies {
                 api(Libraries.Analytics.properties)
                 implementation(Libraries.Ktor.Engine.darwin)
             }
         }
-        val commonTest by getting {
+
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
             }
@@ -90,6 +99,9 @@ android {
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         minSdk = Versions.Android.minSdkVersion
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
