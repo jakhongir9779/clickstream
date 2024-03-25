@@ -45,6 +45,13 @@ kotlin {
                 api(project(":properties"))
                 api(project(":common"))
 
+//                implementation(Libraries.Analytics.analyticsType)
+//                implementation(Libraries.Analytics.eventSender)
+//                implementation(Libraries.Analytics.event)
+//                implementation(Libraries.Analytics.platform)
+//                api(Libraries.Analytics.properties)
+//                api(Libraries.Analytics.common)
+
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)
                 implementation(Libraries.Ktor.logging)
@@ -63,6 +70,7 @@ kotlin {
         androidMain {
             dependencies {
                 api(Libraries.AndroidX.work)
+//                implementation(Libraries.Analytics.platformAndroid)
                 implementation(project(":platform"))
                 implementation(Libraries.Ktor.Engine.okHttp)
 

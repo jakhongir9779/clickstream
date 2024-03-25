@@ -54,6 +54,11 @@ dependencies {
     implementation(project(":clickstream"))
     implementation(project(":event"))
     implementation(project(":platform"))
+//    implementation(Libraries.Analytics.clickstream)
+//    implementation(Libraries.Analytics.event)
+//    implementation(Libraries.Analytics.analyticsType)
+//    implementation(Libraries.Analytics.platform)
+
     testImplementation(project(":database"))
     testImplementation(project(":clickstream-test"))
     testLibs()
