@@ -28,10 +28,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":analyticstype"))
-//                implementation(Libraries.Analytics.analyticsType)
-//                implementation(Libraries.Analytics.event)
-                implementation(project(":event"))
+                implementation(Libraries.Analytics.analyticsType)
+                implementation(Libraries.Analytics.event)
                 implementation(Libraries.Ktor.core)
                 // DI
                 implementation(Libraries.Koin.core)

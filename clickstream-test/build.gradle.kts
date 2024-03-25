@@ -28,9 +28,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":common"))
-                implementation(project(":clickstream"))
-                implementation(project(":platform"))
+                implementation(Libraries.Analytics.common)
+                implementation(Libraries.Analytics.clickstream)
+                implementation(Libraries.Analytics.platform)
+
+
                 implementation(Libraries.Koin.core)
                 implementation(Libraries.Tests.coroutines)
                 implementation(Libraries.Tests.junit)

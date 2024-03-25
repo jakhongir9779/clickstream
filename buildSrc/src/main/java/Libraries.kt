@@ -176,5 +176,8 @@ object Libraries {
         const val platform = "$group:${Artifacts.Analytics.platform}:${Versions.Analytics.platform}"
         const val platformAndroid = "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
         const val properties = "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
+        const val analyticsType = "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
+        const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
+
     }
 }
