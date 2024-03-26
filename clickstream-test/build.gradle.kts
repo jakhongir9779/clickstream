@@ -15,27 +15,14 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = Artifacts.Analytics.clickstreamTest
-        }
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(Libraries.Analytics.common)
                 implementation(Libraries.Analytics.clickstream)
                 implementation(Libraries.Analytics.platform)
-
-
                 implementation(Libraries.Koin.core)
                 implementation(Libraries.Tests.coroutines)
-                implementation(Libraries.Tests.junit)
             }
         }
 
@@ -44,6 +31,7 @@ kotlin {
                 api(Libraries.Koin.android)
                 api(Libraries.Koin.test)
                 implementation(Libraries.Tests.mockK)
+                implementation(Libraries.Tests.junit)
             }
         }
     }
@@ -61,8 +49,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.clickstreamTest
-
             version = Versions.Analytics.clickstreamTest
         }
     }
