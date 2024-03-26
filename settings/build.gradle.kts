@@ -46,7 +46,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.settings
             version = Versions.Analytics.settings
         }
     }

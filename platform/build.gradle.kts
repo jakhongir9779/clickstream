@@ -31,11 +31,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                //implementation(Libraries.Analytics.settings)
-                //implementation(Libraries.Analytics.database)
-
-                implementation(project(":settings"))
-                implementation(project(":database"))
+                implementation(Libraries.Analytics.settings)
+                implementation(Libraries.Analytics.database)
             }
         }
     }
@@ -60,7 +57,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.platform
             version = Versions.Analytics.platform
         }
     }
