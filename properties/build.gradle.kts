@@ -36,11 +36,11 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation(project(":settings"))
-                implementation(project(":platform"))
+                //implementation(project(":settings"))
+                //implementation(project(":platform"))
 
-                //implementation(Libraries.Analytics.platform)
-                //implementation(Libraries.Analytics.settings)
+                implementation(Libraries.Analytics.platform)
+                implementation(Libraries.Analytics.settings)
                 implementation(Libraries.Kotlin.serializationJson)
                 implementation(Libraries.Logging.kermit)
             }
@@ -61,7 +61,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.properties
             version = Versions.Analytics.properties
         }
     }
