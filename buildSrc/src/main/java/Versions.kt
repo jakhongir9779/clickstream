@@ -64,7 +64,7 @@ object Versions {
     }
 
     object Analytics {
-        const val clickstream = "1.0"
+        const val clickstream = "1.1"
 
         const val event = "1.0"
         const val eventSender = "1.0"
