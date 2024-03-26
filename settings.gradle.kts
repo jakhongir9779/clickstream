@@ -17,14 +17,12 @@ rootProject.name = "AnalyticsSdk"
 include(":androidApp")
 
 include(
-    // core
     ":common",
     ":event",
     ":analyticstype",
-    //":clickstream-test",
+    ":clickstream-test",
 
-    // composite feature
-    //":clickstream",
+    ":clickstream",
     ":platform",
     ":properties",
     ":database",

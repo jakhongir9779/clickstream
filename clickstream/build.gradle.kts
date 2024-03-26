@@ -39,7 +39,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(Libraries.Analytics.analyticsType)
-                implementation(Libraries.Analytics.eventSender)
                 implementation(Libraries.Analytics.event)
                 implementation(Libraries.Analytics.platform)
                 implementation(Libraries.Analytics.database)
@@ -118,7 +117,6 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
-            artifactId = Artifacts.Analytics.clickstream
             version = Versions.Analytics.clickstream
         }
     }
