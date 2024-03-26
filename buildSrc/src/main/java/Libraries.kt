@@ -1,11 +1,10 @@
 import Libraries.Tests.Junit5.junit5
 import Libraries.Tests.Mockito.mockito
 import org.gradle.api.artifacts.dsl.DependencyHandler
-import org.gradle.kotlin.dsl.project
 
 object Libraries {
 
-    const val settings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
+    const val multiplatformSettings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
 
 
     object Ktor {
@@ -45,7 +44,7 @@ object Libraries {
 
         private const val std = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 
-        const val serialization =
+        const val serializationJson =
             "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.serialization}"
 
         fun DependencyHandler.kotlin() {
@@ -163,10 +162,10 @@ object Libraries {
     }
 
     object Analytics {
-        const val group = "analytics.sdk"
+        const val group = "uz.uzum.mobile.analytics.sdk"
 
         const val clickstream = "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
-        const val clickstreamTest = "$group:clickstream-test:${Versions.Analytics.clickstreamTest}"
+        const val clickstreamTest = "$group:${Artifacts.Analytics.clickstreamTest}:${Versions.Analytics.clickstreamTest}"
         const val clickstreamEventSenderTest = "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
         const val composite = "$group:composite:${Versions.Analytics.composite}"
         const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"

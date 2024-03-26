@@ -21,10 +21,10 @@ include(
     ":common",
     ":event",
     ":analyticstype",
-    ":clickstream-test",
+    //":clickstream-test",
 
     // composite feature
-    ":clickstream",
+    //":clickstream",
     ":platform",
     ":properties",
     ":database",

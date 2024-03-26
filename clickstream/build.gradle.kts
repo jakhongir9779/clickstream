@@ -42,6 +42,8 @@ kotlin {
                 implementation(Libraries.Analytics.eventSender)
                 implementation(Libraries.Analytics.event)
                 implementation(Libraries.Analytics.platform)
+                implementation(Libraries.Analytics.database)
+
                 api(Libraries.Analytics.properties)
                 api(Libraries.Analytics.common)
 
@@ -51,7 +53,7 @@ kotlin {
                 implementation(Libraries.Ktor.contentNegotiation)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-                implementation(Libraries.Kotlin.serialization)
+                implementation(Libraries.Kotlin.serializationJson)
                 implementation(Libraries.Logging.kermit)
 
                 // DI
@@ -116,6 +118,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.clickstream
             version = Versions.Analytics.clickstream
         }
     }

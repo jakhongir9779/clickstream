@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.settings)
+                implementation(Libraries.multiplatformSettings)
             }
         }
     }
@@ -46,6 +46,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.settings
             version = Versions.Analytics.settings
         }
     }

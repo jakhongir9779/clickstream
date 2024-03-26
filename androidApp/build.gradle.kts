@@ -57,7 +57,7 @@ dependencies {
     implementation(Libraries.Analytics.platform)
 
     testImplementation(Libraries.Analytics.database)
-    testImplementation(Libraries.Analytics.clickstreamTest)
+    //testImplementation(Libraries.Analytics.clickstreamTest)
 
     testLibs()
 }

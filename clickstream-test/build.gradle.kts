@@ -21,7 +21,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = Artifacts.Analytics.test
+            baseName = Artifacts.Analytics.clickstreamTest
         }
     }
 
@@ -61,6 +61,8 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.clickstreamTest
+
             version = Versions.Analytics.clickstreamTest
         }
     }

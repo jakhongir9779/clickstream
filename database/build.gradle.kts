@@ -32,7 +32,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.Kotlin.serialization)
+                implementation(Libraries.Kotlin.serializationJson)
             }
         }
 
@@ -71,6 +71,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.database
             version = Versions.Analytics.database
         }
     }

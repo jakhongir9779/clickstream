@@ -64,17 +64,18 @@ object Versions {
     }
 
     object Analytics {
-        const val event = "1.1"
-        const val eventSender = "1.1"
-        const val clickstream = "1.2"
-        const val database = "1.1"
-        const val settings = "1.3"
-        const val platform = "1.1"
-        const val properties = "1.1"
-        const val composite = "1.1"
-        const val clickstreamTest = "1.1"
-        const val clickstreamEventsenderTest = "1.1"
-        const val analyticsType = "1.1"
-        const val common = "1.1"
+        const val clickstream = "1.0"
+
+        const val event = "1.0"
+        const val eventSender = "1.0"
+        const val database = "1.0"
+        const val settings = "1.0"
+        const val platform = "1.0"
+        const val properties = "1.0"
+        const val composite = "1.0"
+        const val clickstreamTest = "1.0"
+        const val clickstreamEventsenderTest = "1.0"
+        const val analyticsType = "1.0"
+        const val common = "1.0"
     }
 }

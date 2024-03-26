@@ -45,3 +45,22 @@ android {
         minSdk = Versions.Android.minSdkVersion
     }
 }
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            groupId = Libraries.Analytics.group
+            artifactId = Artifacts.Analytics.common
+            version = Versions.Analytics.common
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+            }
+        }
+    }
+}

@@ -10,6 +10,6 @@ object Artifacts {
         const val platform = "platform"
         const val properties = "properties"
         const val clickstream = "clickstream"
-        const val test = "clickstream-test"
+        const val clickstreamTest = "clickstream-test"
     }
 }
