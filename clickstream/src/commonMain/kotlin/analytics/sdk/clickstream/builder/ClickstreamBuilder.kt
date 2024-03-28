@@ -18,12 +18,11 @@ import co.touchlab.kermit.Logger
 
 class ClickstreamBuilder : AnalyticsBuilder() {
     private var eventProperties: EventProperties? = null
-    private var uiProperties: UiProperties? = null
-
-    private var spaceBuilder: SpaceBuilder? = null
-    private var sectionBuilder: SectionBuilder? = null
-    private var groupBuilder: GroupBuilder? = null
-    private var widgetBuilder: WidgetBuilder? = null
+    private var uiProperties = UiProperties()
+    private val spaceBuilder: SpaceBuilder by lazy { SpaceBuilder() }
+    private val sectionBuilder: SectionBuilder by lazy { SectionBuilder() }
+    private val groupBuilder: GroupBuilder by lazy { GroupBuilder() }
+    private val widgetBuilder: WidgetBuilder by lazy { WidgetBuilder() }
 
     private var isInteractive = true
 
@@ -33,32 +32,27 @@ class ClickstreamBuilder : AnalyticsBuilder() {
     }
 
     fun space(build: SpaceBuilder.() -> Space): SpaceBuilder {
-        createSpaceBuilderIfNull()
-        uiProperties = uiProperties!!.copy(space = spaceBuilder!!.build())
-        return spaceBuilder!!
+        uiProperties = uiProperties.copy(space = spaceBuilder.build())
+        return spaceBuilder
     }
 
     fun section(build: SectionBuilder.() -> Section): SectionBuilder {
-        createSectionBuilderIfNull()
-        uiProperties = uiProperties?.copy(section = sectionBuilder!!.build())
-        return sectionBuilder!!
+        uiProperties = uiProperties.copy(section = sectionBuilder.build())
+        return sectionBuilder
     }
 
     fun group(build: GroupBuilder.() -> Group): GroupBuilder {
-        createGroupBuilderIfNull()
-        uiProperties = uiProperties?.copy(group = groupBuilder!!.build())
-        return groupBuilder!!
+        uiProperties = uiProperties.copy(group = groupBuilder.build())
+        return groupBuilder
     }
 
     fun widget(build: WidgetBuilder.() -> Widget): WidgetBuilder {
-        createWidgetBuilderIfNull()
-        uiProperties = uiProperties?.copy(widget = widgetBuilder!!.build())
-        return widgetBuilder!!
+        uiProperties = uiProperties.copy(widget = widgetBuilder.build())
+        return widgetBuilder
     }
 
     fun action(action: UiProperties.Action): ClickstreamBuilder {
-        createUiPropertiesIfNull()
-        uiProperties = uiProperties!!.copy(action = action)
+        uiProperties = uiProperties.copy(action = action)
         return this
     }
 
@@ -67,37 +61,6 @@ class ClickstreamBuilder : AnalyticsBuilder() {
         return this
     }
 
-    private fun createWidgetBuilderIfNull() {
-        if (widgetBuilder != null) return
-        widgetBuilder = WidgetBuilder()
-    }
-
-    private fun createUiPropertiesIfNull() {
-        if (uiProperties != null) return
-        this.uiProperties = UiProperties(
-            widget = null, space = null, section = null, group = null, action = null
-        )
-    }
-
-    private fun createSpaceBuilderIfNull() {
-        createUiPropertiesIfNull()
-        if (spaceBuilder != null) return
-        spaceBuilder = SpaceBuilder()
-    }
-
-    private fun createSectionBuilderIfNull() {
-        createUiPropertiesIfNull()
-        if (sectionBuilder != null) return
-        sectionBuilder = SectionBuilder()
-    }
-
-    private fun createGroupBuilderIfNull() {
-        createUiPropertiesIfNull()
-        if (groupBuilder != null) return
-        groupBuilder = GroupBuilder()
-    }
-
-
     /**
      * Validation rules:
      *  - event_props != null, ui_props != null
@@ -105,7 +68,7 @@ class ClickstreamBuilder : AnalyticsBuilder() {
      */
     fun build(): ClickstreamEvent {
         val eventWithUiIsValid = eventProperties.isValid() && uiProperties.isValid()
-        val eventWithoutUiIsValid = eventProperties.isValid() && uiProperties == null
+        val eventWithoutUiIsValid = eventProperties.isValid()
 
         if (!(eventWithUiIsValid || eventWithoutUiIsValid)) {
             Logger.e {

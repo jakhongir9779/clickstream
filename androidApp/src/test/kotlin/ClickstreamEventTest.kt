@@ -1,10 +1,6 @@
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
-import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.test.ClickstreamTestRule
-import io.mockk.coEvery
-import io.mockk.coVerify
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -16,9 +12,12 @@ class ClickstreamEventTest {
 
     @Test
     fun clickStreamEventSent() = runTest {
-        lateinit var someEvent: ClickstreamEvent
-        var resultEvent: Any? = null
-        coEvery { clickstreamTest.eventSender.send(any()) } answers { resultEvent = valueAny }
+        val paramKey = "parameter_key"
+        val paramValue = "parameter_value"
+        val paramKey2 = "parameter_key2"
+        val paramValue2 = "parameter_value2"
+        val eventType = "EVENT_TYPE"
+
         clickstreamTest.send {
             space {
                 id(1)
@@ -46,20 +45,28 @@ class ClickstreamEventTest {
             }
             action(UiProperties.Action.SHOW)
             interaction(true)
-            someEvent = event {
-                type("event_type")
+            event {
+                type(eventType)
                 parameter(
-                    key = "parameter_key",
-                    value = "parameter_value"
+                    key = paramKey,
+                    value = paramValue,
+                )
+                parameter(
+                    key = paramKey2,
+                    value = paramValue2,
                 )
             }.build()
-            someEvent
         }
-        coVerify { clickstreamTest.eventSender.send(any()) }
-        assertEquals(someEvent, resultEvent)
-        assert(resultEvent is ClickstreamEvent)
-        assertEquals(someEvent.uiProperties, (resultEvent as ClickstreamEvent).uiProperties)
-        assertEquals(someEvent.eventProperties, (resultEvent as ClickstreamEvent).eventProperties)
+
+        clickstreamTest.verifyEventSent(
+            event = eventType,
+            eventParams = listOf(
+                paramKey to paramValue,
+                paramKey2 to paramValue2,
+            )
+        )
     }
 
 }
+
+
