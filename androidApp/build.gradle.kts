@@ -51,10 +51,13 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.1")
 
     implementation(Libraries.AndroidX.startup)
-    implementation(project(":clickstream"))
-    implementation(project(":event"))
-    implementation(project(":platform"))
-    testImplementation(project(":database"))
-    testImplementation(project(":clickstream-test"))
+    implementation(Libraries.Analytics.clickstream)
+    implementation(Libraries.Analytics.event)
+    implementation(Libraries.Analytics.analyticsType)
+    implementation(Libraries.Analytics.platform)
+
+    testImplementation(Libraries.Analytics.database)
+    //testImplementation(Libraries.Analytics.clickstreamTest)
+
     testLibs()
 }

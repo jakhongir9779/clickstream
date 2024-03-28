@@ -32,7 +32,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.Kotlin.serialization)
+                implementation(Libraries.Kotlin.serializationJson)
             }
         }
 

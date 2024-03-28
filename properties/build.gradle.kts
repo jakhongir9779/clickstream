@@ -34,14 +34,15 @@ kotlin {
             }
         }
 
-        commonMain {
+        val commonMain by getting {
             dependencies {
-                implementation(project(":platform"))
-                implementation(project(":settings"))
-                implementation(Libraries.Kotlin.serialization)
+                implementation(Libraries.Analytics.platform)
+                implementation(Libraries.Analytics.settings)
+                implementation(Libraries.Kotlin.serializationJson)
                 implementation(Libraries.Logging.kermit)
             }
         }
+
     }
 }
 

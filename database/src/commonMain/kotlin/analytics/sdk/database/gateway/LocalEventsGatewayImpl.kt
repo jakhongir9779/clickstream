@@ -9,16 +9,21 @@ class LocalEventsGatewayImpl(
 ) : LocalEventsGateway {
 
     override fun save(event: DbEventEntity) {
-        clickStreamDatabase.eventEntityQueries.save(null, event.event, event.properties, event.propertyHash)
+        clickStreamDatabase.eventQueries.save(
+            null,
+            event.event,
+            event.properties,
+            event.propertyHash
+        )
     }
 
     override fun getAllByCount(count: Int): List<DbEventEntity> {
-        return clickStreamDatabase.eventEntityQueries.getAllByCount(count.toLong())
+        return clickStreamDatabase.eventQueries.getAllByCount(count.toLong())
             .executeAsList()
             .map { it.toPublicModel() }
     }
 
     override fun removeByIds(ids: List<Long>) {
-        clickStreamDatabase.eventEntityQueries.removeByIds(ids)
+        clickStreamDatabase.eventQueries.removeByIds(ids)
     }
 }

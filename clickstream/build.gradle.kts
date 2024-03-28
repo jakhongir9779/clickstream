@@ -38,12 +38,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":database"))
-                implementation(project(":analyticstype"))
-                implementation(project(":event"))
-                implementation(project(":platform"))
-                api(project(":properties"))
-                api(project(":common"))
+                implementation(Libraries.Analytics.analyticsType)
+                implementation(Libraries.Analytics.event)
+                implementation(Libraries.Analytics.platform)
+                implementation(Libraries.Analytics.database)
+
+                api(Libraries.Analytics.properties)
+                api(Libraries.Analytics.common)
 
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)
@@ -51,7 +52,7 @@ kotlin {
                 implementation(Libraries.Ktor.contentNegotiation)
 
                 implementation(Libraries.Kotlin.Coroutines.core)
-                implementation(Libraries.Kotlin.serialization)
+                implementation(Libraries.Kotlin.serializationJson)
                 implementation(Libraries.Logging.kermit)
 
                 // DI
@@ -63,7 +64,7 @@ kotlin {
         androidMain {
             dependencies {
                 api(Libraries.AndroidX.work)
-                implementation(project(":platform"))
+                implementation(Libraries.Analytics.platformAndroid)
                 implementation(Libraries.Ktor.Engine.okHttp)
 
                 // DI

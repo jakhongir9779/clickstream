@@ -1,6 +1,5 @@
 package analytics.sdk.clickstream
 
-import analytics.sdk.BuildConfig
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import android.content.Context
 import androidx.work.Constraints
@@ -14,6 +13,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import kotlinx.coroutines.CoroutineScope
+import uz.uzum.mobile.analytics.sdk.BuildConfig
 import java.util.concurrent.TimeUnit
 
 actual class AnalyticsJobScheduler(private val context: Context) {

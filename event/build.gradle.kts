@@ -26,9 +26,9 @@ kotlin {
     }
 
     sourceSets {
-        commonMain {
+        val commonMain by getting {
             dependencies {
-                implementation(project(":analyticstype"))
+                implementation(Libraries.Analytics.analyticsType)
             }
         }
     }

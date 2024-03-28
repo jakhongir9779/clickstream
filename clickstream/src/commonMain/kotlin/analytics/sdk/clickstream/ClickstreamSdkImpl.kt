@@ -39,11 +39,7 @@ class ClickstreamSdkImpl(
     }
 
     init {
-        if (dependencies.utils.initAllowed().not()) {
-            throw Exception("Init is not allowed due to dependencies configuration")
-        }
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
-
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {

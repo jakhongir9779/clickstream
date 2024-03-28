@@ -26,10 +26,10 @@ kotlin {
     }
 
     sourceSets {
-        commonMain {
+        val commonMain by getting {
             dependencies {
-                implementation(project(":analyticstype"))
-                implementation(project(":event"))
+                implementation(Libraries.Analytics.analyticsType)
+                implementation(Libraries.Analytics.event)
                 implementation(Libraries.Ktor.core)
                 // DI
                 implementation(Libraries.Koin.core)
@@ -43,5 +43,23 @@ android {
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         minSdk = Versions.Android.minSdkVersion
+    }
+}
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            groupId = Libraries.Analytics.group
+            version = Versions.Analytics.common
+        }
+    }
+    repositories {
+        maven {
+            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
+            credentials(PasswordCredentials::class) {
+                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
+                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
+            }
+        }
     }
 }

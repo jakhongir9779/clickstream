@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.settings)
+                implementation(Libraries.multiplatformSettings)
             }
         }
     }

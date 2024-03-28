@@ -10,7 +10,7 @@ import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.common.AnalyticsEventSender
 import analytics.sdk.common.extensions.MultiParameter
 import analytics.sdk.database.ClickstreamDatabase
-import analytics.sdk.database.Event_entity
+import analytics.sdk.database.Event
 import analytics.sdk.database.gateway.LocalEventsGateway
 import analytics.sdk.database.gateway.LocalEventsGatewayImpl
 import analytics.sdk.platform.PlatformDependencies
@@ -60,7 +60,7 @@ val CommonKoinModule = module {
         LocalEventsGatewayImpl(
             ClickstreamDatabase(
                 driver = dependencies.databaseDriverFactory.createDriver(),
-                event_entityAdapter = Event_entity.Adapter(
+                eventAdapter = Event.Adapter(
                     eventJsonAdapter = dbJsonAdapter(),
                     propertiesMapJsonAdapter = dbJsonAdapter()
                 )
