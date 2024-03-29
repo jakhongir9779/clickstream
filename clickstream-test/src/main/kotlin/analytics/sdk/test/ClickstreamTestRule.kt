@@ -63,36 +63,18 @@ class ClickstreamTestRule : TestRule {
 
     fun verifyEventSent(
         event: String,
-//        accountId: String? = null,
-//        appsflyerId: String? = null,
-//        facebookAnonId: String? = null,
-//        firebaseAppInstanceId: String? = null,
-//        googleCid: String? = null,
-//        language: String? = null,
-//        muid: String? = null,
-//        mindboxId: String? = null,
-//        myTrackerInstanceId: String? = null,
-//        appmetricaDeviceId: String? = null,
-//        timeZone: String? = null,
-//        timestamp: String? = null,
         spaceId: String? = null,
         spaceName: String? = null,
-//        spaceViewId: String? = null,
-//        spacePreviousViewId: String? = null,
         spaceScreenSize: String? = null,
         spaceType: String? = null,
         widgetName: String? = null,
         widgetType: String? = null,
-//        widgetText: String? = null,
-//        widgetPrompt: String? = null,
-//        widgetPosition: String? = null,
         sectionId: String? = null,
         sectionType: String? = null,
         sectionName: String? = null,
         sectionPosition: Long? = null,
         groupName: String? = null,
         groupPosition: Long? = null,
-//        connectionType: String? = null,
         isInteractive: Boolean? = null,
         eventParams: List<Pair<String, String>>,
     ) {
@@ -105,104 +87,20 @@ class ClickstreamTestRule : TestRule {
         val actualGroup = actualEvent.uiProperties?.group
         assertEquals(resultEvent.captured.eventProperties?.type, event)
 
+        spaceId?.let { assertEquals(it, actualSpace?.id) }
+        spaceName?.let { assertEquals(it, actualSpace?.name) }
+        spaceScreenSize?.let { assertEquals(it, actualSpace?.screenSize) }
+        spaceType?.let { assertEquals(it, actualSpace?.type?.name) }
+        widgetName?.let { assertEquals(it, actualWidget?.name) }
+        widgetType?.let { assertEquals(it, actualWidget?.type?.name) }
+        sectionId?.let { assertEquals(it, actualSection?.id) }
+        sectionType?.let { assertEquals(it, actualSection?.type) }
+        sectionName?.let { assertEquals(it, actualSection?.name) }
+        sectionPosition?.let { assertEquals(it, actualSection?.position) }
+        groupName?.let { assertEquals(it, actualGroup?.name) }
+        groupPosition?.let { assertEquals(it, actualGroup?.position) }
+        isInteractive?.let { assertEquals(it, actualEvent.isInteractive) }
 
-//        accountId?.let {
-//            assertEquals(it, actualEvent.uiProperties)
-//        }
-//        appsflyerId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        facebookAnonId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        firebaseAppInstanceId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        googleCid?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        language?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        muid?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        mindboxId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        myTrackerInstanceId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        appmetricaDeviceId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        timeZone?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        timestamp?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-        spaceId?.let {
-            assertEquals(it, actualSpace?.id)
-        }
-        spaceName?.let {
-            assertEquals(it, actualSpace?.name)
-        }
-//        spaceViewId?.let {
-//            assertEquals(it, actualSpace.type)
-//        }
-//        spacePreviousViewId?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-        spaceScreenSize?.let {
-            assertEquals(it, actualSpace?.screenSize)
-        }
-        spaceType?.let {
-            assertEquals(it, actualSpace?.type?.name)
-        }
-        widgetName?.let {
-            assertEquals(it, actualWidget?.name)
-        }
-        widgetType?.let {
-            assertEquals(it, actualWidget?.type?.name)
-        }
-//        widgetText?.let {
-//            assertEquals(it, actualWidget?.text)
-//        }
-//        widgetPrompt?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-//        widgetPosition?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-        sectionId?.let {
-            assertEquals(it, actualSection?.id)
-        }
-        sectionType?.let {
-            assertEquals(it, actualSection?.type)
-        }
-        sectionName?.let {
-            assertEquals(it, actualSection?.name)
-        }
-        sectionPosition?.let {
-            assertEquals(it, actualSection?.position)
-        }
-        groupName?.let {
-            assertEquals(it, actualGroup?.name)
-        }
-        groupPosition?.let {
-            assertEquals(it, actualGroup?.position)
-        }
-//        connectionType?.let {
-//            assertEquals(it, actualEvent.)
-//        }
-        isInteractive?.let {
-            assertEquals(it, actualEvent.isInteractive)
-        }
-
-//        val eventParamsMap = eventParams.associate {
-//            it.first to it.second
-//        }
         eventParams.forEach { (key, value) ->
             val actualValue =
                 actualEvent.eventProperties?.parameters?.get(key)?.jsonPrimitive?.content
