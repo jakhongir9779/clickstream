@@ -76,7 +76,7 @@ class ClickstreamTestRule : TestRule {
         groupName: String? = null,
         groupPosition: Long? = null,
         isInteractive: Boolean? = null,
-        eventParams: List<Pair<String, String>>,
+        eventParams: List<Pair<String, String>> = listOf(),
     ) {
         val resultEvent = slot<ClickstreamEvent>()
         coVerify { eventSender.send(capture(resultEvent)) }
