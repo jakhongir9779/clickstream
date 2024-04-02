@@ -52,11 +52,11 @@ dependencies {
 
     implementation(Libraries.AndroidX.startup)
     implementation(project(":clickstream"))
-    implementation(Libraries.Analytics.event)
-    implementation(Libraries.Analytics.analyticsType)
-    implementation(Libraries.Analytics.platform)
+    implementation(project(":event"))
+    implementation(project(":analyticstype"))
+    implementation(project(":platform"))
 
-    testImplementation(Libraries.Analytics.database)
+    testImplementation(project(":database"))
     testImplementation(project(":clickstream-test"))
 
     testLibs()

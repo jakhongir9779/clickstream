@@ -18,47 +18,32 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
         return event
     }
 
-    private fun buildJsonObjectFromParams() =
-        buildJsonObject {
-            parameters.forEach { param ->
-                when (param.value) {
-                    is String -> {
-                        put(param.key, JsonPrimitive(param.value as String))
-                    }
-
-                    is Boolean -> {
-                        put(param.key, JsonPrimitive(param.value as Boolean))
-                    }
-
-                    is Double -> {
-                        put(param.key, JsonPrimitive(param.value as Double))
-                    }
-
-                    is List<*> -> {
-                        put(
-                            param.key,
-                            JsonArray((param.value as List<*>).map { JsonPrimitive(it as Int) })
-                        )
-                    }
-
-                    is Int -> {
-                        put(param.key, JsonPrimitive(param.value as Int))
-                    }
-
-                    is Long -> {
-                        put(param.key, JsonPrimitive(param.value as Long))
-                    }
+    private fun buildJsonObjectFromParams() = buildJsonObject {
+        parameters.forEach { param ->
+            when (val value = param.value) {
+                is String -> put(param.key, JsonPrimitive(value))
+                is Boolean -> put(param.key, JsonPrimitive(value))
+                is Double -> put(param.key, JsonPrimitive(value))
+                is Int -> put(param.key, JsonPrimitive(value))
+                is Long -> put(param.key, JsonPrimitive(value))
+                is List<*> -> {
+                    put(
+                        param.key, JsonArray(value.map {
+                            if (it is Number) {
+                                JsonPrimitive(it)
+                            } else {
+                                JsonPrimitive(it as String)
+                            }
+                        })
+                    )
                 }
             }
         }
+    }
 
     fun parameter(key: String, @ObjCName(swiftName = "bool") value: Boolean): EventProperties {
         parameters += key to value
-        event = event.copy(parameters = buildJsonObject {
-            parameters.forEach {
-                put(it.key, it.value as JsonPrimitive)
-            }
-        })
+        event = event.copy(parameters = buildJsonObjectFromParams())
         return event
     }
 
@@ -80,7 +65,17 @@ class EventPropertiesBuilder internal constructor() : ClickstreamEventProperties
         return event
     }
 
-    fun parameter(key: String, @ObjCName(swiftName = "intArray") value: List<Long>): EventProperties {
+    fun numberListParameter(
+        key: String, @ObjCName(swiftName = "numberArray") value: List<Number>
+    ): EventProperties {
+        parameters += key to value
+        event = event.copy(parameters = buildJsonObjectFromParams())
+        return event
+    }
+
+    fun stringListParameter(
+        key: String, @ObjCName(swiftName = "stringArray") value: List<String>
+    ): EventProperties {
         parameters += key to value
         event = event.copy(parameters = buildJsonObjectFromParams())
         return event

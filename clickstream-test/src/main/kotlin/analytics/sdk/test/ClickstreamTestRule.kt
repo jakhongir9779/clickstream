@@ -14,6 +14,8 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.rules.TestRule
@@ -76,7 +78,7 @@ class ClickstreamTestRule : TestRule {
         groupName: String? = null,
         groupPosition: Long? = null,
         isInteractive: Boolean? = null,
-        eventParams: List<Pair<String, String>> = listOf(),
+        eventParams: Map<String, Any> = mapOf(),
     ) {
         val resultEvent = slot<ClickstreamEvent>()
         coVerify { eventSender.send(capture(resultEvent)) }
@@ -103,8 +105,12 @@ class ClickstreamTestRule : TestRule {
 
         eventParams.forEach { (key, value) ->
             val actualValue =
-                actualEvent.eventProperties?.parameters?.get(key)?.jsonPrimitive?.content
-            assertEquals(value, actualValue)
+                when (val parsingValue = actualEvent.eventProperties?.parameters?.get(key)) {
+                    is JsonPrimitive -> if (parsingValue.isString) parsingValue.content else parsingValue.toString()
+                    is JsonArray -> parsingValue.map { it.jsonPrimitive.content }.toString()
+                    else -> parsingValue?.toString()
+                }
+            assertEquals(value.toString(), actualValue)
         }
     }
 }
