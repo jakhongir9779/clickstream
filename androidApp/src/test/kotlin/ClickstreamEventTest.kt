@@ -1,3 +1,4 @@
+import analytics.sdk.clickstream.Clickstream
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
 import analytics.sdk.test.ClickstreamTestRule
@@ -78,6 +79,21 @@ class ClickstreamEventTest {
                 paramKey7 to paramListNumbers,
             )
         )
+    }
+
+    @Test
+    fun clickstreamDeeplinkEvent() = runTest {
+        val eventType = "DEEPLINK_OPENED"
+        val params = mapOf(
+            "utm_source" to "uzum_bank",
+            "utm_medium" to "ecosystem_referral",
+            "utm_campaign" to "banner_in_menu",
+        )
+
+        val query = params.toList().joinToString("&") { (key, value) -> "$key=$value" }
+        val deeplinkString = "https://uzum.uz/ru?$query"
+        Clickstream.deeplinkOpened(deeplinkString)
+        clickstreamTest.verifyEventSent(event = eventType, eventParams = params)
     }
 
 }
