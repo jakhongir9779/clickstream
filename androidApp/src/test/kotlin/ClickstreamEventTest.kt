@@ -1,10 +1,6 @@
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
-import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.test.ClickstreamTestRule
-import io.mockk.coEvery
-import io.mockk.coVerify
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -16,9 +12,22 @@ class ClickstreamEventTest {
 
     @Test
     fun clickStreamEventSent() = runTest {
-        lateinit var someEvent: ClickstreamEvent
-        var resultEvent: Any? = null
-        coEvery { clickstreamTest.eventSender.send(any()) } answers { resultEvent = valueAny }
+        val paramKey = "parameter_key"
+        val paramStringValue = "parameter_value"
+        val paramKey2 = "parameter_key2"
+        val paramIntValue = 100
+        val paramKey3 = "parameter_key3"
+        val paramLongValue = 103L
+        val paramKey4 = "parameter_key4"
+        val paramDoubleValue = 101.00
+        val paramKey5 = "parameter_key5"
+        val paramBooleanValue = true
+        val paramKey6 = "parameter_key6"
+        val paramListNumbers = listOf(1L, 2f, 4.0)
+        val paramKey7 = "parameter_key7"
+        val paramListStrings = listOf("one", "two", "three")
+        val eventType = "EVENT_TYPE"
+
         clickstreamTest.send {
             space {
                 id(1)
@@ -46,20 +55,29 @@ class ClickstreamEventTest {
             }
             action(UiProperties.Action.SHOW)
             interaction(true)
-            someEvent = event {
-                type("event_type")
-                parameter(
-                    key = "parameter_key",
-                    value = "parameter_value"
-                )
+            event {
+                type(eventType)
+                parameter(key = paramKey, value = paramStringValue)
+                parameter(key = paramKey2, value = paramIntValue)
+                parameter(key = paramKey3, value = paramLongValue)
+                parameter(key = paramKey4, value = paramDoubleValue)
+                parameter(key = paramKey5, value = paramBooleanValue)
+                stringListParameter(key = paramKey6, value = paramListStrings)
+                numberListParameter(key = paramKey7, value = paramListNumbers)
             }.build()
-            someEvent
         }
-        coVerify { clickstreamTest.eventSender.send(any()) }
-        assertEquals(someEvent, resultEvent)
-        assert(resultEvent is ClickstreamEvent)
-        assertEquals(someEvent.uiProperties, (resultEvent as ClickstreamEvent).uiProperties)
-        assertEquals(someEvent.eventProperties, (resultEvent as ClickstreamEvent).eventProperties)
+
+        clickstreamTest.verifyEventSent(
+            event = eventType, eventParams = mapOf(
+                paramKey to paramStringValue,
+                paramKey2 to paramIntValue,
+                paramKey3 to paramLongValue,
+                paramKey4 to paramDoubleValue,
+                paramKey5 to paramBooleanValue,
+                paramKey6 to paramListStrings,
+                paramKey7 to paramListNumbers,
+            )
+        )
     }
 
 }
