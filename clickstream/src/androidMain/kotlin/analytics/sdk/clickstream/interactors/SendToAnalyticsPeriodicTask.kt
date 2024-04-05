@@ -1,4 +1,4 @@
-package analytics.sdk.clickstream
+package analytics.sdk.clickstream.interactors
 
 import analytics.sdk.clickstream.data.EventResult
 import analytics.sdk.clickstream.data.interactor.GetUnDispatchedEvents

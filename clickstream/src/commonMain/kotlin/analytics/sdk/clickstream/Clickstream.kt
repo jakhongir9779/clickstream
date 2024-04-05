@@ -4,6 +4,7 @@ import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.di.initKoin
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ScreenLifecycleState
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.PropertiesProvider
@@ -35,6 +36,15 @@ object Clickstream {
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
         instance.send(builder)
+    }
+
+    fun sendScreenLifecycleChange(screenName: String, lifecycleState: ScreenLifecycleState) {
+        when(lifecycleState) {
+            ScreenLifecycleState.CREATED -> TODO()
+            ScreenLifecycleState.RESUMED -> TODO()
+            ScreenLifecycleState.STOPPED -> TODO()
+            ScreenLifecycleState.PAUSED -> TODO()
+        }
     }
 
     val instance

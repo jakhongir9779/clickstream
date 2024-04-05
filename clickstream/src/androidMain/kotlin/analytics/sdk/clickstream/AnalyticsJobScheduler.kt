@@ -1,6 +1,7 @@
 package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.domain.ClickstreamConfig
+import analytics.sdk.clickstream.interactors.SendToAnalyticsPeriodicTask
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
