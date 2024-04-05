@@ -41,31 +41,31 @@ fun Clickstream.trackScreen(activity: Activity) {
         activity.registerActivityLifecycleCallbacks(
             object : ActivityLifecycleCallbacks {
                 override fun onActivityCreated(p0: Activity, p1: Bundle?) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Created" }
                 }
 
                 override fun onActivityStarted(p0: Activity) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Started" }
                 }
 
                 override fun onActivityResumed(p0: Activity) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Resumed" }
                 }
 
                 override fun onActivityPaused(p0: Activity) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Paused" }
                 }
 
                 override fun onActivityStopped(p0: Activity) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Stopped" }
                 }
 
                 override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {
-                    // TODO
+                    co.touchlab.kermit.Logger.i { "SaveInstanceState" }
                 }
 
                 override fun onActivityDestroyed(p0: Activity) {
-                    TODO("Not yet implemented")
+                    co.touchlab.kermit.Logger.i { "Destroyed" }
                 }
 
             }
