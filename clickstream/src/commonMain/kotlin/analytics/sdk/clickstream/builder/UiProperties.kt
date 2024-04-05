@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UiProperties internal constructor(
-    val widget: Widget?,
-    val space: Space?,
-    val section: Section?,
-    val group: Group?,
-    val action: Action?
+    val widget: Widget? = null,
+    val space: Space? = null,
+    val section: Section? = null,
+    val group: Group? = null,
+    val action: Action? = null,
 ) {
     enum class Action {
         SHOW,

@@ -2,6 +2,7 @@ plugins {
     id("maven-publish")
     kotlin("multiplatform")
     id("com.android.library")
+    kotlin("plugin.serialization") version Versions.Kotlin.core
 }
 
 kotlin {
@@ -18,20 +19,19 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(Libraries.Analytics.event)
                 implementation(Libraries.Analytics.common)
                 implementation(Libraries.Analytics.clickstream)
                 implementation(Libraries.Analytics.platform)
-                implementation(Libraries.Koin.core)
                 implementation(Libraries.Tests.coroutines)
             }
         }
 
         val androidMain by getting {
             dependencies {
-                api(Libraries.Koin.android)
-                api(Libraries.Koin.test)
                 implementation(Libraries.Tests.mockK)
                 implementation(Libraries.Tests.junit)
+                implementation(Libraries.Kotlin.serializationJson)
             }
         }
     }
