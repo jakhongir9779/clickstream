@@ -6,6 +6,7 @@ import analytics.sdk.clickstream.builder.space.Space
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -28,17 +29,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    GreetingView("Clickstream SDK app")
-
-                    Button(onClick = ::sendSomeEvent) {
-                        Text("Click Me to send some event!")
-                    }
-                    Spacer(modifier = Modifier.size(20.dp))
-                    Button(onClick = ::sendDeeplinkEvent) {
-                        Text("Click Me to send DEEPLINK event!")
+                    Column {
+                        GreetingView("Clickstream SDK app")
+                        Button(onClick = ::sendSomeEvent) {
+                            Text("Click Me to send some event!")
+                        }
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Button(onClick = ::sendDeeplinkEvent) {
+                            Text("Click Me to send DEEPLINK event!")
+                        }
                     }
                 }
             }
@@ -84,8 +85,7 @@ class MainActivity : ComponentActivity() {
             event {
                 type("event_type")
                 parameter(
-                    key = "parameter_key",
-                    value = "parameter_value"
+                    key = "parameter_key", value = "parameter_value"
                 )
             }.build()
         }
