@@ -31,13 +31,14 @@ object Libraries {
         }
     }
 
-        object SqlDelight {
+    object SqlDelight {
 
         object Driver {
             const val android = "app.cash.sqldelight:android-driver:${Versions.sqlDelight}"
             const val native = "app.cash.sqldelight:native-driver:${Versions.sqlDelight}"
         }
     }
+
     object Kotlin {
 
         private const val version = Versions.kotlin
@@ -164,19 +165,31 @@ object Libraries {
     object Analytics {
         const val group = "uz.uzum.mobile.analytics.sdk"
 
-        const val clickstream = "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
-        const val clickstreamTest = "$group:${Artifacts.Analytics.clickstreamTest}:${Versions.Analytics.clickstreamTest}"
-        const val clickstreamEventSenderTest = "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
+        const val clickstream =
+            "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
+        const val clickstreamTest =
+            "$group:${Artifacts.Analytics.clickstreamTest}:${Versions.Analytics.clickstreamTest}"
+        const val clickstreamEventSenderTest =
+            "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
         const val composite = "$group:composite:${Versions.Analytics.composite}"
         const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"
-        const val eventSender = "$group:${Artifacts.Analytics.eventSender}:${Versions.Analytics.eventSender}"
+        const val eventSender =
+            "$group:${Artifacts.Analytics.eventSender}:${Versions.Analytics.eventSender}"
         const val database = "$group:${Artifacts.Analytics.database}:${Versions.Analytics.database}"
         const val settings = "$group:${Artifacts.Analytics.settings}:${Versions.Analytics.settings}"
         const val platform = "$group:${Artifacts.Analytics.platform}:${Versions.Analytics.platform}"
-        const val platformAndroid = "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
-        const val properties = "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
-        const val analyticsType = "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
+        const val platformAndroid =
+            "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
+        const val properties =
+            "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
+        const val analyticsType =
+            "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
         const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
 
+    }
+
+    object Firebase {
+        const val group = "com.google.firebase"
+        const val messaging = "$group:firebase-messaging:${Versions.Firebase.messaging}"
     }
 }

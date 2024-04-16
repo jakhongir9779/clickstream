@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331553652511",
+    "project_id": "clickstream-sample-app",
+    "storage_bucket": "clickstream-sample-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331553652511:android:93fc68732a3f2909ac3a2a",
+        "android_client_info": {
+          "package_name": "uz.uzum.mobile.analytics.sdk.android.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHza64KrxHvg-ZtKW4HhFfec28nOHfIQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
