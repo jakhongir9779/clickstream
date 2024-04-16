@@ -47,7 +47,19 @@ class ClickstreamSdkImpl(
 
     fun sendFingerPrint() {
         launch(coroutineExceptionHandler) {
-            dependencies.fingerprinter.getData()
+            val fingerprint = dependencies.fingerprinter.getData()
+            send {
+                event {
+                    fingerprint.forEach { (key, value) ->
+                        parameter(
+                            key = key,
+                            value = value
+                        )
+                    }
+                    type("fingerprint")
+                }.build()
+            }
+
         }
     }
 
