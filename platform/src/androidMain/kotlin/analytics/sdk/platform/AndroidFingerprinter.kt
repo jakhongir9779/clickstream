@@ -28,11 +28,13 @@ class AndroidFingerprinter(context: Context) : Fingerprinter {
             ).orEmpty()
         }
 
-        val result = mutableMapOf("fingerprint" to fingerprint)
-        result["deviceId"] = deviceId.deviceId
-        result["androidId"] = deviceId.androidId
-        result["gsfId"] = deviceId.gsfId
-        result["mediaDrmId"] = deviceId.mediaDrmId
+        val result = mutableMapOf(
+            "fingerprint" to fingerprint,
+            "deviceId" to deviceId.deviceId,
+            "androidId" to deviceId.androidId,
+            "gsfId" to deviceId.gsfId,
+            "mediaDrmId" to deviceId.mediaDrmId
+        )
 
         signals.forEach {
             val data = when (it.value) {
