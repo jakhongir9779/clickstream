@@ -56,7 +56,7 @@ class ClickstreamSdkImpl(
                             value = value
                         )
                     }
-                    type("fingerprint")
+                    type("FINGERPRINT")
                 }.build()
             }
 
