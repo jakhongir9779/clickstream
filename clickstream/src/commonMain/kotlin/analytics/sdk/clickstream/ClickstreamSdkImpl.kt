@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.CoroutineContext
 
 class ClickstreamSdkImpl(
@@ -40,6 +41,11 @@ class ClickstreamSdkImpl(
 
     init {
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
+
+        runBlocking {
+            println("Try to get data")
+            println(dependencies.fingerprinter.getData())
+        }
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {

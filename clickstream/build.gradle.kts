@@ -67,6 +67,7 @@ kotlin {
                 implementation(Libraries.Analytics.platformAndroid)
                 implementation(Libraries.Ktor.Engine.okHttp)
 
+
                 // DI
                 implementation(Libraries.Koin.android)
             }

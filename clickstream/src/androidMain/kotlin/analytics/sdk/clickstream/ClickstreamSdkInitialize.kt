@@ -22,3 +22,5 @@ fun Clickstream.initializeForAndroid(
         analyticsJobScheduler = AnalyticsJobScheduler(context),
     )
 }
+
+

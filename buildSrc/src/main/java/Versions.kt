@@ -2,6 +2,8 @@ object Versions {
 
     val android = Android
 
+    const val fingerprinter = "2.1.0"
+
     object Plugins {
         const val swiftPackage = "2.2.1"
     }
@@ -70,7 +72,7 @@ object Versions {
         const val eventSender = "1.0"
         const val database = "1.2"
         const val settings = "1.0"
-        const val platform = "1.0"
+        const val platform = "1.1"
         const val properties = "1.1"
         const val composite = "1.0"
         const val clickstreamTest = "1.3"
