@@ -22,13 +22,15 @@ import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.CoroutineContext
 
 class ClickstreamSdkImpl(
-    dependencies: PlatformDependencies,
+    val dependencies: PlatformDependencies,
     val clickStreamConfig: ClickstreamConfig,
     val analyticsJobScheduler: AnalyticsJobScheduler,
     propertiesProvider: PropertiesProvider?,
     api: ClickstreamAnalyticsApi,
     val sender: AnalyticsEventSender,
 ) : CoroutineScope {
+
+
     private val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
     private val defaultPropertiesProvider =
@@ -41,10 +43,11 @@ class ClickstreamSdkImpl(
 
     init {
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
+    }
 
-        runBlocking {
-            println("Try to get data")
-            println(dependencies.fingerprinter.getData())
+    fun sendFingerPrint() {
+        launch {
+            dependencies.fingerprinter.getData()
         }
     }
 

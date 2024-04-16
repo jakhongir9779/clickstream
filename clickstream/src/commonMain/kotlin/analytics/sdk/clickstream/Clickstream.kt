@@ -31,6 +31,8 @@ object Clickstream {
                 propertiesProvider
             )
         }
+
+        clickstreamSdk?.sendFingerPrint()
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
