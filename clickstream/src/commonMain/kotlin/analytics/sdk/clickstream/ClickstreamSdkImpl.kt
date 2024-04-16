@@ -46,7 +46,7 @@ class ClickstreamSdkImpl(
     }
 
     fun sendFingerPrint() {
-        launch {
+        launch(coroutineExceptionHandler) {
             dependencies.fingerprinter.getData()
         }
     }
