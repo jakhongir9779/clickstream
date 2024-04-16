@@ -39,15 +39,23 @@ object Clickstream {
     }
 
     fun sendScreenLifecycleChange(screenName: String, lifecycleState: ScreenLifecycleState) {
-        when(lifecycleState) {
-            ScreenLifecycleState.CREATED -> TODO()
-            ScreenLifecycleState.RESUMED -> TODO()
-            ScreenLifecycleState.STOPPED -> TODO()
-            ScreenLifecycleState.PAUSED -> TODO()
+        send {
+            event {
+                type("SCREEN_LIFECYCLE")
+                parameter(
+                    key = "SCREEN_NAME",
+                    value = screenName
+                )
+
+                parameter(
+                    key = "LIFECYCLE_STATE",
+                    value = lifecycleState.name
+                )
+            }.build()
         }
     }
 
-    val instance
+    private val instance
         get() = clickstreamSdk ?: throw Exception("Run ClickstreamSdk.initalize() first")
 
 }
