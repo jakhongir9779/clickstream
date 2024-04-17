@@ -2,6 +2,7 @@ package uz.uzum.mobile.analytics.sdk.android
 
 import analytics.sdk.clickstream.AnalyticsSdkWorkerFactory
 import analytics.sdk.clickstream.Clickstream
+import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.initializeForAndroid
 import analytics.sdk.properties.PropertiesProvider
 import analytics.sdk.properties.application.ApplicationAnalyticsPropertyProvider
@@ -39,6 +40,7 @@ class App : Application(), Configuration.Provider {
             context = applicationContext,
             url = "https://clickstream-b2c.dev.cluster.kznexpess.com/api/analytics/v2/",
             requestHeaders = mapOf("Authorization" to { header }),
+            config = ClickstreamConfig(trackAppLifecycle = true),
             propertiesProvider = PropertiesProvider(
                 appProps = ApplicationAnalyticsPropertyProvider(
                     setOf(

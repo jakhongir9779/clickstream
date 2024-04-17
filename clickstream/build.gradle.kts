@@ -66,6 +66,7 @@ kotlin {
                 api(Libraries.AndroidX.work)
                 implementation(Libraries.Analytics.platformAndroid)
                 implementation(Libraries.Ktor.Engine.okHttp)
+                implementation("androidx.lifecycle:lifecycle-process:2.7.0")
 
                 // DI
                 implementation(Libraries.Koin.android)
