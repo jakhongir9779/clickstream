@@ -12,7 +12,6 @@ kotlin {
                 jvmTarget = "1.8"
             }
         }
-        publishLibraryVariants("release")
     }
 
     listOf(
@@ -28,7 +27,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libraries.Analytics.analyticsType)
+                implementation(project(":shared:analyticstype"))
             }
         }
     }
@@ -39,23 +38,5 @@ android {
     compileSdk = Versions.Android.compileSdkVersion
     defaultConfig {
         minSdk = Versions.Android.minSdkVersion
-    }
-}
-
-publishing {
-    publications {
-        withType<MavenPublication> {
-            groupId = Libraries.Analytics.group
-            version = Versions.Analytics.event
-        }
-    }
-    repositories {
-        maven {
-            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
-            credentials(PasswordCredentials::class) {
-                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
-            }
-        }
     }
 }

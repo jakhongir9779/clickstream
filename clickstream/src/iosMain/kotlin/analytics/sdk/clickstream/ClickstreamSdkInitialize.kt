@@ -1,7 +1,6 @@
 package analytics.sdk.clickstream
 
 import analytics.sdk.clickstream.domain.ClickstreamConfig
-import analytics.sdk.platform.IosDependencies
 import analytics.sdk.properties.PropertiesProvider
 
 fun ClickstreamSdkImpl.initialize(

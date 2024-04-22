@@ -171,22 +171,6 @@ object Libraries {
             "$group:${Artifacts.Analytics.clickstream}:${Versions.Analytics.clickstream}"
         const val clickstreamTest =
             "$group:${Artifacts.Analytics.clickstreamTest}:${Versions.Analytics.clickstreamTest}"
-        const val clickstreamEventSenderTest =
-            "$group:clickstream-eventsender-test:${Versions.Analytics.clickstreamEventsenderTest}"
-        const val composite = "$group:composite:${Versions.Analytics.composite}"
-        const val event = "$group:${Artifacts.Analytics.event}:${Versions.Analytics.event}"
-        const val eventSender =
-            "$group:${Artifacts.Analytics.eventSender}:${Versions.Analytics.eventSender}"
-        const val database = "$group:${Artifacts.Analytics.database}:${Versions.Analytics.database}"
-        const val settings = "$group:${Artifacts.Analytics.settings}:${Versions.Analytics.settings}"
-        const val platform = "$group:${Artifacts.Analytics.platform}:${Versions.Analytics.platform}"
-        const val platformAndroid =
-            "$group:${Artifacts.Analytics.platform}-android:${Versions.Analytics.platform}"
-        const val properties =
-            "$group:${Artifacts.Analytics.properties}:${Versions.Analytics.properties}"
-        const val analyticsType =
-            "$group:${Artifacts.Analytics.analyticsType}:${Versions.Analytics.analyticsType}"
-        const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
 
     }
 

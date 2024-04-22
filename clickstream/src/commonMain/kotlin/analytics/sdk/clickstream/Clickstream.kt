@@ -4,6 +4,7 @@ import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.di.initKoin
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
+import analytics.sdk.clickstream.domain.model.ScreenLifecycleState
 import analytics.sdk.clickstream.lifecycle.registerAppLifecycleCallbacks
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
@@ -45,15 +46,8 @@ object Clickstream {
         send {
             event {
                 type("SCREEN_LIFECYCLE")
-                parameter(
-                    key = "SCREEN_NAME",
-                    value = screenName
-                )
-
-                parameter(
-                    key = "LIFECYCLE_STATE",
-                    value = lifecycleState.name
-                )
+                parameter(key = "SCREEN_NAME", value = screenName)
+                parameter(key = "LIFECYCLE_STATE", value = lifecycleState.name)
             }.build()
         }
     }

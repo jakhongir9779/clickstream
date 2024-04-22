@@ -15,7 +15,6 @@ kotlin {
                 jvmTarget = "1.8"
             }
         }
-        publishLibraryVariants("release")
     }
 
     listOf(
@@ -31,8 +30,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.Analytics.settings)
-                implementation(Libraries.Analytics.database)
+                implementation(project(":shared:settings"))
+                implementation(project(":shared:database"))
             }
         }
 
@@ -58,22 +57,4 @@ project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
         .filterIsInstance<KotlinNativeTarget>()
         .flatMap { it.binaries }
         .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
-}
-
-publishing {
-    publications {
-        withType<MavenPublication> {
-            groupId = Libraries.Analytics.group
-            version = Versions.Analytics.platform
-        }
-    }
-    repositories {
-        maven {
-            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
-            credentials(PasswordCredentials::class) {
-                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
-            }
-        }
-    }
 }

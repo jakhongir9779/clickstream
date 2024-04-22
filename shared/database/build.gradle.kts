@@ -7,14 +7,12 @@ plugins {
 }
 
 kotlin {
-
     androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
         }
-        publishLibraryVariants("release")
     }
 
     listOf(
@@ -63,24 +61,6 @@ sqldelight {
         create("ClickstreamDatabase") {
             packageName.set("analytics.sdk.database")
             version = 2
-        }
-    }
-}
-
-publishing {
-    publications {
-        withType<MavenPublication> {
-            groupId = Libraries.Analytics.group
-            version = Versions.Analytics.database
-        }
-    }
-    repositories {
-        maven {
-            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
-            credentials(PasswordCredentials::class) {
-                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
-            }
         }
     }
 }

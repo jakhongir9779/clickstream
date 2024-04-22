@@ -14,17 +14,17 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AnalyticsSdk"
-include(":androidApp")
+include(":apps:androidApp")
 
 include(
-    ":common",
-    ":event",
-    ":analyticstype",
     ":clickstream-test",
-
     ":clickstream",
-    ":platform",
-    ":properties",
-    ":database",
-    ":settings",
+    ":shared",
+    ":shared:common",
+    ":shared:event",
+    ":shared:analyticstype",
+    ":shared:platform",
+    ":shared:properties",
+    ":shared:database",
+    ":shared:settings",
 )
