@@ -40,6 +40,23 @@ object Clickstream {
         instance.send(builder)
     }
 
+    fun sendScreenLifecycleChange(screenName: String, lifecycleState: ScreenLifecycleState) {
+        send {
+            event {
+                type("SCREEN_LIFECYCLE")
+                parameter(
+                    key = "SCREEN_NAME",
+                    value = screenName
+                )
+
+                parameter(
+                    key = "LIFECYCLE_STATE",
+                    value = lifecycleState.name
+                )
+            }.build()
+        }
+    }
+
     fun deeplinkOpened(deeplink: String) {
         send {
             event {

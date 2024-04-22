@@ -3,6 +3,7 @@ package uz.uzum.mobile.analytics.sdk.android
 import analytics.sdk.clickstream.Clickstream
 import analytics.sdk.clickstream.builder.UiProperties
 import analytics.sdk.clickstream.builder.space.Space
+import analytics.sdk.clickstream.interactors.trackScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,10 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Clickstream.trackScreen(this)
+
         sendSomeEvent()
 
         setContent {
