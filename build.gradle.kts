@@ -1,9 +1,10 @@
 plugins {
     //trick: for the same plugin versions in all sub-modules
-    id("com.android.application").version("8.1.3").apply(false)
-    id("com.android.library").version("8.1.3").apply(false)
-    kotlin("android").version(Versions.Kotlin.core).apply(false)
-    kotlin("multiplatform").version(Versions.Kotlin.core).apply(false)
+    id("com.android.application") version "8.1.3" apply false
+    id("com.android.library") version "8.1.3" apply false
+    kotlin("android") version Versions.Kotlin.core apply false
+    kotlin("multiplatform") version Versions.Kotlin.core apply false
+    id("com.google.gms.google-services") version "4.4.1" apply false
     id("org.gradle.maven-publish")
 }
 

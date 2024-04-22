@@ -4,8 +4,7 @@ import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.di.initKoin
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
-import analytics.sdk.clickstream.lifecycle.AppLifecycle
-import analytics.sdk.clickstream.lifecycle.AppLifecycleEvent
+import analytics.sdk.clickstream.lifecycle.registerAppLifecycleCallbacks
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.PropertiesProvider
@@ -33,11 +32,8 @@ object Clickstream {
                 propertiesProvider
             )
         }
-        if (clickStreamConfig.trackAppLifecycle) {
-            AppLifecycle.registerLifecycleCallbacks { lifecycleEvent ->
-                sendLifecycleEvent(lifecycleEvent)
-            }
-        }
+        registerAppLifecycleCallbacks(clickStreamConfig.trackAppLifecycle)
+        notificationTrackingInitializer(clickStreamConfig.trackNotifications, dependencies)
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
@@ -53,15 +49,6 @@ object Clickstream {
                     parameter(key, value)
                 }
                 parameter("link", deeplink)
-            }.build()
-        }
-    }
-
-    private fun sendLifecycleEvent(lifecycleEvent: AppLifecycleEvent) {
-        send {
-            event {
-                type("APP_LIFECYCLE")
-                parameter("name", lifecycleEvent.name)
             }.build()
         }
     }
