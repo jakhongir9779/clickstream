@@ -10,4 +10,6 @@ interface PlatformDependencies {
     val settings: PlatformSettings
 
     val utils: PlatformUtils
+
+    val fingerprinter: Fingerprinter
 }

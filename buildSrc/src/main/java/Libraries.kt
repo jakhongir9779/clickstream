@@ -6,6 +6,8 @@ object Libraries {
 
     const val multiplatformSettings = "com.russhwolf:multiplatform-settings:${Versions.settings}"
 
+    const val fingerprinter =
+        "com.github.fingerprintjs:fingerprint-android:${Versions.fingerprinter}"
 
     object Ktor {
         const val core = "io.ktor:ktor-client-core:${Versions.ktor}"
