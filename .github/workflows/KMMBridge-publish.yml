@@ -13,5 +13,8 @@ jobs:
     with:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
-#    secrets:
-#      PODSPEC_SSH_KEY: ${{ secrets.PODSPEC_SSH_KEY }}
+    secrets:
+      NEXUS_URL: ${{ secrets.nexus_url }}
+      NEXUS_USER: ${{ secrets.nexus_user }}
+      NEXUS_PASSWORD: ${{ secrets.nexus_password }}
+
