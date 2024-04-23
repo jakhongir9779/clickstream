@@ -6,7 +6,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization") version Versions.Kotlin.core
-    id("io.github.luca992.multiplatform-swiftpackage") version Versions.Plugins.swiftPackage
+    id("co.touchlab.kmmbridge") version Versions.kmmBridge
+    `maven-publish`
 }
 
 version = Versions.Analytics.clickstream
@@ -88,13 +89,13 @@ kotlin {
         }
     }
 
-    multiplatformSwiftPackage {
-        swiftToolsVersion(Versions.Ios.swiftToolsVersion)
-        targetPlatforms {
-            iOS { v(Versions.Ios.targetPlatformVersion) }
-        }
-        outputDirectory(File(rootDir, "/"))
-    }
+//    multiplatformSwiftPackage {
+//        swiftToolsVersion(Versions.Ios.swiftToolsVersion)
+//        targetPlatforms {
+//            iOS { v(Versions.Ios.targetPlatformVersion) }
+//        }
+//        outputDirectory(File(rootDir, "/"))
+//    }
 }
 
 android {
@@ -113,6 +114,13 @@ project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
         .filterIsInstance<KotlinNativeTarget>()
         .flatMap { it.binaries }
         .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+}
+
+addGithubPackagesRepository()
+
+kmmbridge {
+    mavenPublishArtifacts()
+    spm()
 }
 
 publishing {

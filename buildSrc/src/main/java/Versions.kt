@@ -3,6 +3,7 @@ object Versions {
     val android = Android
 
     const val fingerprinter = "2.1.0"
+    const val kmmBridge = "0.5.1"
 
     object Plugins {
         const val swiftPackage = "2.2.1"
