@@ -14,4 +14,4 @@ jobs:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
     secrets:
-      gradle_params: "-PNEXUS_USER=${{ secrets.NEXUS_USER }} -PNEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }} -PNEXUS_URL=${{ secrets.NEXUS_URL }}"
+      gradle_params: -PNEXUS_USER=${{ secrets.NEXUS_USER }} -PNEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }} -PNEXUS_URL=${{ secrets.NEXUS_URL }}
