@@ -14,7 +14,6 @@ jobs:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
       publishTask: kmmBridgePublish publishKotlinMultiplatformPublicationToGitHubPackagesRepository publishAndroidDebugPublicationToGitHubPackagesRepository publishAndroidReleasePublicationToGitHubPackagesRepository
-    secrets:
       NEXUS_URL: ${{ secrets.nexus_url }}
       NEXUS_USER: ${{ secrets.nexus_user }}
       NEXUS_PASSWORD: ${{ secrets.nexus_password }}
