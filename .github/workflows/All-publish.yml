@@ -15,4 +15,4 @@ jobs:
       versionBaseProperty: LIBRARY_VERSION
       publishTask: kmmBridgePublish publishKotlinMultiplatformPublicationToGitHubPackagesRepository publishAndroidDebugPublicationToGitHubPackagesRepository publishAndroidReleasePublicationToGitHubPackagesRepository
     secrets:
-      gradle_params: -PNEXUS_USER=${{ secrets.NEXUS_USER }}
+      gradle_params: -PNEXUS_URL=${{ secrets.NEXUS_URL }}
