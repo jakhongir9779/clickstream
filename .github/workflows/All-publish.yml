@@ -10,11 +10,11 @@ jobs:
       contents: write
       packages: write
     uses: touchlab/KMMBridgeGithubWorkflow/.github/workflows/faktorybuildautoversion.yml@v1.1
+    env:
+      NEXUS_URL: ${{ secrets.nexus_url }}
+      NEXUS_USER: ${{ secrets.nexus_user }}
+      NEXUS_PASSWORD: ${{ secrets.nexus_password }}
     with:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
       publishTask: kmmBridgePublish publishKotlinMultiplatformPublicationToGitHubPackagesRepository publishAndroidDebugPublicationToGitHubPackagesRepository publishAndroidReleasePublicationToGitHubPackagesRepository
-      NEXUS_URL: ${{ secrets.nexus_url }}
-      NEXUS_USER: ${{ secrets.nexus_user }}
-      NEXUS_PASSWORD: ${{ secrets.nexus_password }}
-
