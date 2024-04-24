@@ -4,6 +4,7 @@ import analytics.sdk.clickstream.builder.ClickstreamBuilder
 import analytics.sdk.clickstream.di.initKoin
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
+import analytics.sdk.clickstream.lifecycle.registerAppLifecycleCallbacks
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.PropertiesProvider
@@ -31,6 +32,8 @@ object Clickstream {
                 propertiesProvider
             )
         }
+        registerAppLifecycleCallbacks(clickStreamConfig.trackAppLifecycle)
+        notificationTrackingInitializer(clickStreamConfig.trackNotifications, dependencies)
 
         clickstreamSdk?.sendFingerPrint()
     }

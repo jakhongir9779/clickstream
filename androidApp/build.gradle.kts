@@ -2,6 +2,7 @@ import Libraries.Tests.testLibs
 
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
     kotlin("android")
 }
 
@@ -49,8 +50,10 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.3")
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.activity:activity-compose:1.7.1")
+    implementation("com.google.gms:google-services:4.4.1")
 
     implementation(Libraries.AndroidX.startup)
+    implementation(Libraries.Firebase.messaging)
     implementation(project(":clickstream"))
     implementation(project(":event"))
     implementation(project(":analyticstype"))

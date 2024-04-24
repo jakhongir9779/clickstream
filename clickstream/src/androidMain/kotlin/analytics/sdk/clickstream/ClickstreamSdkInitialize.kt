@@ -5,6 +5,7 @@ import analytics.sdk.platform.AndroidDependencies
 import analytics.sdk.properties.PropertiesProvider
 import android.content.Context
 
+
 // Initialize for Android
 fun Clickstream.initializeForAndroid(
     context: Context,
@@ -12,7 +13,7 @@ fun Clickstream.initializeForAndroid(
     requestHeaders: Map<String, () -> String>,
     config: ClickstreamConfig = ClickstreamConfig(),
     propertiesProvider: PropertiesProvider? = null,
-)  {
+) {
     initialize(
         url = url,
         dependencies = AndroidDependencies(context),

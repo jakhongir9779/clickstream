@@ -189,4 +189,9 @@ object Libraries {
         const val common = "$group:${Artifacts.Analytics.common}:${Versions.Analytics.common}"
 
     }
+
+    object Firebase {
+        const val group = "com.google.firebase"
+        const val messaging = "$group:firebase-messaging:${Versions.Firebase.messaging}"
+    }
 }

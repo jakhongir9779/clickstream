@@ -398,7 +398,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DayMarket/mobile-analytics-sdk";
 			requirement = {
-				branch = swiftpackage;
+				branch = master;
 				kind = branch;
 			};
 		};

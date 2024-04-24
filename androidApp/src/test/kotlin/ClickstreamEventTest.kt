@@ -89,7 +89,6 @@ class ClickstreamEventTest {
             "utm_medium" to "ecosystem_referral",
             "utm_campaign" to "banner_in_menu",
         )
-
         val query = params.toList().joinToString("&") { (key, value) -> "$key=$value" }
         val deeplinkString = "https://uzum.uz/ru?$query"
         Clickstream.deeplinkOpened(deeplinkString)
