@@ -18,16 +18,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.CoroutineContext
 
 class ClickstreamSdkImpl(
-    dependencies: PlatformDependencies,
+    val dependencies: PlatformDependencies,
     val clickStreamConfig: ClickstreamConfig,
     val analyticsJobScheduler: AnalyticsJobScheduler,
     propertiesProvider: PropertiesProvider?,
     api: ClickstreamAnalyticsApi,
     val sender: AnalyticsEventSender,
 ) : CoroutineScope {
+
+
     private val eventPropertiesDelegate = EventPropertiesDelegate(dependencies)
 
     private val defaultPropertiesProvider =
@@ -40,6 +43,24 @@ class ClickstreamSdkImpl(
 
     init {
         dependencies.utils.subscribeOnSessionUpdate(eventPropertiesDelegate)
+    }
+
+    fun sendFingerPrint() {
+        launch(coroutineExceptionHandler) {
+            val fingerprint = dependencies.fingerprinter.getData()
+            send {
+                event {
+                    fingerprint.forEach { (key, value) ->
+                        parameter(
+                            key = key,
+                            value = value
+                        )
+                    }
+                    type("FINGERPRINT")
+                }.build()
+            }
+
+        }
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {

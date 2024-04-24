@@ -35,6 +35,8 @@ object Clickstream {
         }
         registerAppLifecycleCallbacks(clickStreamConfig.trackAppLifecycle)
         notificationTrackingInitializer(clickStreamConfig.trackNotifications, dependencies)
+
+        clickstreamSdk?.sendFingerPrint()
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {

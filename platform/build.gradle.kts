@@ -35,6 +35,13 @@ kotlin {
                 implementation(Libraries.Analytics.database)
             }
         }
+
+        androidMain {
+            dependencies {
+                implementation(Libraries.Kotlin.Coroutines.core)
+                implementation(Libraries.fingerprinter)
+            }
+        }
     }
 }
 
