@@ -1,0 +1,24 @@
+{
+  "object" : {
+    "artifacts" : [
+      {
+        "kind" : "xcframework",
+        "packageRef" : {
+          "identity" : "mobile-analytics-sdk",
+          "kind" : "root",
+          "location" : "/Users/j.madaminov/AndroidStudioProjects/mobile-analytics-sdk",
+          "name" : "mobile-analytics-sdk"
+        },
+        "path" : "/Users/j.madaminov/AndroidStudioProjects/mobile-analytics-sdk/clickstream.xcframework",
+        "source" : {
+          "type" : "local"
+        },
+        "targetName" : "clickstream"
+      }
+    ],
+    "dependencies" : [
+
+    ]
+  },
+  "version" : 6
+}

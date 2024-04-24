@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DayMarket/mobile-analytics-sdk",
       "state" : {
-        "branch" : "swiftpackage",
-        "revision" : "99ab1f6c5f5c63b2c250d59ce240966108319256"
+        "branch" : "master",
+        "revision" : "a57287ecaa07af01825da22a5f06ce5ca54270dc"
       }
     }
   ],

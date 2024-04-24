@@ -7,7 +7,10 @@ import analytics.sdk.clickstream.interactors.trackScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -15,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,20 +26,29 @@ class MainActivity : ComponentActivity() {
         Clickstream.trackScreen(this)
 
         sendSomeEvent()
+
         setContent {
             MyApplicationTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    GreetingView("Clickstream SDK app")
-
-                    Button(onClick = ::sendSomeEvent) {
-                        Text("Click Me to send some event!")
+                    Column {
+                        GreetingView("Clickstream SDK app")
+                        Button(onClick = ::sendSomeEvent) {
+                            Text("Click Me to send some event!")
+                        }
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Button(onClick = ::sendDeeplinkEvent) {
+                            Text("Click Me to send DEEPLINK event!")
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun sendDeeplinkEvent() {
+        Clickstream.deeplinkOpened("https://uzum.uz/ru?utm_source=uzum_bank&utm_medium=ecosystem_referral&utm_campaign=banner_in_menu")
     }
 
     private fun sendSomeEvent() {
@@ -73,8 +86,7 @@ class MainActivity : ComponentActivity() {
             event {
                 type("event_type")
                 parameter(
-                    key = "parameter_key",
-                    value = "parameter_value"
+                    key = "parameter_key", value = "parameter_value"
                 )
             }.build()
         }

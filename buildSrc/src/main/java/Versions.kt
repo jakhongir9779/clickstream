@@ -64,7 +64,7 @@ object Versions {
     }
 
     object Analytics {
-        const val clickstream = "1.4"
+        const val clickstream = "1.5"
 
         const val event = "1.0"
         const val eventSender = "1.0"
@@ -77,5 +77,9 @@ object Versions {
         const val clickstreamEventsenderTest = "1.0"
         const val analyticsType = "1.0"
         const val common = "1.0"
+    }
+
+    object Firebase {
+        const val messaging = "23.4.1"
     }
 }

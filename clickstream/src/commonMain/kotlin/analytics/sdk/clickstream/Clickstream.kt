@@ -5,6 +5,7 @@ import analytics.sdk.clickstream.di.initKoin
 import analytics.sdk.clickstream.domain.ClickstreamConfig
 import analytics.sdk.clickstream.domain.model.ClickstreamEvent
 import analytics.sdk.clickstream.domain.model.ScreenLifecycleState
+import analytics.sdk.clickstream.lifecycle.registerAppLifecycleCallbacks
 import analytics.sdk.common.extensions.multiParametersOf
 import analytics.sdk.platform.PlatformDependencies
 import analytics.sdk.properties.PropertiesProvider
@@ -32,6 +33,8 @@ object Clickstream {
                 propertiesProvider
             )
         }
+        registerAppLifecycleCallbacks(clickStreamConfig.trackAppLifecycle)
+        notificationTrackingInitializer(clickStreamConfig.trackNotifications, dependencies)
     }
 
     fun send(builder: ClickstreamBuilder.() -> ClickstreamEvent) {
@@ -54,6 +57,25 @@ object Clickstream {
             }.build()
         }
     }
+
+    fun deeplinkOpened(deeplink: String) {
+        send {
+            event {
+                type("DEEPLINK_OPENED")
+                val keyValuePairs = getDeeplinkParamPairs(deeplink)
+                keyValuePairs.forEach { (key, value) ->
+                    parameter(key, value)
+                }
+                parameter("link", deeplink)
+            }.build()
+        }
+    }
+
+    private fun getDeeplinkParamPairs(deeplink: String) =
+        deeplink.substringAfter('?').split('&').map {
+            val keyValue = it.split('=')
+            (keyValue.firstOrNull() ?: "") to (keyValue.getOrNull(1) ?: "")
+        }
 
     private val instance
         get() = clickstreamSdk ?: throw Exception("Run ClickstreamSdk.initalize() first")
