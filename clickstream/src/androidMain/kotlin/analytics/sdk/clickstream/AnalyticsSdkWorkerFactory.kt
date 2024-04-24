@@ -1,5 +1,6 @@
 package analytics.sdk.clickstream
 
+import analytics.sdk.clickstream.interactors.SendToAnalyticsPeriodicTask
 import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
