@@ -2,7 +2,7 @@ package analytics.sdk.properties.user.default
 
 import analytics.sdk.platform.AndroidDependencies
 import analytics.sdk.platform.PlatformDependencies
-import analytics.sdk.properties.user.UserAnalyticsProperties
+import analytics.sdk.properties.user.UserAnalyticsProperty
 import android.content.Context
 import android.telephony.TelephonyManager
 import android.text.TextUtils
@@ -10,7 +10,7 @@ import co.touchlab.kermit.Logger
 
 internal actual class OperatorNetworkCodeProperty actual constructor(
     private val dependencies: PlatformDependencies
-) : UserAnalyticsProperties {
+) : UserAnalyticsProperty {
     override val key: String = operatorNetworkCodePropertyKey
 
     private var cache = ""

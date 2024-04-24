@@ -14,6 +14,7 @@ import analytics.sdk.properties.user.default.AppsflyerIdProperty
 import analytics.sdk.properties.user.default.FacebookIdProperty
 import analytics.sdk.properties.user.default.FirebaseAppInstanceIdProperty
 import analytics.sdk.properties.user.default.GoogleCidProperty
+import analytics.sdk.properties.user.default.InstallIdProperty
 import analytics.sdk.properties.user.default.LanguageProperty
 import analytics.sdk.properties.user.default.MindboxAnonIdProperty
 import analytics.sdk.properties.user.default.MindboxIdProperty
@@ -29,6 +30,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 class App : Application(), Configuration.Provider {
 
+    private var language: String = "ru"
     private val TAG: String = "Clickstream Test APP"
 
     override fun onCreate() {
@@ -72,16 +74,16 @@ class App : Application(), Configuration.Provider {
                 ),
                 userProps = UserAnalyticsPropertyProvider(
                     setOf(
-                        //InstallIdProperty("install_id"),
-                        AccountIdProperty("account_id"),
-                        AppsflyerIdProperty("appsflyer_id"),
-                        FacebookIdProperty("facebook_id"),
-                        FirebaseAppInstanceIdProperty("firebase_app_instance_id"),
-                        GoogleCidProperty("google_cid"),
-                        LanguageProperty("language"),
-                        MindboxAnonIdProperty("mindbox_anon_id"),
-                        MindboxIdProperty("mindbox_id"),
-                        MyTrackerInstanceIdProperty("mytracker_id"),
+                        InstallIdProperty { "install_id" },
+                        AccountIdProperty { "account_id" },
+                        AppsflyerIdProperty { "appsflyer_id" },
+                        FacebookIdProperty { "facebook_id" },
+                        FirebaseAppInstanceIdProperty { "firebase_app_instance_id" },
+                        GoogleCidProperty { "google_cid" },
+                        MindboxAnonIdProperty { "mindbox_anon_id" },
+                        MindboxIdProperty { "mindbox_id" },
+                        MyTrackerInstanceIdProperty { "mytracker_id" },
+                        LanguageProperty { language },
                     )
                 )
             )

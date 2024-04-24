@@ -1,13 +1,13 @@
 package analytics.sdk.properties.user.default
 
 import analytics.sdk.platform.PlatformDependencies
-import analytics.sdk.properties.user.UserAnalyticsProperties
+import analytics.sdk.properties.user.UserAnalyticsProperty
 
 /**
  * Мобильный код сети
  */
 internal expect class OperatorNetworkCodeProperty(
     dependencies: PlatformDependencies,
-) : UserAnalyticsProperties
+) : UserAnalyticsProperty
 
 internal const val operatorNetworkCodePropertyKey = "mnc"

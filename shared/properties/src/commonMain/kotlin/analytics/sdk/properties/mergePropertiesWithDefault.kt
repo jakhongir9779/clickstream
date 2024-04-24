@@ -7,7 +7,7 @@ import analytics.sdk.properties.application.default.getDefaultAppProperties
 import analytics.sdk.properties.device.DeviceAnalyticsProperties
 import analytics.sdk.properties.device.DeviceAnalyticsPropertyProvider
 import analytics.sdk.properties.device.default.getDefaultDeviceProperties
-import analytics.sdk.properties.user.UserAnalyticsProperties
+import analytics.sdk.properties.user.UserAnalyticsProperty
 import analytics.sdk.properties.user.UserAnalyticsPropertyProvider
 import analytics.sdk.properties.user.default.getDefaultUserProperties
 import co.touchlab.kermit.Logger
@@ -51,7 +51,7 @@ fun mergePropertiesWithDefault(
             appProps as Set<ApplicationAnalyticsProperties>
         ),
         userProps = UserAnalyticsPropertyProvider(
-            userProps as Set<UserAnalyticsProperties>
+            userProps as Set<UserAnalyticsProperty>
         ),
         deviceProps = DeviceAnalyticsPropertyProvider(
             deviceProps as Set<DeviceAnalyticsProperties>

@@ -1,9 +1,9 @@
 package analytics.sdk.properties.user.default
 
 import analytics.sdk.platform.PlatformDependencies
-import analytics.sdk.properties.user.UserAnalyticsProperties
+import analytics.sdk.properties.user.UserAnalyticsProperty
 
-interface InstallIdProperties: UserAnalyticsProperties {
+interface InstallIdProperties : UserAnalyticsProperty {
 
     companion object {
         const val KEY = "install_id"
@@ -26,11 +26,8 @@ internal class DefaultInstallIdProperty(
     }
 }
 
-class InstallIdProperty(
-    private val installId: String
-) : InstallIdProperties {
+class InstallIdProperty(private val get: () -> String) : InstallIdProperties {
     override val key: String = InstallIdProperties.KEY
 
-    override fun getValue(): String =
-        installId
+    override fun getValue(): String = get()
 }

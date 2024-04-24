@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class UserAnalyticsPropertyProvider(
-    private val values: Set<UserAnalyticsProperties>,
+    private val values: Set<UserAnalyticsProperty>,
 ) : AnalyticsPropertyProvider {
 
     override val key: String = "user_properties"
