@@ -88,14 +88,6 @@ kotlin {
             }
         }
     }
-
-//    multiplatformSwiftPackage {
-//        swiftToolsVersion(Versions.Ios.swiftToolsVersion)
-//        targetPlatforms {
-//            iOS { v(Versions.Ios.targetPlatformVersion) }
-//        }
-//        outputDirectory(File(rootDir, "/"))
-//    }
 }
 
 android {
