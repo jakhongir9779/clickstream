@@ -3,7 +3,6 @@ object Artifacts {
     object Analytics {
         const val analyticsType = "analyticstype"
         const val event = "event"
-        const val eventSender = "eventsender"
         const val common = "common"
         const val database = "database"
         const val settings = "settings"

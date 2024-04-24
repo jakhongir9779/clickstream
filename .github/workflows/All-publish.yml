@@ -14,5 +14,5 @@ jobs:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
       publishTask: kmmBridgePublish publishKotlinMultiplatformPublicationToGitHubPackagesRepository publishAndroidDebugPublicationToGitHubPackagesRepository publishAndroidReleasePublicationToGitHubPackagesRepository
-#    secrets:
-#      PODSPEC_SSH_KEY: ${{ secrets.PODSPEC_SSH_KEY }}
+    secrets:
+      gradle_params: -PNEXUS_URL=${{ secrets.NEXUS_URL }}

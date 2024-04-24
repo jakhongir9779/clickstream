@@ -6,6 +6,21 @@ plugins {
     kotlin("multiplatform") version Versions.Kotlin.core apply false
     id("com.google.gms.google-services") version "4.4.1" apply false
     id("org.gradle.maven-publish")
+    id("co.touchlab.kmmbridge") version Versions.kmmBridge apply false
+}
+
+val autoVersion = project.property(
+    if (project.hasProperty("AUTO_VERSION")) {
+        "AUTO_VERSION"
+    } else {
+        "LIBRARY_VERSION"
+    }
+) as String
+
+subprojects {
+    val GROUP: String by project
+    group = GROUP
+    version = autoVersion
 }
 
 tasks.register("clean", Delete::class) {
@@ -13,7 +28,6 @@ tasks.register("clean", Delete::class) {
 }
 
 buildscript {
-
     repositories {
         google()
         mavenCentral()
@@ -27,14 +41,6 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven {
-            url = uri(System.getenv("NEXUS_URL") ?: getLocalProperty("nexus_url"))
-            credentials(PasswordCredentials::class) {
-                username = System.getenv("NEXUS_USER") ?: getLocalProperty("nexus_user")
-                password = System.getenv("NEXUS_PASSWORD") ?: getLocalProperty("nexus_password")
-            }
-        }
-        mavenLocal()
     }
 }
 

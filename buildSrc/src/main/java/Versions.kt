@@ -3,6 +3,7 @@ object Versions {
     val android = Android
 
     const val fingerprinter = "2.1.0"
+    const val kmmBridge = "0.5.1"
 
     object Plugins {
         const val swiftPackage = "2.2.1"
@@ -66,19 +67,8 @@ object Versions {
     }
 
     object Analytics {
-        const val clickstream = "1.5"
-
-        const val event = "1.0"
-        const val eventSender = "1.0"
-        const val database = "1.2"
-        const val settings = "1.0"
-        const val platform = "1.1"
-        const val properties = "1.1"
-        const val composite = "1.0"
+        const val clickstream = "0.0"
         const val clickstreamTest = "1.3"
-        const val clickstreamEventsenderTest = "1.0"
-        const val analyticsType = "1.0"
-        const val common = "1.0"
     }
 
     object Firebase {

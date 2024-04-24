@@ -6,7 +6,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization") version Versions.Kotlin.core
-    id("io.github.luca992.multiplatform-swiftpackage") version Versions.Plugins.swiftPackage
+    id("co.touchlab.kmmbridge") version Versions.kmmBridge
+    `maven-publish`
 }
 
 version = Versions.Analytics.clickstream
@@ -29,7 +30,6 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = Artifacts.Analytics.clickstream
-            export(Libraries.Analytics.properties)
         }
     }
 
@@ -38,13 +38,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(Libraries.Analytics.analyticsType)
-                implementation(Libraries.Analytics.event)
-                implementation(Libraries.Analytics.platform)
-                implementation(Libraries.Analytics.database)
+                implementation(project(":shared:analyticstype"))
+                implementation(project(":shared:event"))
+                implementation(project(":shared:platform"))
+                implementation(project(":shared:database"))
 
-                api(Libraries.Analytics.properties)
-                api(Libraries.Analytics.common)
+                implementation(project(":shared:properties"))
+                implementation(project(":shared:common"))
 
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)
@@ -64,7 +64,7 @@ kotlin {
         androidMain {
             dependencies {
                 api(Libraries.AndroidX.work)
-                implementation(Libraries.Analytics.platformAndroid)
+                implementation(project(":shared:platform"))
                 implementation(Libraries.Firebase.messaging)
                 implementation(Libraries.Ktor.Engine.okHttp)
                 implementation("androidx.lifecycle:lifecycle-process:2.7.0")
@@ -77,7 +77,7 @@ kotlin {
 
         iosMain {
             dependencies {
-                api(Libraries.Analytics.properties)
+                implementation(project(":shared:properties"))
                 implementation(Libraries.Ktor.Engine.darwin)
             }
         }
@@ -87,14 +87,6 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-    }
-
-    multiplatformSwiftPackage {
-        swiftToolsVersion(Versions.Ios.swiftToolsVersion)
-        targetPlatforms {
-            iOS { v(Versions.Ios.targetPlatformVersion) }
-        }
-        outputDirectory(File(rootDir, "/"))
     }
 }
 
@@ -114,6 +106,13 @@ project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
         .filterIsInstance<KotlinNativeTarget>()
         .flatMap { it.binaries }
         .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+}
+
+addGithubPackagesRepository()
+
+kmmbridge {
+    mavenPublishArtifacts()
+    spm()
 }
 
 publishing {

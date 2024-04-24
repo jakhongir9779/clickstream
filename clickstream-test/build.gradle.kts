@@ -19,10 +19,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(Libraries.Analytics.event)
-                implementation(Libraries.Analytics.common)
+                implementation(project(":shared:event"))
+                implementation(project(":shared:common"))
                 implementation(Libraries.Analytics.clickstream)
-                implementation(Libraries.Analytics.platform)
+                implementation(project(":shared:platform"))
                 implementation(Libraries.Tests.coroutines)
             }
         }

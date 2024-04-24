@@ -35,7 +35,6 @@ object Clickstream {
         }
         registerAppLifecycleCallbacks(clickStreamConfig.trackAppLifecycle)
         notificationTrackingInitializer(clickStreamConfig.trackNotifications, dependencies)
-
         clickstreamSdk?.sendFingerPrint()
     }
 
@@ -47,15 +46,8 @@ object Clickstream {
         send {
             event {
                 type("SCREEN_LIFECYCLE")
-                parameter(
-                    key = "SCREEN_NAME",
-                    value = screenName
-                )
-
-                parameter(
-                    key = "LIFECYCLE_STATE",
-                    value = lifecycleState.name
-                )
+                parameter(key = "SCREEN_NAME", value = screenName)
+                parameter(key = "LIFECYCLE_STATE", value = lifecycleState.name)
             }.build()
         }
     }
@@ -79,7 +71,7 @@ object Clickstream {
             (keyValue.firstOrNull() ?: "") to (keyValue.getOrNull(1) ?: "")
         }
 
-    private val instance
+    val instance
         get() = clickstreamSdk ?: throw Exception("Run ClickstreamSdk.initalize() first")
 
 }
