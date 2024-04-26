@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		3155FBF02BD78FD0007E21E3 /* clickstream in Frameworks */ = {isa = PBXBuildFile; productRef = 3155FBEF2BD78FD0007E21E3 /* clickstream */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3155FBF02BD78FD0007E21E3 /* clickstream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +110,7 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				3155FBEF2BD78FD0007E21E3 /* clickstream */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* iosApp.app */;
@@ -139,6 +142,7 @@
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
+				DA730B722B224E4D009E097E /* XCRemoteSwiftPackageReference "mobile-analytics-sdk" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -380,6 +384,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DA730B722B224E4D009E097E /* XCRemoteSwiftPackageReference "mobile-analytics-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DayMarket/mobile-analytics-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3155FBEF2BD78FD0007E21E3 /* clickstream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA730B722B224E4D009E097E /* XCRemoteSwiftPackageReference "mobile-analytics-sdk" */;
+			productName = clickstream;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7555FF73242A565900829871 /* Project object */;
 }
