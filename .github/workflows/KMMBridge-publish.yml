@@ -13,5 +13,5 @@ jobs:
     with:
       jvmVersion: 17
       versionBaseProperty: LIBRARY_VERSION
-#    secrets:
-#      gradle_params: -PNEXUS_URL=${{ secrets.NEXUS_URL }}
+    secrets:
+      gradle_params: -PIS_GH_WORKFLOW=${{ true }}
