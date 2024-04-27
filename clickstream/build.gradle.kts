@@ -36,13 +36,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":shared:analyticstype"))
-                implementation(project(":shared:event"))
-                implementation(project(":shared:platform"))
-                implementation(project(":shared:database"))
+                api(project(":shared:analyticstype"))
+                api(project(":shared:event"))
+                api(project(":shared:platform"))
+                api(project(":shared:database"))
 
-                implementation(project(":shared:properties"))
-                implementation(project(":shared:common"))
+                api(project(":shared:properties"))
+                api(project(":shared:common"))
 
                 implementation(Libraries.Ktor.core)
                 implementation(Libraries.Ktor.json)
