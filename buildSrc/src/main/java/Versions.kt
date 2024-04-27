@@ -67,8 +67,8 @@ object Versions {
     }
 
     object Analytics {
-        const val clickstream = "0.0"
-        const val clickstreamTest = "1.3"
+        const val clickstream = "1.6"
+        const val clickstreamTest = "0.0.1"
     }
 
     object Firebase {

@@ -42,7 +42,7 @@ android {
     }
 }
 
-val isGhWorkflow = project.findProperty("IS_GH_WORKFLOW") as Boolean? ?: false
+val isGhWorkflow = project.findProperty("IS_GH_WORKFLOW")?.toString()?.toBoolean() ?: false
 if (!isGhWorkflow) {
     publishing {
         publications {

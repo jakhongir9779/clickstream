@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    id("maven-publish")
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization") version Versions.Kotlin.core
@@ -118,7 +117,7 @@ kmmbridge {
     spm()
 }
 
-val isGhWorkflow = project.findProperty("IS_GH_WORKFLOW") as Boolean? ?: false
+val isGhWorkflow = project.findProperty("IS_GH_WORKFLOW")?.toString()?.toBoolean() ?: false
 if (!isGhWorkflow) {
     publishing {
         publications {
