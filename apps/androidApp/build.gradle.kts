@@ -55,12 +55,6 @@ dependencies {
     implementation(Libraries.AndroidX.startup)
     implementation(Libraries.Firebase.messaging)
     implementation(project(":clickstream"))
-    implementation(project(":shared:event"))
-    implementation(project(":shared:analyticstype"))
-    implementation(project(":shared:platform"))
-    implementation(project(":shared:common"))
-    implementation(project(":shared:properties"))
-    testImplementation(project(":shared:database"))
     testImplementation(project(":clickstream-test"))
 
     testLibs()
