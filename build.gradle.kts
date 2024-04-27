@@ -41,14 +41,6 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven {
-            name = "clickstream"
-            url = uri("https://maven.pkg.github.com/jakhongir9779/clickstream")
-            credentials {
-                username = "jakhongir9779"
-                password = "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"
-            }
-        }
     }
 }
 
