@@ -1,21 +1,24 @@
 // swift-tools-version:5.3
 import PackageDescription
 
+let packageName = "clickstream"
+
 let package = Package(
-    name: "clickstream",
+    name: packageName,
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "clickstream",
-            targets: ["clickstream"]
+            name: packageName,
+            targets: [packageName]
         ),
     ],
     targets: [
         .binaryTarget(
-            name: "clickstream",
-            path: "./clickstream.xcframework"
-        ),
+            name: packageName,
+            path: "./clickstream/build/XCFrameworks/debug/\(packageName).xcframework"
+        )
+        ,
     ]
 )
