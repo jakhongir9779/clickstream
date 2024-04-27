@@ -33,6 +33,7 @@ kotlin {
     }
 }
 
+addGithubPackagesRepository()
 android {
     namespace = Libraries.Analytics.group
     compileSdk = Versions.Android.compileSdkVersion
