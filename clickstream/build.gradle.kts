@@ -27,7 +27,13 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = Artifacts.Analytics.clickstream
+            export(project(":shared:analyticstype"))
+            export(project(":shared:event"))
+            export(project(":shared:platform"))
+            export(project(":shared:database"))
+            export(project(":shared:properties"))
+            export(project(":shared:common"))
+            isStatic = true
         }
     }
 
@@ -40,7 +46,6 @@ kotlin {
                 api(project(":shared:event"))
                 api(project(":shared:platform"))
                 api(project(":shared:database"))
-
                 api(project(":shared:properties"))
                 api(project(":shared:common"))
 

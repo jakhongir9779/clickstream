@@ -14,15 +14,10 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = Artifacts.Analytics.event
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
 
     sourceSets {
         val commonMain by getting {

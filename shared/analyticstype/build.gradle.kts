@@ -13,15 +13,10 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = Artifacts.Analytics.analyticsType
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
 }
 
 addGithubPackagesRepository()
