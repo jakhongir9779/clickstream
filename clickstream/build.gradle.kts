@@ -10,8 +10,6 @@ plugins {
     `maven-publish`
 }
 
-version = Versions.Analytics.clickstream
-
 kotlin {
 
     androidTarget {
